@@ -17,12 +17,6 @@ Class {
 	#tag : 'TestProfiler'
 }
 
-{ #category : 'examples' }
-RuntimeTypesCollector class >> example [
-
-	^ self new collect collectedTypes
-]
-
 { #category : 'initialization' }
 RuntimeTypesCollector >> addCollectedType: data [
 
@@ -46,8 +40,11 @@ RuntimeTypesCollector >> collectInPackage: packageName [
 RuntimeTypesCollector >> collectInTest: compiledTest inClass: classObj [
 
 	| testCase proxies methods |
+	
+	(classObj class isTestCase) ifFalse: [ ^ false ]. 
+	
 	methods := self collectMethodsToInstrument: classObj >> compiledTest selector.
-	testCase := BagTest selector: compiledTest selector.
+	testCase := classObj selector: compiledTest selector.
 
 	proxies := (methods collect: [ :m |
 			            ((m pragmas anySatisfy: [ :p | p selector beginsWith: 'primitive' ]) or: (m hasPragmaNamed: #noInstrumentation))
@@ -56,14 +53,16 @@ RuntimeTypesCollector >> collectInTest: compiledTest inClass: classObj [
 								             collector: self;
 								             method: m;
 								             yourself) ] ]) reject: #isNil.
+	proxies ifNotEmpty: [
+			proxies do: [ :p | p install ].
+			MpMethodProxy enableInstrumentation.
 
-	proxies do: [ :p | p install ].
-	MpMethodProxy enableInstrumentation.
+			testCase run.
 
-	testCase run.
-
-	proxies do: [ :p | p uninstall ].
-	MpMethodProxy disableInstrumentation
+			proxies do: [ :p | p uninstall ].
+			MpMethodProxy disableInstrumentation ].
+		
+	^ true
 ]
 
 { #category : 'as yet unclassified' }
