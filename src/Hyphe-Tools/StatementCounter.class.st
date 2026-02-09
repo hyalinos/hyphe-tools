@@ -36,6 +36,12 @@ StatementCounter class >> countStatementsIn: aMethod [
 ]
 
 { #category : 'initialization' }
+StatementCounter >> count [
+	
+	^ count
+]
+
+{ #category : 'initialization' }
 StatementCounter >> countIn: aMethod [
 
     count := 0.
@@ -54,6 +60,13 @@ StatementCounter >> visitAssignmentNode: aNode [
 
     count := count + 1.
     super visitAssignmentNode: aNode
+]
+
+{ #category : 'initialization' }
+StatementCounter >> visitMessageNode: aNode [
+
+    count := count + 1.
+    super visitMessageNode: aNode
 ]
 
 { #category : 'initialization' }

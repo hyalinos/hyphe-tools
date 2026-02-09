@@ -115,6 +115,9 @@ LOCCounterTestData >> methodWithOnlyComments: aComment
 
 { #category : 'as yet unclassified' }
 LOCCounterTestData >> methodWithPragma [
+
+	<primitive: 123>
+
 ]
 
 { #category : 'as yet unclassified' }
