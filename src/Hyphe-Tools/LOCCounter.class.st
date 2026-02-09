@@ -1,3 +1,19 @@
+"
+I calculate LOC for a given method.
+
+I calculate:  
+	- temporary variable declarations
+	- assignment statements
+   - return statements
+   - message sends
+   - block definitions
+
+I do not calculate: 
+   - method signatures (single ot multilines)
+   - comments (single ot multilines)
+   - blank lines
+	- pragmas
+"
 Class {
 	#name : 'LOCCounter',
 	#superclass : 'Object',
@@ -35,7 +51,7 @@ LOCCounter >> extractMethodBody: aCompiledMethod [
 	
 	| ast |
 	ast := aCompiledMethod ast.
-	^ ast body formattedCode
+	^ ast body sourceCode
 ]
 
 { #category : 'helpers' }
