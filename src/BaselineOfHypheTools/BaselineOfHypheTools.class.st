@@ -17,7 +17,7 @@ BaselineOfHypheTools >> baseline: spec [
 				package: #'Hyphe-Tools-Tests' with: [ spec requires: #'Hyphe-Tools' ].
 
 			spec
-				group: 'Core' with: #( #'Hyphe-Tools', #'Hyphe-Tools-Tests' );
-				group: 'default' with: #( #'Hyphe-Tools', #'Hyphe-Tools-Tests' ) 
+				group: 'Core' with: #( 'Hyphe-Tools' 'Hyphe-Tools-Tests' );
+				group: 'default' with: #( 'Hyphe-Tools' 'Hyphe-Tools-Tests' ) 
 	]
 ]
