@@ -2,7 +2,6 @@ Class {
 	#name : 'HyCFGNode',
 	#superclass : 'Object',
 	#instVars : [
-		'astNode',
 		'nestingDepth',
 		'incomingEdges',
 		'outgoingEdges'
@@ -24,16 +23,30 @@ HyCFGNode >> addOutgoingEdge: anEdge [
 	outgoingEdges add: anEdge
 ]
 
-{ #category : 'accessing' }
-HyCFGNode >> astNode [
+{ #category : 'adding' }
+HyCFGNode >> findRootsOf: aNode [
 
-	^ astNode
-]
-
-{ #category : 'accessing' }
-HyCFGNode >> astNode: anObject [
-
-	astNode := anObject
+| visited toVisit earliestNodes |
+    
+    visited := Set new.
+    toVisit := OrderedCollection with: aNode.
+    earliestNodes := Set new.
+    
+    [ toVisit isEmpty ] whileFalse: [
+        | current predecessors |
+        current := toVisit removeFirst.
+        
+        (visited includes: current) ifFalse: [
+            visited add: current.
+            predecessors := current predecessors.
+            
+            predecessors isEmpty
+                ifTrue: [ earliestNodes add: current ]
+                ifFalse: [ toVisit addAll: predecessors ]
+        ]
+    ].
+    
+    ^ earliestNodes
 ]
 
 { #category : 'accessing' }
@@ -49,6 +62,12 @@ HyCFGNode >> initialize [
 	nestingDepth := 0.
 	incomingEdges := OrderedCollection new.
 	outgoingEdges := OrderedCollection new
+]
+
+{ #category : 'testing' }
+HyCFGNode >> isTerminal [
+
+	^ false
 ]
 
 { #category : 'accessing' }

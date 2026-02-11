@@ -1,6 +1,6 @@
 Class {
 	#name : 'HyCFGEntryNode',
-	#superclass : 'HyCFGNode',
+	#superclass : 'HyCFGStructureNode',
 	#category : 'Hyphe-CFG-Structure',
 	#package : 'Hyphe-CFG',
 	#tag : 'Structure'

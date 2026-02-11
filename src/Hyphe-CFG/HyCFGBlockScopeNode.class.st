@@ -1,6 +1,6 @@
 Class {
 	#name : 'HyCFGBlockScopeNode',
-	#superclass : 'HyCFGNode',
+	#superclass : 'HyCFGCodeNode',
 	#instVars : [
 		'blockContext'
 	],

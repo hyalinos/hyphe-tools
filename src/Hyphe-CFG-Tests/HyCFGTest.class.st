@@ -7,8 +7,9 @@ Class {
 	#instVars : [
 		'cfg'
 	],
-	#category : 'Hyphe-CFG-Tests',
-	#package : 'Hyphe-CFG-Tests'
+	#category : 'Hyphe-CFG-Tests-Structure',
+	#package : 'Hyphe-CFG-Tests',
+	#tag : 'Structure'
 }
 
 { #category : 'running' }

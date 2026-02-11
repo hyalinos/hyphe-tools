@@ -1,6 +1,6 @@
 Class {
 	#name : 'HyCFGControlFlowNode',
-	#superclass : 'HyCFGNode',
+	#superclass : 'HyCFGCodeNode',
 	#instVars : [
 		'isComplete',
 		'unknownBlockReferences'
