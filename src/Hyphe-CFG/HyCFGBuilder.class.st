@@ -129,26 +129,27 @@ HyCFGBuilder >> connectNode: sourceNode to: targetNode [
 	cfg addEdge: edge
 ]
 
-{ #category : 'visiting' }
-HyCFGBuilder >> createControlFlowNode: aMessageNode [
-	"Create a control flow node for a pattern"
+{ #category : 'initialization' }
+HyCFGBuilder >> connectNode: sourceNode to: targetNode withEdge: edgeClass [
 
-	| node |
-	node := HyCFGControlFlowNode new.
-	node astNode: aMessageNode.
-	node nestingDepth: currentNestingDepth.
-	cfg addNode: node.
-
-	currentNode isTerminal ifFalse: [ cfg addEdge: (HyCFGSequentialEdge from: currentNode to: node) ].
-
-	currentNode := node.
-	^ node
+	| edge |
+	edge := edgeClass from: sourceNode to: targetNode.
+	cfg addEdge: edge
 ]
 
 { #category : 'visiting' }
-HyCFGBuilder >> createNode: aNode withEdge: anEdge [
+HyCFGBuilder >> createControlFlowNode: aMessageNode [
 
-	| node edge |
+	^ cfg addNode: (HyCFGControlFlowNode new
+			   astNode: aMessageNode;
+			   nestingDepth: currentNestingDepth;
+			   yourself)
+]
+
+{ #category : 'visiting' }
+HyCFGBuilder >> createNode: aNode [
+
+	| node |
 	node := currentNestingDepth = 0
 		        ifTrue: [ HyCFGStatementNode new ]
 		        ifFalse: [ HyCFGBlockScopeNode new ].
@@ -157,63 +158,58 @@ HyCFGBuilder >> createNode: aNode withEdge: anEdge [
 	node nestingDepth: currentNestingDepth.
 	cfg addNode: node.
 
-	currentNode isTerminal ifFalse: [
-			edge := anEdge from: currentNode to: node.
-			cfg addEdge: edge ].
+	^ node
+]
 
+{ #category : 'visiting' }
+HyCFGBuilder >> createNode: aNode withEdge: anEdge [
+
+	| node |
+	node := currentNestingDepth = 0
+		        ifTrue: [ HyCFGStatementNode new ]
+		        ifFalse: [ HyCFGBlockScopeNode new ].
+
+	node astNode: aNode.
+	node nestingDepth: currentNestingDepth.
+	cfg addNode: node.
+
+	currentNode isTerminal ifFalse: [	cfg addEdge: (anEdge from: currentNode to: node) ].
 	currentNode := node.
 	^ node
 ]
 
 { #category : 'handlers' }
-HyCFGBuilder >> handleIfTrue: aNode [
+HyCFGBuilder >> handleIfTrue: aMessageNode [
+	"Handle ifTrue single branch conditional"
+	"check if condition is a block, if it is empty and if it is have local return"
 
-	| cfNode trueBlock localExit trueEdge falseEdge |
-	trueBlock := aNode arguments first.
-
-	cfNode := self createControlFlowNode: aNode.
-	
-	localExit := HyCFGExitNode new.
-	localExit nestingDepth: currentNestingDepth.
+	| cfNode trueBlock localEntry localExit savedCurrent |
+	trueBlock := aMessageNode arguments first.
+	trueBlock isBlock ifFalse: [ 1 halt "to be implemented" ]. 
+	cfNode := self createControlFlowNode: aMessageNode.
+	self connectNode: currentNode to: cfNode.
+	localExit := HyCFGLocalExitNode new
+		             nestingDepth: currentNestingDepth;
+		             yourself.
 	cfg addNode: localExit.
-	
-	trueBlock isBlock "to avoid malformed but parseable and executable expressions e.g false ifTrue: true"
-		ifTrue: [
-				self withIncrementedNesting: [self visitSequenceNode: (trueBlock body)].
-				
-				currentNode
-					ifNotNil: [
-							"either the block was empty of not"
-							|firstNodeOfBlock|
-							
-							firstNodeOfBlock := (currentNode findRootsOf: aNode) first. 
-							(currentNode = firstNodeOfBlock) ifTrue: [ 
-								trueEdge := HyCFGTrueEdge from: cfNode to: currentNode.
-								cfg addEdge: trueEdge.
-								 ] ifFalse: [
-								trueEdge := HyCFGTrueEdge from: cfNode to: firstNodeOfBlock .
-								cfg addEdge: trueEdge.
-								cfg addEdge: (HyCFGSequentialEdge from: currentNode to: localExit) 	
-								 ].
-						
-						 
-							trueEdge := HyCFGTrueEdge from: cfNode to: currentNode.
-							cfg addEdge: trueEdge.
-							cfg addEdge: (HyCFGSequentialEdge from: currentNode to: localExit) ]
-					ifNil: [ "true branch had a local return"
-							trueEdge := HyCFGTrueEdge from: cfNode to: localExit.
-							cfg addEdge: trueEdge ] 
-					]
-		ifFalse: [ "malformed block is marked as incomplete"
-				cfNode addUnknownBlockReference: trueBlock.
-				trueEdge := HyCFGTrueEdge from: cfNode to: localExit.
-				cfg addEdge: trueEdge 
-		]. 
-	
-	"false branch directly to local exit"
-	falseEdge := HyCFGFalseEdge from: cfNode to: localExit.
-	cfg addEdge: falseEdge.
 
+	trueBlock statements isEmpty
+		ifTrue: [ cfg addEdge: (HyCFGTrueEdge from: cfNode to: localExit) ]
+		ifFalse: [ "add local entry"
+				localEntry := HyCFGLocalEntryNode new
+					              nestingDepth: currentNestingDepth;
+					              yourself.
+				cfg addNode: localEntry.
+				self connectNode: cfNode to: localEntry withEdge: HyCFGTrueEdge.
+				currentNode := localEntry.
+
+				savedCurrent := currentNode.
+				self withIncrementedNesting: [ trueBlock body ifNotNil: [ :body | self visitSequenceNode: body ] ].
+				currentNode isTerminal 
+					ifFalse: [ cfg addEdge: (HyCFGSequentialEdge from: currentNode to: localExit) ]
+		].
+
+	cfg addEdge: (HyCFGFalseEdge from: cfNode to: localExit).
 	currentNode := localExit
 ]
 
@@ -229,8 +225,7 @@ HyCFGBuilder >> initialize [
 HyCFGBuilder >> visitAssignmentNode: aNode [
 
 	self createNode: aNode withEdge: HyCFGSequentialEdge.
-	
-	super visitAssignmentNode: aNode 
+	super visitAssignmentNode: aNode
 ]
 
 { #category : 'visiting' }
@@ -244,10 +239,10 @@ HyCFGBuilder >> visitMessageNode: aNode [
 		handler := self class handlerFor: selector.
 		self perform: handler with: aNode ]
 	ifFalse: [  
-		self createNode: aNode withEdge: HyCFGSequentialEdge
-	].
-		
-	super visitMessageNode: aNode 
+		self createNode: aNode withEdge: HyCFGSequentialEdge.
+		super visitMessageNode: aNode 
+	].	
+	
 ]
 
 { #category : 'visiting' }
@@ -263,7 +258,7 @@ HyCFGBuilder >> visitReturnNode: aNode [
 	super visitReturnNode: aNode
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'util' }
 HyCFGBuilder >> withIncrementedNesting: aBlock [ 
 	"Execute a block with incremented nesting depth"
 	
