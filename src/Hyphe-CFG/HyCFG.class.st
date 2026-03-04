@@ -69,3 +69,13 @@ HyCFG >> nodes [
 
 	^ nodes
 ]
+
+{ #category : 'initialization' }
+HyCFG >> removeNode: aNode [
+
+	nodes remove: aNode.
+	aNode incomingEdges do: [ :e | edges remove: e ].
+	aNode outgoingEdges do: [ :e | edges remove: e ].
+
+	
+]

@@ -116,7 +116,8 @@ HyCFGBuilder >> buildFrom: aOCMethodNode [
 	currentNode := cfg entryNode.
 	aOCMethodNode body ifNotNil: [ :body | self visitSequenceNode: body ].
 
-	((currentNode isTerminal = false) and: [ currentNode ~= cfg exitNode ]) ifTrue: [ self connectNode: currentNode to: cfg exitNode ].
+	(currentNode isTerminal = false and: [ currentNode ~= cfg exitNode ]) ifTrue: [ self connectNode: currentNode to: cfg exitNode ].
+	self removeTemporalNodes.
 
 	^ cfg
 ]
@@ -135,6 +136,15 @@ HyCFGBuilder >> connectNode: sourceNode to: targetNode withEdge: edgeClass [
 	| edge |
 	edge := edgeClass from: sourceNode to: targetNode.
 	cfg addEdge: edge
+]
+
+{ #category : 'as yet unclassified' }
+HyCFGBuilder >> connectSourcesToTargets: n [
+
+	| targetNodes sourceNodes |
+	sourceNodes := n incomingEdges collect: [ :e | {e source . e class} ].
+	targetNodes := n outgoingEdges collect: [ :e | e target ].
+	sourceNodes do: [ :sourceNode | targetNodes do: [ :targetNode | self connectNode: sourceNode first to: targetNode withEdge: sourceNode last ] ]
 ]
 
 { #category : 'visiting' }
@@ -179,38 +189,160 @@ HyCFGBuilder >> createNode: aNode withEdge: anEdge [
 ]
 
 { #category : 'handlers' }
-HyCFGBuilder >> handleIfTrue: aMessageNode [
-	"Handle ifTrue single branch conditional"
-	"check if condition is a block, if it is empty and if it is have local return"
+HyCFGBuilder >> handleBranch: cfgBranchClass ofConditional: aBlock from: cfgNode to: localExit [
 
-	| cfNode trueBlock localEntry localExit savedCurrent |
-	trueBlock := aMessageNode arguments first.
-	trueBlock isBlock ifFalse: [ 1 halt "to be implemented" ]. 
-	cfNode := self createControlFlowNode: aMessageNode.
-	self connectNode: currentNode to: cfNode.
-	localExit := HyCFGLocalExitNode new
-		             nestingDepth: currentNestingDepth;
-		             yourself.
-	cfg addNode: localExit.
+	|  localEntry savedCurrent |
+	aBlock isBlock ifFalse: [ 1 halt "to be implemented" ].
 
-	trueBlock statements isEmpty
-		ifTrue: [ cfg addEdge: (HyCFGTrueEdge from: cfNode to: localExit) ]
+	aBlock statements isEmpty
+		ifTrue: [ cfg addEdge: (cfgBranchClass from: cfgNode to: localExit) ]
 		ifFalse: [ "add local entry"
-				localEntry := HyCFGLocalEntryNode new
-					              nestingDepth: currentNestingDepth;
-					              yourself.
+				localEntry := HyCFGLocalEntryNode createWithNesting: currentNestingDepth.
 				cfg addNode: localEntry.
-				self connectNode: cfNode to: localEntry withEdge: HyCFGTrueEdge.
+				self connectNode: cfgNode to: localEntry withEdge: cfgBranchClass.
 				currentNode := localEntry.
 
 				savedCurrent := currentNode.
-				self withIncrementedNesting: [ trueBlock body ifNotNil: [ :body | self visitSequenceNode: body ] ].
-				currentNode isTerminal 
-					ifFalse: [ cfg addEdge: (HyCFGSequentialEdge from: currentNode to: localExit) ]
-		].
+				self withIncrementedNesting: [ aBlock body ifNotNil: [ :body | self visitSequenceNode: body ] ].
+				currentNode isTerminal ifFalse: [ cfg addEdge: (HyCFGSequentialEdge from: currentNode to: localExit) ] ]
+]
 
-	cfg addEdge: (HyCFGFalseEdge from: cfNode to: localExit).
+{ #category : 'handlers' }
+HyCFGBuilder >> handleFalseTrue: aMessageNode left: left right: right [
+
+	| cfgNode localExit block |
+	cfgNode := self createControlFlowNode: aMessageNode.
+	self connectNode: currentNode to: cfgNode.
+	localExit := HyCFGLocalExitNode createWithNesting: currentNestingDepth.
+	cfg addNode: localExit.
+
+	block := aMessageNode arguments first.
+
+	self
+		handleBranch: left
+		ofConditional: block
+		from: cfgNode
+		to: localExit.
+
+	block := aMessageNode arguments last.
+
+	self
+		handleBranch: right
+		ofConditional: block
+		from: cfgNode
+		to: localExit.
+		
 	currentNode := localExit
+	
+
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfEmpty: aMessageNode [
+
+	self handleIfTrue: aMessageNode
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfEmptyIfNotEmpty: aMessageNode [
+
+	self handleIfTrueIfFalse: aMessageNode
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfFalse: aMessageNode [
+	"ifTFalse single branch conditional"
+
+	| cfgNode localExit block |
+	cfgNode := self createControlFlowNode: aMessageNode.
+	self connectNode: currentNode to: cfgNode.
+	localExit := HyCFGLocalExitNode createWithNesting: currentNestingDepth.
+	cfg addNode: localExit.
+
+	block := aMessageNode arguments first.
+	
+	self
+		handleBranch: HyCFGFalseEdge
+		ofConditional: block
+		from: cfgNode
+		to: localExit.
+
+	cfg addEdge: (HyCFGTrueEdge from: cfgNode to: localExit).
+	currentNode := localExit
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfFalseIfTrue: aMessageNode [
+
+	self handleFalseTrue: aMessageNode left: HyCFGFalseEdge right: HyCFGTrueEdge
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfNil: aMessageNode [
+	"same as ifFalse"
+	
+	self handleIfFalse: aMessageNode
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfNilIfNotNil: aMessageNode [
+	"same as IfTrueIfFalse"
+
+	self handleIfTrueIfFalse: aMessageNode
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfNotEmpty: aMessageNode [
+
+	self handleIfFalse: aMessageNode
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfNotEmptyIfEmpty: aMessageNode [
+
+	self handleIfTrueIfFalse: aMessageNode
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfNotNil: aMessageNode [
+	"same as ifTrue"
+	
+	self handleIfTrue: aMessageNode
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfNotNilIfNil: aMessageNode [
+	"same as ifTrueIfFalse"
+
+	self handleIfTrueIfFalse: aMessageNode
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfTrue: aMessageNode [
+	"ifTrue single branch conditional"
+
+	| block cfgNode localExit |
+	cfgNode := self createControlFlowNode: aMessageNode.
+	self connectNode: currentNode to: cfgNode.
+	localExit := HyCFGLocalExitNode createWithNesting: currentNestingDepth.
+	cfg addNode: localExit.
+
+	block := aMessageNode arguments first.
+
+	self
+		handleBranch: HyCFGTrueEdge
+		ofConditional: block
+		from: cfgNode
+		to: localExit.
+
+	cfg addEdge: (HyCFGFalseEdge from: cfgNode to: localExit).
+	currentNode := localExit
+]
+
+{ #category : 'handlers' }
+HyCFGBuilder >> handleIfTrueIfFalse: aMessageNode [
+
+	self handleFalseTrue: aMessageNode left: HyCFGTrueEdge right: HyCFGFalseEdge
 ]
 
 { #category : 'initialization' }
@@ -219,6 +351,15 @@ HyCFGBuilder >> initialize [
 	super initialize.
 	cfg := HyCFG new.
 	currentNestingDepth := 0
+]
+
+{ #category : 'initialization' }
+HyCFGBuilder >> removeTemporalNodes [
+	"remove local entry and local exit nodes used to ease building of cfg"
+
+	(cfg nodes select: [ :n | n isKindOf: HyCFGTemporalNode ]) do: [ :n |
+			self connectSourcesToTargets: n.
+			cfg removeNode: n ].
 ]
 
 { #category : 'visiting' }

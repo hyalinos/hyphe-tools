@@ -11,6 +11,14 @@ Class {
 	#tag : 'Structure'
 }
 
+{ #category : 'as yet unclassified' }
+HyCFGNode class >> createWithNesting: nestingDepth [
+
+	^ self new
+		nestingDepth: nestingDepth;
+		yourself
+]
+
 { #category : 'initialization' }
 HyCFGNode >> addIncomingEdge: anEdge [ 
 

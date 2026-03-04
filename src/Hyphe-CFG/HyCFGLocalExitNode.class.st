@@ -1,6 +1,6 @@
 Class {
 	#name : 'HyCFGLocalExitNode',
-	#superclass : 'HyCFGStructureNode',
+	#superclass : 'HyCFGTemporalNode',
 	#category : 'Hyphe-CFG-Structure',
 	#package : 'Hyphe-CFG',
 	#tag : 'Structure'
