@@ -17,10 +17,10 @@ ReceiverCounterTest class >> testVariableCounter [
 { #category : 'tests' }
 ReceiverCounterTest >> testArgumentCounter [
 	| compiledMethod counter superReceiver|
-	compiledMethod := ReceiverCounterTestData>>#testArgument:and:.
+	compiledMethod := ReceiverCounterTestData>>#testArgument:and:and:.
 	counter := ReceiverCounter new.
 	superReceiver := (counter receiverArguments: compiledMethod).
-	self assert: superReceiver equals: 2.
+	self assert: superReceiver equals: 3.
 ]
 
 { #category : 'tests' }
@@ -39,6 +39,33 @@ ReceiverCounterTest >> testLocalVariableCounter [
 	counter := ReceiverCounter new.
 	superReceiver := (counter receiverLocalVariable: compiledMethod).
 	self assert: superReceiver equals: 4.
+]
+
+{ #category : 'tests' }
+ReceiverCounterTest >> testMethodArgumentCounter [
+	| compiledMethod counter superReceiver|
+	compiledMethod := ReceiverCounterTestData>>#testMethod:and:.
+	counter := ReceiverCounter new.
+	superReceiver := (counter receiverArguments: compiledMethod).
+	self assert: superReceiver equals: 2.
+]
+
+{ #category : 'tests' }
+ReceiverCounterTest >> testMethodLocalVariableCounter [
+	| compiledMethod counter superReceiver|
+	compiledMethod := ReceiverCounterTestData>>#testMethod:and: .
+	counter := ReceiverCounter new.
+	superReceiver := (counter receiverLocalVariable: compiledMethod).
+	self assert: superReceiver equals: 2.
+]
+
+{ #category : 'tests' }
+ReceiverCounterTest >> testMethodVariableCounter [
+	| compiledMethod counter superReceiver|
+	compiledMethod := ReceiverCounterTestData>>#testMethod:and:.
+	counter := ReceiverCounter new.
+	superReceiver := (counter receiverVariable: compiledMethod).
+	self assert: superReceiver equals: 1.
 ]
 
 { #category : 'tests' }

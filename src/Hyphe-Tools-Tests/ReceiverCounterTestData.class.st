@@ -29,6 +29,16 @@ ReceiverCounterTestData >> testArgument: aNumber and: aString [
 ]
 
 { #category : 'tests' }
+ReceiverCounterTestData >> testArgument: aNumber and: aString and: aClass [
+    aNumber printString.
+    aString size.
+	 aNumber size.
+	 aClass class.
+	 var1 := 3.
+ 
+]
+
+{ #category : 'tests' }
 ReceiverCounterTestData >> testLiteral [
     5 printString.
 	 6 printString.
@@ -45,6 +55,25 @@ ReceiverCounterTestData >> testLocalVariable [
 	d:= 5.
 	c := a + b.
 	^ c
+	
+ 
+]
+
+{ #category : 'tests' }
+ReceiverCounterTestData >> testMethod: arg1 and: arg2 [
+   | local test|
+	arg1 printString.
+	arg2 size.
+	self class.
+	super initialize.
+	test := 5.
+	local := 0.
+	local >10 ifTrue: [ 
+		test := test + local.
+		local := local + 1 ].
+	var1 := test.
+	'Hello' printString .
+	'Pharo' class.
 	
  
 ]
