@@ -171,7 +171,7 @@ CSVComparator >> expotResults: results toFile: path [
 CSVComparator >> readCSV: aFile [
     | rows |
     rows := OrderedCollection new.
-(FileLocator workingDirectory / aFile) readStreamDo: [ :stream |
+"(FileLocator workingDirectory / aFile) readStreamDo: [ :stream |
         (NeoCSVReader on: stream)
             separator: $,;
             do: [ :row | rows add: row ].
@@ -180,7 +180,7 @@ CSVComparator >> readCSV: aFile [
 		(NeoCSVReader on: stream)
 			separator: $,;
 			do: [ :row | rows add: row  ].
-	].   " 
+	].    
     ^ rows
 ]
 

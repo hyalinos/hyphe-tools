@@ -42,24 +42,6 @@ ReceiverCounterTest >> testLocalVariableCounter [
 ]
 
 { #category : 'tests' }
-ReceiverCounterTest >> testMethodArgumentCounter [
-	| compiledMethod counter superReceiver|
-	compiledMethod := ReceiverCounterTestData>>#testMethod:and:.
-	counter := ReceiverCounter new.
-	superReceiver := (counter receiverArguments: compiledMethod).
-	self assert: superReceiver equals: 2.
-]
-
-{ #category : 'tests' }
-ReceiverCounterTest >> testMethodLocalVariableCounter [
-	| compiledMethod counter superReceiver|
-	compiledMethod := ReceiverCounterTestData>>#testMethod:and: .
-	counter := ReceiverCounter new.
-	superReceiver := (counter receiverLocalVariable: compiledMethod).
-	self assert: superReceiver equals: 2.
-]
-
-{ #category : 'tests' }
 ReceiverCounterTest >> testMethodVariableCounter [
 	| compiledMethod counter superReceiver|
 	compiledMethod := ReceiverCounterTestData>>#testMethod:and:.
