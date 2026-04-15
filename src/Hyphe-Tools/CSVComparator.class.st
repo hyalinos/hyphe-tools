@@ -5,6 +5,12 @@ Class {
 	#package : 'Hyphe-Tools'
 }
 
+{ #category : 'as yet unclassified' }
+CSVComparator >> allEqual: aCollection [
+    aCollection isEmpty ifTrue: [ ^ false ].
+    ^ aCollection allSatisfy: [ :each | each = aCollection first ]
+]
+
 { #category : 'verification' }
 CSVComparator >> compareFile: collectedFile with: inferredFile [
     | collectedRows inferredRows inferredDict resultRow resultCollection key |
@@ -38,6 +44,103 @@ CSVComparator >> compareFile: collectedFile with: inferredFile [
                 resultRow result: ((resultRow typeCollected = resultRow typeInferred) | ((row at: 'commonType') = resultRow typeInferred))
             ]. 
 
+        resultCollection add: resultRow.
+    ].
+
+    ^ resultCollection
+]
+
+{ #category : 'verification' }
+CSVComparator >> compareFile: collectedFile with:consensus with:biasedConsensus with: tieredStrategy with: weightedVoting with: biasedWeightedVoting [ 
+    | collectedRows consensusRows consensusDict biasedConsensusRows biasedConsensusDict tieredStrategyRows tieredStrategyDict weightedVotingRows weightedVotingDict biasedWeightedVotingRows biasedWeightedVotingDict resultRow resultCollection key|
+
+    collectedRows := self rowsToDicts: (self readCSV: collectedFile).
+	 
+	 "AllStrategy"
+	
+	 "consensus"
+    consensusRows := self rowsToDicts: (self readCSV: consensus).
+    consensusDict := self toDictionaryByKeyStrategy: consensusRows.
+		
+	 
+	 "BiasedConsensus"
+	 biasedConsensusRows := self rowsToDicts: (self readCSV: biasedConsensus).
+    biasedConsensusDict := self toDictionaryByKeyStrategy: biasedConsensusRows.
+	 "TieredStrategy"
+	 tieredStrategyRows := self rowsToDicts: (self readCSV: tieredStrategy).
+    tieredStrategyDict := self toDictionaryByKeyStrategy: tieredStrategyRows.
+	 
+	 "WeightedVoting "
+	 weightedVotingRows := self rowsToDicts: (self readCSV: weightedVoting).
+    weightedVotingDict := self toDictionaryByKeyStrategy: weightedVotingRows.
+ 
+    "BiasedWeightedVoting"
+	 biasedWeightedVotingRows := self rowsToDicts: (self readCSV: biasedWeightedVoting).
+    biasedWeightedVotingDict := self toDictionaryByKeyStrategy: biasedWeightedVotingRows.
+     
+	 "Result"
+    resultCollection := OrderedCollection new.
+
+    collectedRows do: [ :row |
+        | varConsensus varBiasedConsensus varTieredStrategy varWeightedVoting  varbiasedWeightedVoting  typeConsensus typeBiasedConsensus typeTieredStrategy typeWeightedVoting  typebiasedWeightedVoting comparaison allStrategy|
+        
+        key := (row at: 'methodSelector'), '|', (row at: 'className').
+	
+        resultRow := Dictionary new.
+        resultRow at: 'package' put: (row at: 'package' ifAbsent: [ '' ]).
+        resultRow at: 'className' put: (row at: 'className').
+        resultRow at: 'methodSelector' put: (row at: 'methodSelector').
+		  resultRow at: 'typeCollected' put: (row at: 'typeCollected').
+		  "Consensus"
+        varConsensus := consensusDict at: key ifAbsent: [ nil ].
+		  typeConsensus := varConsensus
+    								ifNotNil: [ varConsensus at: 'typeInferred' ]
+   			 						ifNil: [ nil ].
+		  "typeConsensus := (varConsensus at: 'typeInferred')."
+		  resultRow at: 'consensus' put: typeConsensus.
+		  "BiasedConsensus"
+		  varBiasedConsensus := biasedConsensusDict at: key ifAbsent: [ nil ]. 
+		  typeBiasedConsensus := varBiasedConsensus
+											ifNotNil: [ varBiasedConsensus at: 'typeInferred' ]
+											ifNil: [ nil ].
+		
+		  resultRow at: 'biasedConsensus' put: typeBiasedConsensus.
+		
+		  "TieredStrategy"
+		  varTieredStrategy := (tieredStrategyDict at: key ifAbsent: [nil]).
+		  typeTieredStrategy := varTieredStrategy 
+											ifNotNil: [ varTieredStrategy at: 'typeInferred' ]
+											ifNil: [ nil ].
+		  resultRow at: 'tieredStrategy' put: typeTieredStrategy .
+		
+		  "WeightedVoting"
+		  varWeightedVoting := (weightedVotingDict at: key ifAbsent: [nil]).
+		  typeWeightedVoting :=varWeightedVoting
+										ifNotNil: [ varWeightedVoting at: 'typeInferred' ]
+										ifNil: [ nil ].
+		  resultRow at: 'weightedVoting' put: typeWeightedVoting.
+		
+		  "BiasedWeigtedVoting"
+		  varbiasedWeightedVoting := (biasedWeightedVotingDict at: key ifAbsent: [ nil ]).
+		  typebiasedWeightedVoting := varbiasedWeightedVoting
+												 ifNotNil: [ varbiasedWeightedVoting at: 'typeInferred' ]
+										       ifNil: [ nil ].	
+		 
+		  resultRow at: 'biasedWeightedVoting' put: typebiasedWeightedVoting.
+		 
+		  "Comparaison"
+		  allStrategy := {
+   			 typeConsensus.
+   			 typeBiasedConsensus.
+    		 typeTieredStrategy.
+    		typeWeightedVoting.
+         typebiasedWeightedVoting
+		  } .
+		  
+
+		 comparaison := self allEqual: allStrategy.
+		  resultRow at: 'comparaisonType' put: comparaison.
+        "AllResult"
         resultCollection add: resultRow.
     ].
 
@@ -116,9 +219,9 @@ CSVComparator >> compteResults: aResultCompared [
 		].
 		^ Dictionary new
 		  at: 'total' put:total;
-        at: 'nil' put: nilCompte;
-        at: 'true' put: trueCompte;
-        at: 'false' put: falseCompte;
+        at: 'nil' put: ((nilCompte*100)/ total);
+        at: 'true' put: ((trueCompte*100)/ total);
+        at: 'false' put: ((falseCompte*100)/total);
         yourself.
 ]
 
@@ -171,16 +274,19 @@ CSVComparator >> expotResults: results toFile: path [
 CSVComparator >> readCSV: aFile [
     | rows |
     rows := OrderedCollection new.
-"(FileLocator workingDirectory / aFile) readStreamDo: [ :stream |
+	"For a real File"
+	(FileLocator workingDirectory / aFile) readStreamDo: [ :stream |
         (NeoCSVReader on: stream)
             separator: $,;
             do: [ :row | rows add: row ].
     ].
+	
+	"Using an in-memory FileSystem"
 	"aFile readStreamDo: [ :stream | 
 		(NeoCSVReader on: stream)
 			separator: $,;
 			do: [ :row | rows add: row  ].
-	].    
+	].  "  
     ^ rows
 ]
 
@@ -219,6 +325,18 @@ CSVComparator >> toDictionaryByKey: inferredCollection [
     inferredCollection do: [ :each |
         | key |
         key := (each at: 'methodName'), '|', (each at: 'className').
+        dict at: key put: each.
+    ].
+    ^ dict
+]
+
+{ #category : 'as yet unclassified' }
+CSVComparator >> toDictionaryByKeyStrategy: inferredCollection [
+    | dict |
+    dict := Dictionary new.
+    inferredCollection do: [ :each |
+        | key |
+        key := (each at: 'methodSelector'), '|', (each at: 'className').
         dict at: key put: each.
     ].
     ^ dict

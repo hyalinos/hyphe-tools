@@ -54,6 +54,18 @@ ResultRow >> result: aResult [
 ]
 
 { #category : 'accessing' }
+ResultRow >> toDictionaryByKey: resultRow [
+    | dict |
+    dict := Dictionary new.
+    resultRow do: [ :each |
+        | key |
+        key := (each at: 'methodName'), '|', (each at: 'className').
+        dict at: key put: each.
+    ].
+    ^ dict
+]
+
+{ #category : 'accessing' }
 ResultRow >> typeCollected [
 	^ typeCollected
 ]
