@@ -12,6 +12,45 @@ CSVComparator >> allEqual: aCollection [
 ]
 
 { #category : 'verification' }
+CSVComparator >> compareAllStrategyCount: aDictionary [
+"Count the number of the method who have the same result and different result in inference"
+	|  count countSame countDiff sameRes diffRes |
+	countSame := 0.
+	countDiff := 0.
+	count := Dictionary new.
+	aDictionary do: [ :row | 
+		| result |
+		result := row at: 'comparaisonType'.
+		result ifTrue: [ countSame := countSame + 1 ] ifFalse: [ countDiff := countDiff + 1 ].
+  ].
+	count at:'Same result for all Strategy' put: countSame .
+	count at:'Different result for strategy' put: countDiff .
+	
+	^ count 
+]
+
+{ #category : 'verification' }
+CSVComparator >> compareAllStrategyDiffence: aDictionary [
+	|  res sameRes diffRes |
+	res := Dictionary new.
+	sameRes := OrderedCollection new.
+	diffRes := OrderedCollection new.
+	aDictionary do: [ :row | 
+		| result |
+		result := row at: 'comparaisonType'.
+		result ifTrue: [  
+			sameRes add: (row at: 'methodSelector' ).
+			] ifFalse: [ 
+			diffRes add: (row at: 'methodSelector').
+			].
+  ].
+	res at: 'Same result for all strategies' put: sameRes .
+	res at: 'Different result for strategies' put: diffRes .
+	
+	^ res
+]
+
+{ #category : 'verification' }
 CSVComparator >> compareFile: collectedFile with: inferredFile [
     | collectedRows inferredRows inferredDict resultRow resultCollection key |
 
@@ -84,12 +123,12 @@ CSVComparator >> compareFile: collectedFile with:consensus with:biasedConsensus 
     collectedRows do: [ :row |
         | varConsensus varBiasedConsensus varTieredStrategy varWeightedVoting  varbiasedWeightedVoting  typeConsensus typeBiasedConsensus typeTieredStrategy typeWeightedVoting  typebiasedWeightedVoting comparaison allStrategy|
         
-        key := (row at: 'methodSelector'), '|', (row at: 'className').
+        key := (row at: 'methodName'), '|', (row at: 'className').
 	
         resultRow := Dictionary new.
         resultRow at: 'package' put: (row at: 'package' ifAbsent: [ '' ]).
         resultRow at: 'className' put: (row at: 'className').
-        resultRow at: 'methodSelector' put: (row at: 'methodSelector').
+        resultRow at: 'methodSelector' put: (row at: 'methodName').
 		  resultRow at: 'typeCollected' put: (row at: 'typeCollected').
 		  "Consensus"
         varConsensus := consensusDict at: key ifAbsent: [ nil ].
@@ -250,27 +289,6 @@ CSVComparator >> exportResultsToCSV: results toFile: fileName [
 ]
 
 { #category : 'as yet unclassified' }
-CSVComparator >> expotResults: results toFile: path [
-	| writer |
-	writer := NeoCSVWriter on: ((FileLocator workingDirectory / path) writeStream).
-	writer separator: $,.
-	writer writeField: #('package' 'class' 'methodSelector' 'typeCollected' 'typeInferred' 'result').
-	results do: [ :r| 
-		writer writeField: {
-			r package.
-			r className.
-			r methodClass.
-			r typeCollected.
-			r typeInferred.
-			(r result isNil
-         	  ifTrue: ['nil']
-    		  ifFalse: [ r result asString ])
-		}.		
-   ].
-   writer close
-]
-
-{ #category : 'as yet unclassified' }
 CSVComparator >> readCSV: aFile [
     | rows |
     rows := OrderedCollection new.
@@ -282,11 +300,11 @@ CSVComparator >> readCSV: aFile [
     ].
 	
 	"Using an in-memory FileSystem"
-	"aFile readStreamDo: [ :stream | 
+   "aFile readStreamDo: [ :stream | 
 		(NeoCSVReader on: stream)
 			separator: $,;
 			do: [ :row | rows add: row  ].
-	].  "  
+	]. " 
     ^ rows
 ]
 

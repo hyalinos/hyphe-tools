@@ -15,7 +15,7 @@ CSVComparatorTest >> testCompareMultipleStrategiesMemory [
     "Collected"
     fileCollected := fs / 'collected.csv'.
     fileCollected writeStreamDo: [ :s |
-        s nextPutAll: 'package,className,methodSelector,typeCollected'; cr.
+        s nextPutAll: 'package,className,methodName,typeCollected'; cr.
         s nextPutAll: 'P1,A,add:,Integer'; cr.
         s nextPutAll: 'P1,A,remove:,String'; cr.
         s nextPutAll: 'P1,B,print:,Object'.
