@@ -11,6 +11,14 @@ Class {
 	#tag : 'Structure'
 }
 
+{ #category : 'as yet unclassified' }
+HyCFGNode class >> createWithNesting: nestingDepth [
+
+	^ self new
+		nestingDepth: nestingDepth;
+		yourself
+]
+
 { #category : 'initialization' }
 HyCFGNode >> addIncomingEdge: anEdge [ 
 
@@ -26,27 +34,26 @@ HyCFGNode >> addOutgoingEdge: anEdge [
 { #category : 'adding' }
 HyCFGNode >> findRootsOf: aNode [
 
-| visited toVisit earliestNodes |
-    
-    visited := Set new.
-    toVisit := OrderedCollection with: aNode.
-    earliestNodes := Set new.
-    
-    [ toVisit isEmpty ] whileFalse: [
-        | current predecessors |
-        current := toVisit removeFirst.
-        
-        (visited includes: current) ifFalse: [
-            visited add: current.
-            predecessors := current predecessors.
-            
-            predecessors isEmpty
-                ifTrue: [ earliestNodes add: current ]
-                ifFalse: [ toVisit addAll: predecessors ]
-        ]
-    ].
-    
-    ^ earliestNodes
+	| visited toVisit earliestNodes |
+
+	visited := Set new.
+	toVisit := OrderedCollection with: aNode.
+	earliestNodes := Set new.
+
+	[ toVisit isEmpty ] whileFalse: [
+			| current predecessors |
+				1 halt.
+			current := toVisit removeFirst.
+
+			(visited includes: current) ifFalse: [
+					visited add: current.
+					predecessors := current predecessors.
+
+					predecessors isEmpty
+						ifTrue: [ earliestNodes add: current ]
+						ifFalse: [ toVisit addAll: predecessors ] ] ].
+
+	^ earliestNodes
 ]
 
 { #category : 'accessing' }
