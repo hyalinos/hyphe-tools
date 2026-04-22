@@ -22,6 +22,12 @@ Class {
 	#package : 'Hyphe-Tools'
 }
 
+{ #category : 'as yet unclassified' }
+BlocsCounter >> dephBlocInMethod: aMethod [
+	 aMethod ast acceptVisitor: self.
+	 ^ blockCounts 
+]
+
 { #category : 'initialization' }
 BlocsCounter >> initialize [
 	super initialize .
@@ -32,7 +38,10 @@ BlocsCounter >> initialize [
 
 { #category : 'as yet unclassified' }
 BlocsCounter >> maxDephBlocInMethod: aMethod [
-		
+	aMethod ast acceptVisitor: self.
+  ^ blockCounts isEmpty
+        ifTrue: [ 0 ]
+        ifFalse: [ blockCounts values max ]
 ]
 
 { #category : 'as yet unclassified' }
