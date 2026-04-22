@@ -5,6 +5,51 @@ Class {
 	#package : 'Hyphe-Tools'
 }
 
+{ #category : 'as yet unclassified' }
+CSVComparator >> allEqual: aCollection [
+    aCollection isEmpty ifTrue: [ ^ false ].
+    ^ aCollection allSatisfy: [ :each | each = aCollection first ]
+]
+
+{ #category : 'verification' }
+CSVComparator >> compareAllStrategyCount: aDictionary [
+"Count the number of the method who have the same result and different result in inference"
+	|  count countSame countDiff sameRes diffRes |
+	countSame := 0.
+	countDiff := 0.
+	count := Dictionary new.
+	aDictionary do: [ :row | 
+		| result |
+		result := row at: 'comparaisonType'.
+		result ifTrue: [ countSame := countSame + 1 ] ifFalse: [ countDiff := countDiff + 1 ].
+  ].
+	count at:'Same result for all Strategy' put: countSame .
+	count at:'Different result for strategy' put: countDiff .
+	
+	^ count 
+]
+
+{ #category : 'verification' }
+CSVComparator >> compareAllStrategyDiffence: aDictionary [
+	|  res sameRes diffRes |
+	res := Dictionary new.
+	sameRes := OrderedCollection new.
+	diffRes := OrderedCollection new.
+	aDictionary do: [ :row | 
+		| result |
+		result := row at: 'comparaisonType'.
+		result ifTrue: [  
+			sameRes add: (row at: 'methodSelector' ).
+			] ifFalse: [ 
+			diffRes add: (row at: 'methodSelector').
+			].
+  ].
+	res at: 'Same result for all strategies' put: sameRes .
+	res at: 'Different result for strategies' put: diffRes .
+	
+	^ res
+]
+
 { #category : 'verification' }
 CSVComparator >> compareFile: collectedFile with: inferredFile [
     | collectedRows inferredRows inferredDict resultRow resultCollection key |
@@ -38,6 +83,103 @@ CSVComparator >> compareFile: collectedFile with: inferredFile [
                 resultRow result: ((resultRow typeCollected = resultRow typeInferred) | ((row at: 'commonType') = resultRow typeInferred))
             ]. 
 
+        resultCollection add: resultRow.
+    ].
+
+    ^ resultCollection
+]
+
+{ #category : 'verification' }
+CSVComparator >> compareFile: collectedFile with:consensus with:biasedConsensus with: tieredStrategy with: weightedVoting with: biasedWeightedVoting [ 
+    | collectedRows consensusRows consensusDict biasedConsensusRows biasedConsensusDict tieredStrategyRows tieredStrategyDict weightedVotingRows weightedVotingDict biasedWeightedVotingRows biasedWeightedVotingDict resultRow resultCollection key|
+
+    collectedRows := self rowsToDicts: (self readCSV: collectedFile).
+	 
+	 "AllStrategy"
+	
+	 "consensus"
+    consensusRows := self rowsToDicts: (self readCSV: consensus).
+    consensusDict := self toDictionaryByKeyStrategy: consensusRows.
+		
+	 
+	 "BiasedConsensus"
+	 biasedConsensusRows := self rowsToDicts: (self readCSV: biasedConsensus).
+    biasedConsensusDict := self toDictionaryByKeyStrategy: biasedConsensusRows.
+	 "TieredStrategy"
+	 tieredStrategyRows := self rowsToDicts: (self readCSV: tieredStrategy).
+    tieredStrategyDict := self toDictionaryByKeyStrategy: tieredStrategyRows.
+	 
+	 "WeightedVoting "
+	 weightedVotingRows := self rowsToDicts: (self readCSV: weightedVoting).
+    weightedVotingDict := self toDictionaryByKeyStrategy: weightedVotingRows.
+ 
+    "BiasedWeightedVoting"
+	 biasedWeightedVotingRows := self rowsToDicts: (self readCSV: biasedWeightedVoting).
+    biasedWeightedVotingDict := self toDictionaryByKeyStrategy: biasedWeightedVotingRows.
+     
+	 "Result"
+    resultCollection := OrderedCollection new.
+
+    collectedRows do: [ :row |
+        | varConsensus varBiasedConsensus varTieredStrategy varWeightedVoting  varbiasedWeightedVoting  typeConsensus typeBiasedConsensus typeTieredStrategy typeWeightedVoting  typebiasedWeightedVoting comparaison allStrategy|
+        
+        key := (row at: 'methodName'), '|', (row at: 'className').
+	
+        resultRow := Dictionary new.
+        resultRow at: 'package' put: (row at: 'package' ifAbsent: [ '' ]).
+        resultRow at: 'className' put: (row at: 'className').
+        resultRow at: 'methodSelector' put: (row at: 'methodName').
+		  resultRow at: 'typeCollected' put: (row at: 'typeCollected').
+		  "Consensus"
+        varConsensus := consensusDict at: key ifAbsent: [ nil ].
+		  typeConsensus := varConsensus
+    								ifNotNil: [ varConsensus at: 'typeInferred' ]
+   			 						ifNil: [ nil ].
+		  "typeConsensus := (varConsensus at: 'typeInferred')."
+		  resultRow at: 'consensus' put: typeConsensus.
+		  "BiasedConsensus"
+		  varBiasedConsensus := biasedConsensusDict at: key ifAbsent: [ nil ]. 
+		  typeBiasedConsensus := varBiasedConsensus
+											ifNotNil: [ varBiasedConsensus at: 'typeInferred' ]
+											ifNil: [ nil ].
+		
+		  resultRow at: 'biasedConsensus' put: typeBiasedConsensus.
+		
+		  "TieredStrategy"
+		  varTieredStrategy := (tieredStrategyDict at: key ifAbsent: [nil]).
+		  typeTieredStrategy := varTieredStrategy 
+											ifNotNil: [ varTieredStrategy at: 'typeInferred' ]
+											ifNil: [ nil ].
+		  resultRow at: 'tieredStrategy' put: typeTieredStrategy .
+		
+		  "WeightedVoting"
+		  varWeightedVoting := (weightedVotingDict at: key ifAbsent: [nil]).
+		  typeWeightedVoting :=varWeightedVoting
+										ifNotNil: [ varWeightedVoting at: 'typeInferred' ]
+										ifNil: [ nil ].
+		  resultRow at: 'weightedVoting' put: typeWeightedVoting.
+		
+		  "BiasedWeigtedVoting"
+		  varbiasedWeightedVoting := (biasedWeightedVotingDict at: key ifAbsent: [ nil ]).
+		  typebiasedWeightedVoting := varbiasedWeightedVoting
+												 ifNotNil: [ varbiasedWeightedVoting at: 'typeInferred' ]
+										       ifNil: [ nil ].	
+		 
+		  resultRow at: 'biasedWeightedVoting' put: typebiasedWeightedVoting.
+		 
+		  "Comparaison"
+		  allStrategy := {
+   			 typeConsensus.
+   			 typeBiasedConsensus.
+    		 typeTieredStrategy.
+    		typeWeightedVoting.
+         typebiasedWeightedVoting
+		  } .
+		  
+
+		 comparaison := self allEqual: allStrategy.
+		  resultRow at: 'comparaisonType' put: comparaison.
+        "AllResult"
         resultCollection add: resultRow.
     ].
 
@@ -116,9 +258,9 @@ CSVComparator >> compteResults: aResultCompared [
 		].
 		^ Dictionary new
 		  at: 'total' put:total;
-        at: 'nil' put: nilCompte;
-        at: 'true' put: trueCompte;
-        at: 'false' put: falseCompte;
+        at: 'nil' put: ((nilCompte*100)/ total);
+        at: 'true' put: ((trueCompte*100)/ total);
+        at: 'false' put: ((falseCompte*100)/total);
         yourself.
 ]
 
@@ -147,40 +289,22 @@ CSVComparator >> exportResultsToCSV: results toFile: fileName [
 ]
 
 { #category : 'as yet unclassified' }
-CSVComparator >> expotResults: results toFile: path [
-	| writer |
-	writer := NeoCSVWriter on: ((FileLocator workingDirectory / path) writeStream).
-	writer separator: $,.
-	writer writeField: #('package' 'class' 'methodSelector' 'typeCollected' 'typeInferred' 'result').
-	results do: [ :r| 
-		writer writeField: {
-			r package.
-			r className.
-			r methodClass.
-			r typeCollected.
-			r typeInferred.
-			(r result isNil
-         	  ifTrue: ['nil']
-    		  ifFalse: [ r result asString ])
-		}.		
-   ].
-   writer close
-]
-
-{ #category : 'as yet unclassified' }
 CSVComparator >> readCSV: aFile [
     | rows |
     rows := OrderedCollection new.
-"(FileLocator workingDirectory / aFile) readStreamDo: [ :stream |
+	"For a real File"
+	(FileLocator workingDirectory / aFile) readStreamDo: [ :stream |
         (NeoCSVReader on: stream)
             separator: $,;
             do: [ :row | rows add: row ].
     ].
-	"aFile readStreamDo: [ :stream | 
+	
+	"Using an in-memory FileSystem"
+   "aFile readStreamDo: [ :stream | 
 		(NeoCSVReader on: stream)
 			separator: $,;
 			do: [ :row | rows add: row  ].
-	].    
+	]. " 
     ^ rows
 ]
 
@@ -219,6 +343,18 @@ CSVComparator >> toDictionaryByKey: inferredCollection [
     inferredCollection do: [ :each |
         | key |
         key := (each at: 'methodName'), '|', (each at: 'className').
+        dict at: key put: each.
+    ].
+    ^ dict
+]
+
+{ #category : 'as yet unclassified' }
+CSVComparator >> toDictionaryByKeyStrategy: inferredCollection [
+    | dict |
+    dict := Dictionary new.
+    inferredCollection do: [ :each |
+        | key |
+        key := (each at: 'methodSelector'), '|', (each at: 'className').
         dict at: key put: each.
     ].
     ^ dict
