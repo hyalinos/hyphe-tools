@@ -80,7 +80,8 @@ ReceiverCounterTestData >> testMethod: arg1 and: arg2 [
 
 { #category : 'tests' }
 ReceiverCounterTestData >> testSelf [
-    self class.
+	self testSuper .
+   self class.
 	
 	
  
