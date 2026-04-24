@@ -1,3 +1,8 @@
+"
+I count the number of each type of receiver in a method
+To run this code, I need a compildMethod as argument:
+    returnInMethod: compiledMethod
+"
 Class {
 	#name : 'ReceiverCounter',
 	#superclass : 'OCProgramNodeVisitor',

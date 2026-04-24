@@ -1,3 +1,6 @@
+"
+I was created to structure data in CSVComparator.
+"
 Class {
 	#name : 'ResultRow',
 	#superclass : 'Object',
