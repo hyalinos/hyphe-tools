@@ -23,17 +23,107 @@ Class {
 }
 
 { #category : 'accessing' }
-LOCCounter class >> image [
+LOCCounter class >> example [
+
+	<script>
+	| collection |
+	collection := self imageMethodsLoc. 
 	
+	"print first 100 random methods with loc = 1" 
+	self printResults: (self methods: collection withLoc: 1) ofSize: 100 to: 'methods_random_100_loc_equal_1'.  
+	
+	"print first 100 random methods with loc > 1 and loc < 15" 
+	self printResults: (self methods: collection withLocFrom: 1 to: 15) ofSize: 100 to: 'methods_random_100_loc_above_1_below_15'.
+	
+	
+	"print first 100 random methods with loc > 15"
+	self printResults: (self methods: collection withLocFrom: 15) ofSize: 100 to: 'methods_random_100_loc_above_15'.
+]
+
+{ #category : 'accessing' }
+LOCCounter class >> imageMethodsLoc [
+
 	| result counter |
 	result := Dictionary new.
 	counter := self new.
-	
-	Smalltalk globals methods do: [ :method |
-		result at: method put: (counter linesOfCode: method)		
-	].
-	
+
+	Smalltalk globals methods do: [ :method | result at: method put: (counter linesOfCode: method) ].
+
 	^ result
+]
+
+{ #category : 'accessing' }
+LOCCounter class >> methods: methodsCollection withLoc: locNumber [
+
+	^ (methodsCollection keys select: [ :method | (methodsCollection at: method) = locNumber ]) asOrderedCollection
+]
+
+{ #category : 'accessing' }
+LOCCounter class >> methods: methodsCollection withLocBelow: locNumber [
+
+	^ (methodsCollection keys select: [ :method | (methodsCollection at: method) < locNumber ]) asOrderedCollection
+]
+
+{ #category : 'accessing' }
+LOCCounter class >> methods: methodsCollection withLocFrom: locNumber [
+
+	^ (methodsCollection keys select: [ :method | (methodsCollection at: method) > locNumber ]) asOrderedCollection
+]
+
+{ #category : 'accessing' }
+LOCCounter class >> methods: methodsCollection withLocFrom: minLocNumber to: maxLocNumber [
+
+	^ (methodsCollection keys select: [ :method |
+			   | num |
+			   num := methodsCollection at: method.
+			   num > minLocNumber and: num < maxLocNumber ]) asOrderedCollection
+]
+
+{ #category : 'accessing' }
+LOCCounter class >> printResults: sample ofSize: sampleSize to: fileName [
+
+	| stream |
+
+	stream := WriteStream on: String new.
+	stream
+		nextPutAll: 'package,class,selector';
+		cr.
+
+	(sample asOrderedCollection shuffled first: sampleSize) do: [ :method |
+			stream
+				nextPutAll: method methodClass package name;
+				nextPut: $,;
+				nextPutAll: method methodClass name;
+				nextPut: $,;
+				nextPutAll: method selector;
+				cr ].
+
+	(fileName , '.csv') asFileReference writeStreamDo: [ :f | f nextPutAll: stream contents ]
+]
+
+{ #category : 'accessing' }
+LOCCounter class >> trivial [
+
+	|collection sample stream|
+	
+collection := self image.
+
+sample := (collection keys select: [ :method |
+    (collection at: method) = 1
+]) asOrderedCollection shuffled first: 100.
+
+stream := WriteStream on: String new.
+stream nextPutAll: 'package,class,selector'; cr.
+
+sample do: [ :method |
+    stream
+        nextPutAll: method methodClass package name; nextPut: $,;
+        nextPutAll: method methodClass name; nextPut: $,;
+        nextPutAll: method selector; cr.
+].
+
+'trivial_sample.csv' asFileReference
+    writeStreamDo: [ :f | f nextPutAll: stream contents ].
 ]
 
 { #category : 'helpers' }
