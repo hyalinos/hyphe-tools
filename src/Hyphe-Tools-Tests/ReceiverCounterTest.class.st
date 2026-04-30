@@ -47,7 +47,7 @@ ReceiverCounterTest >> testMethodVariableCounter [
 	compiledMethod := ReceiverCounterTestData>>#testMethod:and:.
 	counter := ReceiverCounter new.
 	superReceiver := (counter receiverVariable: compiledMethod).
-	self assert: superReceiver equals: 1.
+	self assert: superReceiver equals: 2.
 ]
 
 { #category : 'tests' }
@@ -56,7 +56,7 @@ ReceiverCounterTest >> testSelfCounter [
 	compiledMethod := ReceiverCounterTestData>>#testSelf.
 	counter := ReceiverCounter new.
 	selfReceiver := (counter receiverSelves: compiledMethod).
-	self assert: selfReceiver equals: 1.
+	self assert: selfReceiver equals: 2.
 ]
 
 { #category : 'tests' }

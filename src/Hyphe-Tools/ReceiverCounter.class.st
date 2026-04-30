@@ -1,3 +1,8 @@
+"
+I count the number of each type of receiver in a method
+To run this code, I need a compildMethod as argument:
+    returnInMethod: compiledMethod
+"
 Class {
 	#name : 'ReceiverCounter',
 	#superclass : 'OCProgramNodeVisitor',
@@ -71,12 +76,13 @@ ReceiverCounter >> visitArgumentNode: anArgumentNode [
 { #category : 'visiting' }
 ReceiverCounter >> visitLiteralNode: aLiteralNode [
 	literalCount := literalCount + 1.
-	"super visitLiteralNode: aLiteralNode."
+	super visitLiteralNode: aLiteralNode.
 ]
 
 { #category : 'visiting' }
 ReceiverCounter >> visitLocalVariableNode: aLocalVariableNode [
 	localVarCount := localVarCount + 1.
+	super visitLocalVariableNode: aLocalVariableNode 
 ]
 
 { #category : 'visiting' }
@@ -108,6 +114,7 @@ ReceiverCounter >> visitMessageNodes: aMessageNode [
 { #category : 'visiting' }
 ReceiverCounter >> visitSelfNode: aSelfNode [
 	selfCount := selfCount + 1.
+	super visitSelfNode: aSelfNode 
 ]
 
 { #category : 'visiting' }
@@ -119,6 +126,7 @@ ReceiverCounter >> visitSequenceNode: aSequenceNode [
 { #category : 'visiting' }
 ReceiverCounter >> visitSuperNode: aSuperNode [
 	superCount := superCount + 1.
+	super visitSuperNode: aSuperNode 
 ]
 
 { #category : 'visiting' }
@@ -129,4 +137,5 @@ ReceiverCounter >> visitTemporaryVariableNode: aTemporaryVariableNode [
 { #category : 'visiting' }
 ReceiverCounter >> visitVariableNode: aVariableNode [
 	variableCount add: aVariableNode name.
+	super visitVariableNode: aVariableNode 
 ]

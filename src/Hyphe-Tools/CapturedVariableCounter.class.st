@@ -1,5 +1,5 @@
 "
-I calculate the amount of captured variable in a given method ( local variable used in block).
+I calculate the number of captured variable in a given method ( local variable used in block).
 To run this code: 
 - use a 'method:=  aClass >> aMethod ' as argument of the method who calculate the amount of captured variable:
    numberOfCapturedVariables: method.

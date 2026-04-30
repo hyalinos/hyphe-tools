@@ -1,3 +1,6 @@
+"
+I count the number of explicit method in a method
+"
 Class {
 	#name : 'ReturnCounter',
 	#superclass : 'OCProgramNodeVisitor',
