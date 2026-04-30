@@ -8,8 +8,9 @@ Class {
 		'size',
 		'implementors'
 	],
-	#category : 'Hyphe-Tools',
-	#package : 'Hyphe-Tools'
+	#category : 'Hyphe-Tools-StaticAnalysis',
+	#package : 'Hyphe-Tools',
+	#tag : 'StaticAnalysis'
 }
 
 { #category : 'as yet unclassified' }
