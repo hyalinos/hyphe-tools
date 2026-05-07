@@ -1,5 +1,7 @@
 "
 I calculate the number of isNil / ifNil: / == nil occurrences per LOC in a given method.
+I do not consider ^ nil, := nil
+
 To run this code:
 •	use a 'method:=  aClass >> aMethod ' as argument of the method who calculate the Nil-check density :
 nilCountIn: method.
