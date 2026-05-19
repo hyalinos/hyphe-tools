@@ -1,5 +1,5 @@
 "
-I count the number of explicit method in a method
+I count the number of explicit return in a method
 "
 Class {
 	#name : 'ReturnCounter',
