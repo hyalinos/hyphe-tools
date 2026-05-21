@@ -1,26 +1,9 @@
-"
-*compareFile: with:
-	-I compare two csv files (inferences files),and return a Dictionnayu as result
-	-To run this code, I need 2 csv files as argument:
-	compareFile: file1.csv with: file2.csv
-*compareFile:with:with:with:with:with
-	-I compare 5 csv files
-*compareFile: withDictionary:
-   -I compare a csv file with a dictionnary
-	-I consider a csv file where the header are the same as the keys on the dictionary
-	-I consider only the inference file.
-*exportResultsToCSVStandard:toFile:
-   -I export a collection of dictionary to a csv file
-	-I consider all dictionary
-	-To run this code, I need a list of dicitionary and the name of file as second argument
-	  exportResultsToCSVStandard:aDictionary toFile: aFile
-	
-"
 Class {
 	#name : 'CSVComparator',
 	#superclass : 'Object',
-	#category : 'Hyphe-Tools',
-	#package : 'Hyphe-Tools'
+	#category : 'Hyphe-Tools-StaticAnalysis',
+	#package : 'Hyphe-Tools',
+	#tag : 'StaticAnalysis'
 }
 
 { #category : 'as yet unclassified' }

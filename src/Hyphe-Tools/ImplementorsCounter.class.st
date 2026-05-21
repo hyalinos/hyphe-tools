@@ -1,9 +1,3 @@
-"
-I count how many implementers there are for each selector within a method.
-To run this code, I need a method as argument:
-   compiledMethod := aClass >> #aMethod.
-	analyzeMethod: compiledMethod
-"
 Class {
 	#name : 'ImplementorsCounter',
 	#superclass : 'OCProgramNodeVisitor',
@@ -12,8 +6,9 @@ Class {
 		'method',
 		'result'
 	],
-	#category : 'Hyphe-Tools',
-	#package : 'Hyphe-Tools'
+	#category : 'Hyphe-Tools-StaticAnalysis',
+	#package : 'Hyphe-Tools',
+	#tag : 'StaticAnalysis'
 }
 
 { #category : 'as yet unclassified' }

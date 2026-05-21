@@ -1,6 +1,7 @@
 Class {
 	#name : 'InferenceType',
 	#superclass : 'Object',
-	#category : 'Hyphe-Tools',
-	#package : 'Hyphe-Tools'
+	#category : 'Hyphe-Tools-StaticAnalysis',
+	#package : 'Hyphe-Tools',
+	#tag : 'StaticAnalysis'
 }
