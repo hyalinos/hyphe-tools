@@ -1,6 +1,3 @@
-"
-I was created to structure data in CSVComparator.
-"
 Class {
 	#name : 'ResultRow',
 	#superclass : 'Object',
@@ -12,8 +9,9 @@ Class {
 		'typeInferred',
 		'result'
 	],
-	#category : 'Hyphe-Tools',
-	#package : 'Hyphe-Tools'
+	#category : 'Hyphe-Tools-StaticAnalysis',
+	#package : 'Hyphe-Tools',
+	#tag : 'StaticAnalysis'
 }
 
 { #category : 'accessing' }
