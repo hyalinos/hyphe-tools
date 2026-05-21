@@ -17,6 +17,17 @@ Class {
 	#package : 'Hyphe-Tools'
 }
 
+{ #category : 'as yet unclassified' }
+CapturedVariableCounter class >> examplecCapturedVariable [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := CapturedVariableCountersTestData >> #complexCapture.
+	"Return the number of captured variable in the method"
+	count := self new numberOfCapturedVariables: method.
+	count inspect.
+]
+
 { #category : 'initialization' }
 CapturedVariableCounter >> capturedVariables [
     ^ capturedVariables

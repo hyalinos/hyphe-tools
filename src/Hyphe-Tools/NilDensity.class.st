@@ -17,6 +17,17 @@ Class {
 	#tag : 'StaticAnalysis'
 }
 
+{ #category : 'as yet unclassified' }
+NilDensity class >> exampleNilDensity [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := NilDensityTestData >> #methodWithMultipleNilChecks .
+   "Return the number of isNil / ifNil: / == nil occurrences per LOC."
+	count := self new nilCountIn: method.
+	count inspect.
+]
+
 { #category : 'initialization' }
 NilDensity >> initialize [ 
    super initialize.
