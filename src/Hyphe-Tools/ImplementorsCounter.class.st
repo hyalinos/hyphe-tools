@@ -17,6 +17,17 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+ImplementorsCounter class >> exampleImplementorCounter [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := ImplementorsCounterTestData >> #compiledMethod.
+   "Return a dictionary with all meesages sent in the method, and for each message sent , it counts the number of implementors"
+	count := self new analyzeMethod: method.
+	count inspect.
+]
+
+{ #category : 'as yet unclassified' }
 ImplementorsCounter >> analyzeMethod: aCompiledMethod [
 	method := aCompiledMethod.
 	aCompiledMethod ast acceptVisitor: self.

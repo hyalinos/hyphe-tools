@@ -15,6 +15,17 @@ Class {
 	#package : 'Hyphe-Tools'
 }
 
+{ #category : 'as yet unclassified' }
+RatioSelfSends class >> exampleRatioSelfSend [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := RatioSelfSendsTestData >> #highSelfMessage.
+   "Return the proportion of message sends where the receiver is self, relative to the total number of sends."
+	count := self new selfRatio: method.
+	count inspect.
+]
+
 { #category : 'initialization' }
 RatioSelfSends >> initialize [ 
 	super initialize.
