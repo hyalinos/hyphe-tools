@@ -1,10 +1,3 @@
-"
-SelectorAnalysisResults stores a name of selector, size of implementors, and a collection of implementors names together with a true/false flag to show if they override the base method or not.
-
-To run this code: 
-•	use a 'method:=  aClass >> aMethod ' as argument of the method :
- analyzMethod: method.
-"
 Class {
 	#name : 'SelectorAnalysisResults',
 	#superclass : 'OCProgramNodeVisitor',
@@ -15,8 +8,9 @@ Class {
 		'size',
 		'implementors'
 	],
-	#category : 'Hyphe-Tools',
-	#package : 'Hyphe-Tools'
+	#category : 'Hyphe-Tools-StaticAnalysis',
+	#package : 'Hyphe-Tools',
+	#tag : 'StaticAnalysis'
 }
 
 { #category : 'as yet unclassified' }

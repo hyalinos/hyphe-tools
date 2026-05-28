@@ -1,3 +1,9 @@
+"
+For a method (can be both class or  instance side) in Pharo ImplmentorsCounter calculate all message sends, for each of this message send it counts how many classes in the image implement that selector.
+To use this code take a compiled method as argument.
+   implementors := ImplementorsCounter new.
+	implementorrs analyseMethod: aCompiledMethod.
+"
 Class {
 	#name : 'ImplementorsCounter',
 	#superclass : 'OCProgramNodeVisitor',
