@@ -1,3 +1,9 @@
+"
+For a method (can be both class or  instance side) in Pharo ImplmentorsCounter calculate all message sends, for each of this message send it counts how many classes in the image implement that selector.
+To use this code take a compiled method as argument.
+   implementors := ImplementorsCounter new.
+	implementorrs analyseMethod: aCompiledMethod.
+"
 Class {
 	#name : 'ImplementorsCounter',
 	#superclass : 'OCProgramNodeVisitor',
@@ -10,6 +16,17 @@ Class {
 	#package : 'Hyphe-Tools',
 	#tag : 'StaticAnalysis'
 }
+
+{ #category : 'as yet unclassified' }
+ImplementorsCounter class >> exampleImplementorCounter [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := ImplementorsCounterTestData >> #compiledMethod.
+   "Return a dictionary with all meesages sent in the method, and for each message sent , it counts the number of implementors"
+	count := self new analyzeMethod: method.
+	count inspect.
+]
 
 { #category : 'as yet unclassified' }
 ImplementorsCounter >> analyzeMethod: aCompiledMethod [

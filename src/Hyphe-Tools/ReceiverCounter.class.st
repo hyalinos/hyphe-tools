@@ -19,6 +19,50 @@ Class {
 	#tag : 'StaticAnalysis'
 }
 
+{ #category : 'as yet unclassified' }
+ReceiverCounter class >> exampleArgumentCounter [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := ReceiverCounterTestData>>#testArgument:and:and:.
+   "Return the number of argument in a method"
+	count := self new receiverArguments: method.
+	count inspect.
+]
+
+{ #category : 'as yet unclassified' }
+ReceiverCounter class >> exampleLiteralReceiverCounter [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := ReceiverCounterTestData>>#testLiteral.
+   "Return the number of literal receiver in a method"
+	count := self new receiverLiteral: method.
+	count inspect.
+]
+
+{ #category : 'as yet unclassified' }
+ReceiverCounter class >> exampleSelfCounter [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := ReceiverCounterTestData>>#testSelf.
+   "Return the number of self receiver in a method"
+	count := self new receiverSelves: method.
+	count inspect.
+]
+
+{ #category : 'as yet unclassified' }
+ReceiverCounter class >> exampleSuperCounter [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := ReceiverCounterTestData>>#testSuper.
+   "Return the number of Super receiver in a method"
+	count := self new receiverSupers: method.
+	count inspect.
+]
+
 { #category : 'initialization' }
 ReceiverCounter >> initialize [ 
 	super initialize.

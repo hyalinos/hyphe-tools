@@ -1,14 +1,13 @@
 "
 * numberOfBlocIn: 
-
-I calculate the total amount of the bloc in a method
-To run this code:
-- use a 'method:=  aClass >> aMethod ' as argument of the method who calculate the amount of bloc:
+I calculate the total amount of the bloc in a method.
+To run this code: use a 'method:=  aClass >> aMethod ' as argument of the method who calculate the amount of bloc:
    numberOfBlocIn: method.
 
 * maxDephBlocInMethod:
-
 I calculate the max the depth of nested block closures within a method.
+To run this code: use a 'method:= aClass >> aMethod' as argument of the method who calculate the max deph of a bloc in a method:
+maxDephBLocInMethod: method
 "
 Class {
 	#name : 'BlocsCounter',
@@ -21,6 +20,30 @@ Class {
 	#category : 'Hyphe-Tools',
 	#package : 'Hyphe-Tools'
 }
+
+{ #category : 'as yet unclassified' }
+BlocsCounter class >> exampleMaxDephBLoc [
+   <script>
+   |blocNumber method|
+	" a compiled method to analyze"
+	method := BlocCountersTestData >> #complexBlocks .
+	" return the max deph of a bloc in a method"
+	blocNumber := self new maxDephBlocInMethod: method.
+	blocNumber inspect.
+	
+]
+
+{ #category : 'as yet unclassified' }
+BlocsCounter class >> exampleNumberOfBloc [
+   <script>
+   |blocNumber method|
+	" a compiled method to analyze"
+	method := BlocCountersTestData >> #complexBlocks .
+	" return the number of a bloc in a method"
+	blocNumber := self new numberOfBlocIn: method.
+	blocNumber inspect.
+	
+]
 
 { #category : 'as yet unclassified' }
 BlocsCounter >> dephBlocInMethod: aMethod [

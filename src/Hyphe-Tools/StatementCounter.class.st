@@ -35,6 +35,17 @@ StatementCounter class >> countStatementsIn: aMethod [
     ^ self new countIn: aMethod
 ]
 
+{ #category : 'as yet unclassified' }
+StatementCounter class >> exampleStatementCounter [
+  <script>
+   | count method| 
+	" a method to analyze"
+	method := StatementCounterTestsData >> #methodWithBlock.
+   " Return the number of statement in the method"
+	count := self countStatementsIn: method .
+	count inspect.
+]
+
 { #category : 'initialization' }
 StatementCounter >> count [
 	

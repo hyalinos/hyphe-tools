@@ -17,6 +17,19 @@ Class {
 	#package : 'Hyphe-Tools'
 }
 
+{ #category : 'examples' }
+AssignmentCounter class >> example [
+   <script>
+	| method count|
+	" a compiled method"
+	method := AssignmentCountersTestData >> #complexAssignments.
+	"return the number of assignment present in method"
+	count := self new countAssignment: method.
+	count inspect.
+	
+
+]
+
 { #category : 'as yet unclassified' }
 AssignmentCounter >> countAssignment: aMethod [
 	aMethod ast acceptVisitor: self.

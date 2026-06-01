@@ -38,6 +38,16 @@ ImplementorsCounterTest >> testBlocMethod [
 ]
 
 { #category : 'tests' }
+ImplementorsCounterTest >> testClassMethod [
+	| compiledMethod counter result |
+	compiledMethod := ImplementorsCounterTestData class >> #testClass.
+	counter := ImplementorsCounter new.
+	result := counter analyzeMethod: compiledMethod.
+	self assert: (result at: compiledMethod) size equals: 1.
+	
+]
+
+{ #category : 'tests' }
 ImplementorsCounterTest >> testEmptyMethod [
 	| compiledMethod counter result |
 	compiledMethod := ImplementorsCounterTestData >> #emptyMethod.

@@ -12,6 +12,17 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+ReturnCounter class >> exampleReturnCounter [
+  <script>
+   | method count| 
+	"Compiled method to analyze, as an argument"
+	method := ReturnCountersTestData >> #multipleReturns.
+   "Return the number of explicit returns (^) in a method"
+	count := self new returnInMethod: method.
+	count inspect.
+]
+
+{ #category : 'as yet unclassified' }
 ReturnCounter >> initialize [
 	super initialize.
 	returnNumber := 0.
