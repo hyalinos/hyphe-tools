@@ -372,6 +372,22 @@ CSVComparator >> toDictByKey: rows [
 ]
 
 { #category : 'as yet unclassified' }
+CSVComparator >> toDictLOC: rows [
+	| header result|
+	header := rows first.
+	result := OrderedCollection new.
+	(rows allButFirst) do: [ :row | 
+		| dict |
+		dict := Dictionary new.
+		1 to: header size do: [ :i |
+			dict at: (header at: i) put: (row at: i ifAbsent:['']) asString trimBoth
+		 ].
+		result add: dict. 
+   ].
+	^ result
+]
+
+{ #category : 'as yet unclassified' }
 CSVComparator >> toDictionaryByKey: inferredCollection [
     | dict |
     dict := Dictionary new.
