@@ -30,6 +30,8 @@ ReceiverCounterTestData >> testArgument: aNumber and: aString [
 
 { #category : 'tests' }
 ReceiverCounterTestData >> testArgument: aNumber and: aString and: aClass [
+	 | test |
+	 test size.
     aNumber printString.
     aString size.
 	 aNumber size.
@@ -40,6 +42,8 @@ ReceiverCounterTestData >> testArgument: aNumber and: aString and: aClass [
 
 { #category : 'tests' }
 ReceiverCounterTestData >> testLiteral [
+	| test |
+	 test size.
     5 printString.
 	 6 printString.
 	 7 printString.
@@ -53,6 +57,7 @@ ReceiverCounterTestData >> testLocalVariable [
 	a := 1.
 	b := 2.
 	d:= 5.
+	var1 size.
 	c := a + b.
 	^ c
 	

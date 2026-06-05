@@ -24,12 +24,12 @@ ImplementorsCounter class >> exampleImplementorCounter [
 	"Compiled method to analyze, as an argument"
 	method := ImplementorsCounterTestData >> #compiledMethod.
    "Return a dictionary with all meesages sent in the method, and for each message sent , it counts the number of implementors"
-	count := self new analyzeMethod: method.
+	count := self new implementorsInMethod: method.
 	count inspect.
 ]
 
 { #category : 'as yet unclassified' }
-ImplementorsCounter >> analyzeMethod: aCompiledMethod [
+ImplementorsCounter >> implementorsInMethod: aCompiledMethod [
 	method := aCompiledMethod.
 	aCompiledMethod ast acceptVisitor: self.
 	result at: method put: selectors.
