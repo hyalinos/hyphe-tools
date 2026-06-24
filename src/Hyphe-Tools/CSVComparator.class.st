@@ -8,6 +8,7 @@ Class {
 
 { #category : 'as yet unclassified' }
 CSVComparator >> allEqual: aCollection [
+	"It compares two colletions"
     aCollection isEmpty ifTrue: [ ^ false ].
     ^ aCollection allSatisfy: [ :each | each = aCollection first ]
 ]
@@ -53,6 +54,7 @@ CSVComparator >> compareAllStrategyDiffence: aDictionary [
 
 { #category : 'verification' }
 CSVComparator >> compareFile: collectedFile with: inferredFile [
+	"It compares 2 files "
     | collectedRows inferredRows inferredDict resultRow resultCollection key |
 
     collectedRows := self rowsToDicts: (self readCSV: collectedFile).
@@ -92,6 +94,7 @@ CSVComparator >> compareFile: collectedFile with: inferredFile [
 
 { #category : 'verification' }
 CSVComparator >> compareFile: collectedFile with:consensus with:biasedConsensus with: tieredStrategy with: weightedVoting with: biasedWeightedVoting [ 
+	"It compares 6 collections "
     | collectedRows consensusRows consensusDict biasedConsensusRows biasedConsensusDict tieredStrategyRows tieredStrategyDict weightedVotingRows weightedVotingDict biasedWeightedVotingRows biasedWeightedVotingDict resultRow resultCollection key|
 
     collectedRows := self rowsToDicts: (self readCSV: collectedFile).
