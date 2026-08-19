@@ -22,6 +22,16 @@ ARTIPipelineTest >> testAllClassifiedTerminalsProduceAPlainUnionOrSingleType [
 ]
 
 { #category : 'tests' }
+ARTIPipelineTest >> testDynamicArrayClassifiesAsClassRefArrayThroughFullPipeline [
+
+	self
+		assert: (ARTIPipeline
+				 inferType: ARTIFixtures class >> #dynamicArrayPositive
+				 safetyTable: ARTINewSafetyTable new)
+		equals: (ARTIClassRef named: #Array)
+]
+
+{ #category : 'tests' }
 ARTIPipelineTest >> testEmptyBodyMethodIsExcluded [
 
 	self
@@ -56,6 +66,16 @@ ARTIPipelineTest >> testPrimitiveMethodIsExcluded [
 				 inferType: ARTIFixtures class >> #gatePrimitiveExcluded
 				 safetyTable: ARTINewSafetyTable new)
 		equals: #excludedPrimitive
+]
+
+{ #category : 'tests' }
+ARTIPipelineTest >> testSingleAssignmentTempClassifiesThroughFullPipeline [
+
+	self
+		assert: (ARTIPipeline
+				 inferType: ARTIFixtures class >> #singleAssignTempPositive
+				 safetyTable: ARTINewSafetyTable new)
+		equals: (ARTIClassRef named: #Integer)
 ]
 
 { #category : 'tests' }

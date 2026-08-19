@@ -14,12 +14,26 @@ Class {
 
 { #category : 'classifying' }
 ARTITypeVarCheck class >> classify: aTerminal context: aContext [
-	"Matches a return of one of the method's own formal parameters, unmodified anywhere in the
+
+	(aTerminal isKindOf: ARTIExplicitReturnTerminal) ifFalse: [ ^ nil ].
+	^ self matchExpr: aTerminal returnValueNode context: aContext
+]
+
+{ #category : 'testing' }
+ARTITypeVarCheck class >> isParameterNamed: aName reassignedIn: methodNode [
+	"Scans the whole method body -- including inside nested blocks and conditional branches --
+	for any assignment to a variable with this name."
+
+	^ methodNode assignmentNodes anySatisfy: [ :assignment |
+		  assignment variable name = aName ]
+]
+
+{ #category : 'classifying' }
+ARTITypeVarCheck class >> matchExpr: exprNode context: aContext [
+	"Matches a return of one of the method''s own formal parameters, unmodified anywhere in the
 	method body. Excluded (reports no match, not Unknown) when that parameter is reassigned."
 
-	| exprNode methodNode position |
-	(aTerminal isKindOf: ARTIExplicitReturnTerminal) ifFalse: [ ^ nil ].
-	exprNode := aTerminal returnValueNode.
+	| methodNode position |
 	(exprNode isKindOf: OCVariableNode) ifFalse: [ ^ nil ].
 	(exprNode variable isKindOf: ArgumentVariable) ifFalse: [ ^ nil ].
 
@@ -32,13 +46,4 @@ ARTITypeVarCheck class >> classify: aTerminal context: aContext [
 		 isParameterNamed: exprNode variable name
 		 reassignedIn: methodNode) ifTrue: [ ^ nil ].
 	^ ARTITypeVarType position: position
-]
-
-{ #category : 'testing' }
-ARTITypeVarCheck class >> isParameterNamed: aName reassignedIn: methodNode [
-	"Scans the whole method body -- including inside nested blocks and conditional branches --
-	for any assignment to a variable with this name."
-
-	^ methodNode assignmentNodes anySatisfy: [ :assignment |
-		  assignment variable name = aName ]
 ]

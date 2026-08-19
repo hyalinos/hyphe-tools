@@ -23,7 +23,7 @@ ARTICascadeShapeCheck class >> classify: aTerminal context: aContext [
 
 { #category : 'accessing' }
 ARTICascadeShapeCheck class >> delegateCheckClasses [
-	"Only these five checks may match a cascade's receiver sub-expression; TypeVar and BlockLiteral
+	"Only these six checks may match a cascade's receiver sub-expression; TypeVar and BlockLiteral
 	are intentionally excluded, and check 9 is deliberately not in its own delegate list."
 
 	^ {
@@ -31,7 +31,8 @@ ARTICascadeShapeCheck class >> delegateCheckClasses [
 		  ARTIClassGlobalReadCheck.
 		  ARTISelfCheck.
 		  ARTISelfClassCheck.
-		  ARTIClassNameNewCheck }
+		  ARTIClassNameNewCheck.
+		  ARTIDynamicArrayCheck }
 ]
 
 { #category : 'classifying' }

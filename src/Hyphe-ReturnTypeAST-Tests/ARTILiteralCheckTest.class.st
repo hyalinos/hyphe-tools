@@ -23,6 +23,18 @@ ARTILiteralCheckTest >> testNegativeDynamicArrayIsNotALiteralNode [
 ]
 
 { #category : 'tests' }
+ARTILiteralCheckTest >> testNegativeDynamicArrayStillDoesNotMatchCheck1 [
+	"Regression guard for the ARTIDynamicArrayCheck addition: check 1 must keep reporting no match for
+	{...}, since that shape now belongs to ARTIDynamicArrayCheck instead."
+
+	self assert: (ARTILiteralCheck
+			 classify:
+			 (ARTIFixtures explicitReturnTerminalFor: #dynamicArrayPositive)
+			 context: (ARTIFixtures contextForSelector: #dynamicArrayPositive))
+			isNil
+]
+
+{ #category : 'tests' }
 ARTILiteralCheckTest >> testNegativeGlobalReadDoesNotMatch [
 
 	self assert: (ARTILiteralCheck

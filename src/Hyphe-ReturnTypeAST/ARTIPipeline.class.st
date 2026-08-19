@@ -12,7 +12,9 @@ Class {
 
 { #category : 'accessing' }
 ARTIPipeline class >> allChecks [
-	"REQ-A1: each of the 10 checks is independent; this is the only place that knows the full list."
+	"REQ-A1: each of the 12 checks (the original 10, plus ARTIDynamicArrayCheck and
+	ARTISingleAssignmentTempCheck, both added after comparing against OCTypingVisitor) is
+	independent; this is the only place that knows the full list."
 
 	^ {
 		  ARTILiteralCheck.
@@ -24,7 +26,9 @@ ARTIPipeline class >> allChecks [
 		  ARTIClassNameNewCheck.
 		  ARTITypeVarCheck.
 		  ARTICascadeShapeCheck.
-		  ARTIBlockLiteralCheck }
+		  ARTIBlockLiteralCheck.
+		  ARTIDynamicArrayCheck.
+		  ARTISingleAssignmentTempCheck }
 ]
 
 { #category : 'classifying' }
