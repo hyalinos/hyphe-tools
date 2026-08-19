@@ -34,6 +34,18 @@ ARTICascadeShapeCheckTest >> testDelegatesToClassNameNewCheck [
 ]
 
 { #category : 'tests' }
+ARTICascadeShapeCheckTest >> testDelegatesToDynamicArrayCheck [
+
+	self
+		assert: (ARTICascadeShapeCheck
+				 classify:
+				 (ARTIFixtures explicitReturnTerminalFor: #cascadeOnDynamicArray)
+				 context:
+				 (ARTIFixtures contextForSelector: #cascadeOnDynamicArray))
+		equals: (ARTIClassRef named: #Array)
+]
+
+{ #category : 'tests' }
 ARTICascadeShapeCheckTest >> testDelegatesToLiteralCheck [
 
 	self

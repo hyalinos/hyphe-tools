@@ -25,7 +25,9 @@ ARTICheckPairwiseDisjointTest >> assertExactlyOneMatchFor: aSelector expected: e
 
 { #category : 'accessing' }
 ARTICheckPairwiseDisjointTest >> explicitReturnChecks [
-	"REQ-C2: the 8 checks that can match an ExplicitReturn(Expr) terminal."
+	"REQ-C2: the checks that can match an ExplicitReturn(Expr) terminal (the original 8, plus
+	ARTIDynamicArrayCheck and ARTISingleAssignmentTempCheck, both added after comparing against
+	OCTypingVisitor)."
 
 	^ {
 		  ARTILiteralCheck.
@@ -35,7 +37,9 @@ ARTICheckPairwiseDisjointTest >> explicitReturnChecks [
 		  ARTIClassNameNewCheck.
 		  ARTITypeVarCheck.
 		  ARTICascadeShapeCheck.
-		  ARTIBlockLiteralCheck }
+		  ARTIBlockLiteralCheck.
+		  ARTIDynamicArrayCheck.
+		  ARTISingleAssignmentTempCheck }
 ]
 
 { #category : 'tests' }
@@ -71,6 +75,14 @@ ARTICheckPairwiseDisjointTest >> testClassNameNewShapeMatchesOnlyThatCheck [
 ]
 
 { #category : 'tests' }
+ARTICheckPairwiseDisjointTest >> testDynamicArrayShapeMatchesOnlyThatCheck [
+
+	self
+		assertExactlyOneMatchFor: #dynamicArrayPositive
+		expected: ARTIDynamicArrayCheck
+]
+
+{ #category : 'tests' }
 ARTICheckPairwiseDisjointTest >> testLiteralShapeMatchesOnlyLiteralCheck [
 
 	self
@@ -90,6 +102,14 @@ ARTICheckPairwiseDisjointTest >> testSelfClassShapeMatchesOnlySelfClassCheck [
 ARTICheckPairwiseDisjointTest >> testSelfShapeMatchesOnlySelfCheck [
 
 	self assertExactlyOneMatchFor: #selfPositive expected: ARTISelfCheck
+]
+
+{ #category : 'tests' }
+ARTICheckPairwiseDisjointTest >> testSingleAssignmentTempShapeMatchesOnlyThatCheck [
+
+	self
+		assertExactlyOneMatchFor: #singleAssignTempPositive
+		expected: ARTISingleAssignmentTempCheck
 ]
 
 { #category : 'tests' }

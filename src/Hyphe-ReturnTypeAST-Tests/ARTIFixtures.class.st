@@ -66,6 +66,14 @@ ARTIFixtures class >> cascadeOnClassNew [
 		  yourself
 ]
 
+{ #category : 'dynamic array check fixtures' }
+ARTIFixtures class >> cascadeOnDynamicArray [
+
+	^ { 1. 2 }
+		  printString;
+		  yourself
+]
+
 { #category : 'cascade shape fixtures' }
 ARTIFixtures class >> cascadeOnGlobalRead [
 
@@ -164,6 +172,38 @@ ARTIFixtures class >> contextForSelector: aSelector [
 	^ ARTICheckContext
 		  methodNode: (self class >> aSelector) ast
 		  safetyTable: ARTINewSafetyTable new
+]
+
+{ #category : 'dynamic array check fixtures' }
+ARTIFixtures class >> dynamicArrayNegativeLiteral [
+
+	^ 5
+]
+
+{ #category : 'dynamic array check fixtures' }
+ARTIFixtures class >> dynamicArrayNegativeLiteralArray [
+
+	^ #( 1 2 3 )
+]
+
+{ #category : 'dynamic array check fixtures' }
+ARTIFixtures class >> dynamicArrayPositive [
+
+	^ { 1. 2 }
+]
+
+{ #category : 'dynamic array check fixtures' }
+ARTIFixtures class >> dynamicArrayPositiveEmpty [
+
+	^ {  }
+]
+
+{ #category : 'dynamic array check fixtures' }
+ARTIFixtures class >> dynamicArrayPositiveWithExpressions [
+
+	^ {
+		  (1 + 1).
+		  self class }
 ]
 
 { #category : 'test support' }
@@ -390,6 +430,72 @@ ARTIFixtures class >> selfNegativeLiteral [
 ARTIFixtures class >> selfPositive [
 
 	^ self
+]
+
+{ #category : 'single-assignment temp check fixtures' }
+ARTIFixtures class >> singleAssignTempExclusionAssignedInBranch: cond [
+
+	| x |
+	cond ifTrue: [ x := 5 ].
+	^ x
+]
+
+{ #category : 'single-assignment temp check fixtures' }
+ARTIFixtures class >> singleAssignTempExclusionReassigned [
+
+	| x |
+	x := 5.
+	x := 6.
+	^ x
+]
+
+{ #category : 'single-assignment temp check fixtures' }
+ARTIFixtures class >> singleAssignTempNegativeUnclassifiableRhs [
+
+	| x |
+	x := self foo bar.
+	^ x
+]
+
+{ #category : 'single-assignment temp check fixtures' }
+ARTIFixtures class >> singleAssignTempOrderCheck: cond [
+
+	| x |
+	cond ifTrue: [ ^ x ].
+	x := 5.
+	^ x
+]
+
+{ #category : 'single-assignment temp check fixtures' }
+ARTIFixtures class >> singleAssignTempPositive [
+
+	| x |
+	x := 5.
+	^ x
+]
+
+{ #category : 'single-assignment temp check fixtures' }
+ARTIFixtures class >> singleAssignTempPositiveViaClassNameNew [
+
+	| x |
+	x := ARTISafeFixtureClass new.
+	^ x
+]
+
+{ #category : 'single-assignment temp check fixtures' }
+ARTIFixtures class >> singleAssignTempPositiveViaDynamicArray [
+
+	| x |
+	x := { 1. 2 }.
+	^ x
+]
+
+{ #category : 'single-assignment temp check fixtures' }
+ARTIFixtures class >> singleAssignTempPositiveViaGlobalRead [
+
+	| x |
+	x := Integer.
+	^ x
 ]
 
 { #category : 'self class check fixtures' }
