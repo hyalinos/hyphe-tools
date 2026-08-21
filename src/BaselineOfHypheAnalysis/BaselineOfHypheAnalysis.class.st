@@ -18,8 +18,8 @@ BaselineOfHypheAnalysis class >> baseline: spec [
 				package: #'Hyphe-Analysis-Tests' with: [ spec requires: #( #'Hyphe-Analysis' ) ].
 
 			spec
-				group: #'Core' with: #( #'Hyphe-Analysis' #'Hyphe-Analysis-Tests' );
-				group: #'default' with: #( #'Core' ) ]
+				group: 'Core' with: #( 'Hyphe-Analysis' 'Hyphe-Analysis-Tests' );
+				group: 'default' with: #( 'Core' ) ]
 ]
 
 { #category : 'baselines' }

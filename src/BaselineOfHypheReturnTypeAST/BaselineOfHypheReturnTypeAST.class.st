@@ -26,10 +26,10 @@ BaselineOfHypheReturnTypeAST >> baseline: spec [
 								   #'Hyphe-ReturnTypeAST-Tests' ) ].
 
 			spec
-				group: #'Core'
-				with: #( #'Hyphe-TypeModel' #'Hyphe-ReturnTypeAST' #'Hyphe-ReturnTypeAST-Tests' );
-				group: #'All'
-				with: #( #'Hyphe-TypeModel' #'Hyphe-ReturnTypeAST' #'Hyphe-ReturnTypeAST-Tests'
-					   #'Hyphe-ReturnTypeAST-Analysis' #'Hyphe-ReturnTypeAST-Analysis-Tests' );
-				group: #'default' with: #( #'Core' ) ]
+				group: 'Core'
+				with: #( 'Hyphe-TypeModel' 'Hyphe-ReturnTypeAST' 'Hyphe-ReturnTypeAST-Tests' );
+				group: 'All'
+				with: #( 'Hyphe-TypeModel' 'Hyphe-ReturnTypeAST' 'Hyphe-ReturnTypeAST-Tests'
+					   'Hyphe-ReturnTypeAST-Analysis' 'Hyphe-ReturnTypeAST-Analysis-Tests' );
+				group: 'default' with: #( 'Core' ) ]
 ]

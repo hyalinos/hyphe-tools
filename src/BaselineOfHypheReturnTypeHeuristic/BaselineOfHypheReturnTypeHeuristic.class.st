@@ -18,8 +18,8 @@ BaselineOfHypheReturnTypeHeuristic class >> baseline: spec [
 				with: [ spec requires: #'Hyphe-ReturnTypeHeuristic' ].
 
 			spec
-				group: #'Core'
+				group: 'Core'
 				with:
-					#( #'Hyphe-TypeModel' #'Hyphe-ReturnTypeHeuristic' #'Hyphe-ReturnTypeHeuristic-Tests' );
-				group: #'default' with: #( #'Core' ) ]
+					#( 'Hyphe-TypeModel' 'Hyphe-ReturnTypeHeuristic' 'Hyphe-ReturnTypeHeuristic-Tests' );
+				group: 'default' with: #( 'Core' ) ]
 ]
