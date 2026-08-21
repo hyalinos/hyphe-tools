@@ -6,17 +6,17 @@ Class {
 }
 
 { #category : 'tests' }
-CTIEngineTest >> testBlockBranchesAreCurrentlyUnmodeled [
-	"Known limitation: block literals carry no type information yet, so a
-	conditional whose branches return different concrete types infers nothing
-	rather than a union. This test documents the gap - when block support
-	lands, this assertion should start failing and needs updating to expect
-	#(#ByteString #SmallInteger)."
+CTIEngineTest >> testBlockBranchesProduceUnion [
+	"Was testBlockBranchesAreCurrentlyUnmodeled: block support (composite
+	type variable + value-send resolution in drainLinkQueue) now wires both
+	branches of a conditional into a real union, as long as call sites
+	provide evidence for both receiver classes - here callPick/callPick2
+	call pick: with true and false respectively."
 
 	| inf info |
 	inf := CTIInferer inferClass: CTIDemoBranch.
 	info := inf methodInfoFor: CTIDemoBranch selector: #pick:.
-	self assert: (inf classNamesFor: info returnVar minBits) asArray isEmpty
+	self assert: (inf classNamesFor: info returnVar minBits) asArray equals: #( #ByteString #SmallInteger )
 ]
 
 { #category : 'tests' }

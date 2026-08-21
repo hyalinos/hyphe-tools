@@ -137,6 +137,12 @@ CTIInferer >> buildNodeFor: aNode scope: scope info: info class: aClass [
 				  scope: scope
 				  info: info
 				  class: aClass ].
+	cname == #OCBlockNode ifTrue: [
+			^ self
+				  nodeForBlock: aNode
+				  scope: scope
+				  info: info
+				  class: aClass ].
 	^ self newVar
 		  name: 'inert-' , cname;
 		  yourself
@@ -188,27 +194,40 @@ CTIInferer >> drainLinkQueue [
 	| any |
 	any := false.
 	[ linkQueue isEmpty ] whileFalse: [
-			| lnk bits |
+			| lnk |
 			lnk := linkQueue removeFirst.
 			linkQueuedSet remove: lnk.
-			bits := lnk receiverVar minBits bitXor: lnk linkedMask.
-			bits ~= 0 ifTrue: [
-					lnk linkedMask: lnk receiverVar minBits.
-					[ bits ~= 0 ] whileTrue: [
-							| bitPos mask cls linkInfo |
-							self bump: #linkOnceBitScan.
-							bitPos := bits lowBit.
-							mask := 1 bitShift: bitPos - 1.
-							cls := universe classAt: bitPos - 1.
-							bits := bits bitClear: mask.
-							linkInfo := self lookupMethod: cls selector: lnk selector.
-							linkInfo ifNotNil: [
-									lnk argVars with: linkInfo paramVars do: [ :a :p |
-											p addSubtype: a.
-											self enqueue: p ].
-									lnk sendVar addSubtype: linkInfo returnVar.
-									self enqueue: lnk sendVar.
-									any := true ] ] ] ].
+			((self isBlockValueSelector: lnk selector) and: [ lnk receiverVar blockInfo notNil ])
+				ifTrue: [
+						| blk |
+						blk := lnk receiverVar blockInfo.
+						lnk argVars size = blk paramVars size ifTrue: [
+								lnk argVars with: blk paramVars do: [ :a :p |
+										p addSubtype: a.
+										self enqueue: p ].
+								lnk sendVar addSubtype: blk returnVar.
+								self enqueue: lnk sendVar.
+								any := true ] ]
+				ifFalse: [
+						| bits |
+						bits := lnk receiverVar minBits bitXor: lnk linkedMask.
+						bits ~= 0 ifTrue: [
+								lnk linkedMask: lnk receiverVar minBits.
+								[ bits ~= 0 ] whileTrue: [
+										| bitPos mask cls linkInfo |
+										self bump: #linkOnceBitScan.
+										bitPos := bits lowBit.
+										mask := 1 bitShift: bitPos - 1.
+										cls := universe classAt: bitPos - 1.
+										bits := bits bitClear: mask.
+										linkInfo := self lookupMethod: cls selector: lnk selector.
+										linkInfo ifNotNil: [
+												lnk argVars with: linkInfo paramVars do: [ :a :p |
+														p addSubtype: a.
+														self enqueue: p ].
+												lnk sendVar addSubtype: linkInfo returnVar.
+												self enqueue: lnk sendVar.
+												any := true ] ] ] ] ].
 	^ any
 ]
 
@@ -237,6 +256,38 @@ CTIInferer >> enqueueLink: aLink [
 	(linkQueuedSet includes: aLink) ifFalse: [
 			linkQueuedSet add: aLink.
 			linkQueue addLast: aLink ]
+]
+
+{ #category : 'building' }
+CTIInferer >> generateBlockBody: aNode info: info class: aClass scope: scope blockInfo: blk [
+
+	| stmts last |
+	stmts := aNode body statements.
+	stmts isEmpty ifTrue: [
+			blk returnVar minBits: (blk returnVar minBits bitOr: (universe maskFor: UndefinedObject)).
+			self enqueue: blk returnVar.
+			^ self ].
+	stmts allButLast do: [ :s |
+			self
+				nodeFor: s
+				scope: scope
+				info: info
+				class: aClass ].
+	last := stmts last.
+	last class name == #OCReturnNode
+		ifTrue: [
+				info returnVar addSubtype: (self
+						 nodeFor: last value
+						 scope: scope
+						 info: info
+						 class: aClass) ]
+		ifFalse: [
+				blk returnVar addSubtype: (self
+						 nodeFor: last
+						 scope: scope
+						 info: info
+						 class: aClass) ].
+	self enqueue: blk returnVar
 ]
 
 { #category : 'building' }
@@ -318,6 +369,18 @@ CTIInferer >> initialize [
 ]
 
 { #category : 'building' }
+CTIInferer >> isBlockValueSelector: aSelector [
+
+	^ #( #value #value: #value:value: #value:value:value: #valueWithArguments: ) includes: aSelector
+]
+
+{ #category : 'building' }
+CTIInferer >> isBlockValueSend: aNode [
+
+	^ #( #value #value: #value:value: #value:value:value: #valueWithArguments: ) includes: aNode selector
+]
+
+{ #category : 'building' }
 CTIInferer >> isPrimitiveCreation: aNode recv: recv [
 
 	(aNode selector == #new or: [ aNode selector == #basicNew ]) ifFalse: [ ^ false ].
@@ -393,6 +456,35 @@ CTIInferer >> nodeFor: aNode scope: scope info: info class: aClass [
 		  scope: scope
 		  info: info
 		  class: aClass
+]
+
+{ #category : 'building' }
+CTIInferer >> nodeForBlock: aNode scope: scope info: info class: aClass [
+
+	| blk blockScope v |
+	blk := CTIBlockInfo new.
+	blockScope := scope copy.
+	blk paramVars: (aNode arguments collect: [ :a |
+				 | pv |
+				 pv := self newVar
+					       name: 'blockParam-' , a name;
+					       yourself.
+				 blockScope at: a name put: pv.
+				 pv ]) asOrderedCollection.
+	blk returnVar: (self newVar
+			 name: 'blockReturn';
+			 yourself).
+	self
+		generateBlockBody: aNode
+		info: info
+		class: aClass
+		scope: blockScope
+		blockInfo: blk.
+	v := self newVar
+		     name: 'block';
+		     yourself.
+	v blockInfo: blk.
+	^ v
 ]
 
 { #category : 'building' }
@@ -497,6 +589,11 @@ CTIInferer >> processMin: v [
 	self bump: #minCalls.
 	newMin := v minBits.
 	v subtypes do: [ :s | newMin := newMin bitOr: s minBits ].
+	v blockInfo isNil ifTrue: [
+			v subtypes do: [ :s |
+					(v blockInfo isNil and: [ s blockInfo notNil ]) ifTrue: [
+							v blockInfo: s blockInfo.
+							v linkClients do: [ :lnk | self enqueueLink: lnk ] ] ] ].
 	newMin ~= v minBits ifTrue: [
 			v minBits: newMin.
 			v supertypes do: [ :sup | self enqueue: sup ].
