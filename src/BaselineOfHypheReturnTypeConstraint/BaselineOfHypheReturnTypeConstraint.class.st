@@ -17,8 +17,8 @@ BaselineOfHypheReturnTypeConstraint class >> baseline: spec [
 				package: #'Hyphe-ReturnTypeConstraint-UI' with: [ spec requires: #( #'Hyphe-ReturnTypeConstraint' ) ].
 
 			spec
-				group: #'Core' with: #( #'Hyphe-TypeModel' #'Hyphe-ReturnTypeConstraint' #'Hyphe-ReturnTypeConstraint-Tests' );
-				group: #'UI' with: #( #'Hyphe-ReturnTypeConstraint-UI' );
-				group: #'All' with: #( #'Core' #'UI' );
-				group: #'default' with: #( #'Core' ) ]
+				group: 'Core' with: #( 'Hyphe-TypeModel' 'Hyphe-ReturnTypeConstraint' 'Hyphe-ReturnTypeConstraint-Tests' );
+				group: 'UI' with: #( 'Hyphe-ReturnTypeConstraint-UI' );
+				group: 'All' with: #( 'Core' 'UI' );
+				group: 'default' with: #( 'Core' ) ]
 ]

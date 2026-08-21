@@ -30,15 +30,15 @@ BaselineOfHyphe class >> baseline: spec [
 				package: #'Hyphe-CFG-Tests' with: [ spec requires: #( #'Hyphe-CFG' ) ].
 
 			spec
-				group: #'inference'
-				with: #( #'Hyphe-TypeModel'
-					   #'Hyphe-ReturnTypeAST' #'Hyphe-ReturnTypeAST-Tests'
-					   #'Hyphe-ReturnTypeHeuristic' #'Hyphe-ReturnTypeHeuristic-Tests'
-					   #'Hyphe-ReturnTypeConstraint' #'Hyphe-ReturnTypeConstraint-Tests' );
-				group: #'analysis'
-				with: #( #'Hyphe-Analysis' #'Hyphe-Analysis-Tests' #'Hyphe-CFG' #'Hyphe-CFG-Tests'
-					   #'Hyphe-ReturnTypeAST-Analysis' #'Hyphe-ReturnTypeAST-Analysis-Tests' );
-				group: #'all'
-				with: #( #'inference' #'analysis' #'Hyphe-ReturnTypeConstraint-UI' );
-				group: #'default' with: #( #'all' ) ]
+				group: 'inference'
+				with: #( 'Hyphe-TypeModel'
+					   'Hyphe-ReturnTypeAST' 'Hyphe-ReturnTypeAST-Tests'
+					   'Hyphe-ReturnTypeHeuristic' 'Hyphe-ReturnTypeHeuristic-Tests'
+					   'Hyphe-ReturnTypeConstraint' 'Hyphe-ReturnTypeConstraint-Tests' );
+				group: 'analysis'
+				with: #( 'Hyphe-Analysis' 'Hyphe-Analysis-Tests' 'Hyphe-CFG' 'Hyphe-CFG-Tests'
+					   'Hyphe-ReturnTypeAST-Analysis' 'Hyphe-ReturnTypeAST-Analysis-Tests' );
+				group: 'all'
+				with: #( 'inference' 'analysis' 'Hyphe-ReturnTypeConstraint-UI' );
+				group: 'default' with: #( 'all' ) ]
 ]

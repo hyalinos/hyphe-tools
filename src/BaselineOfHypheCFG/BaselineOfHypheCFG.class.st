@@ -15,6 +15,6 @@ BaselineOfHypheCFG class >> baseline: spec [
 				package: #'Hyphe-CFG-Tests' with: [ spec requires: #(#'Hyphe-CFG') ].
 
 			spec
-				group: #'Core' with: #( #'Hyphe-CFG' #'Hyphe-CFG-Tests' );
-				group: #'default' with: #( #'Core' ) ]
+				group: 'Core' with: #( 'Hyphe-CFG' 'Hyphe-CFG-Tests' );
+				group: 'default' with: #( 'Core' ) ]
 ]
