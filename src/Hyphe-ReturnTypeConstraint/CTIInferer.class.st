@@ -189,14 +189,6 @@ CTIInferer >> config: aConfig [
 	config := aConfig
 ]
 
-{ #category : 'reporting' }
-CTIInferer >> csvField: aString [
-
-	(aString includes: $,) | (aString includes: $") | (aString includes: Character lf) | (aString includes: Character cr) ifFalse: [
-		^ aString ].
-	^ '"' , (aString copyReplaceAll: '"' with: '""') , '"'
-]
-
 { #category : 'building' }
 CTIInferer >> declaringClassFor: aClass ivarNamed: aName [
 
@@ -580,31 +572,30 @@ CTIInferer >> nodeForVariable: aNode scope: scope info: info class: aClass [
 		  yourself
 ]
 
-{ #category : 'reporting' }
+{ #category : 'exporting' }
 CTIInferer >> printCSVTo: aFileReference [
 
+	aFileReference ensureDelete.
 	aFileReference writeStreamDo: [ :stream |
-			stream
-				nextPutAll: 'Package,Class,ClassSide,Selector,Type';
-				nextPut: Character lf.
-			methodInfos keysAndValuesDo: [ :cls :bySelector |
-					bySelector keysAndValuesDo: [ :sel :info |
-							| pkgName typeStr |
-							typeStr := (self typeFor: info returnVar minBits) asString.
-							pkgName := [ cls package name ]
-								           on: Error
-								           do: [ :e | '' ].
-							stream
-								nextPutAll: (self csvField: pkgName asString);
-								nextPut: $,;
-								nextPutAll: (self csvField: cls name asString);
-								nextPut: $,;
-								nextPutAll: 'false';
-								nextPut: $,;
-								nextPutAll: (self csvField: sel asString);
-								nextPut: $,;
-								nextPutAll: (self csvField: typeStr);
-								nextPut: Character lf ] ] ]
+			ZnBufferedWriteStream
+				on: stream
+				do: [ :out |
+						| writer |
+						writer := NeoCSVWriter on: out.
+						writer writeHeader: { #Package. #Class. #ClassSide. #Selector. #Type }.
+						methodInfos keysAndValuesDo: [ :cls :bySelector |
+								bySelector keysAndValuesDo: [ :sel :info |
+										| pkgName typeStr |
+										typeStr := (self typeFor: info returnVar minBits) asString.
+										pkgName := [ cls package name ]
+											           on: Error
+											           do: [ :e | '' ].
+										writer nextPut: {
+												pkgName asString.
+												cls name asString.
+												false.
+												sel asString.
+												typeStr } ] ] ] ]
 ]
 
 { #category : 'solving' }
