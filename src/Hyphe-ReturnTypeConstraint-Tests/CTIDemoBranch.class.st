@@ -6,6 +6,18 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+CTIDemoBranch >> callPick [
+
+	^ self pick: true
+]
+
+{ #category : 'as yet unclassified' }
+CTIDemoBranch >> callPick2 [
+
+	^ self pick: false
+]
+
+{ #category : 'as yet unclassified' }
 CTIDemoBranch >> pick: aBoolean [
 
 	^ aBoolean

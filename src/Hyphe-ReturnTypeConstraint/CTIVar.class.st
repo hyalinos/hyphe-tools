@@ -9,7 +9,8 @@ Class {
 		'supertypes',
 		'name',
 		'isSend',
-		'linkClients'
+		'linkClients',
+		'blockInfo'
 	],
 	#category : 'Hyphe-ReturnTypeConstraint',
 	#package : 'Hyphe-ReturnTypeConstraint'
@@ -43,6 +44,18 @@ CTIVar >> addSupertypeOnly: other [
 
 	supertypes ifNil: [ supertypes := Set new ].
 	supertypes add: other
+]
+
+{ #category : 'accessing' }
+CTIVar >> blockInfo [
+
+	^ blockInfo
+]
+
+{ #category : 'accessing' }
+CTIVar >> blockInfo: aBlockInfo [
+
+	blockInfo := aBlockInfo
 ]
 
 { #category : 'initialization' }
@@ -114,7 +127,7 @@ CTIVar >> name: aString [
 	name := aString
 ]
 
-{ #category : 'accessing' }
+{ #category : 'printing' }
 CTIVar >> printOn: aStream [
 
 	aStream nextPutAll: self name
