@@ -30,7 +30,7 @@ ARTHClassification class >> noMatchFor: aSelector [
 	^ self new
 		  setSelector: aSelector
 		  matchedPattern: nil
-		  expectedType: #NoMatch
+		  expectedType: HTMType unknown
 		  confidenceTier: nil
 ]
 
@@ -60,17 +60,16 @@ ARTHClassification >> matchedPattern [
 
 { #category : 'printing' }
 ARTHClassification >> printOn: aStream [
-
 	aStream
 		nextPutAll: selector asString;
 		nextPutAll: ' -> '.
 	self hasMatch
 		ifTrue: [
-				aStream
-					nextPutAll: expectedType asString;
-					nextPutAll: ' via ';
-					print: matchedPattern identifier ]
-		ifFalse: [ aStream nextPutAll: 'NoMatch' ]
+			aStream
+				nextPutAll: expectedType asString;
+				nextPutAll: ' via ';
+				print: matchedPattern identifier ]
+		ifFalse: [ aStream nextPutAll: expectedType asString ]
 ]
 
 { #category : 'accessing' }

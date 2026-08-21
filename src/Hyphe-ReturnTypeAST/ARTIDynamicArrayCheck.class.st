@@ -27,5 +27,5 @@ ARTIDynamicArrayCheck class >> matchExpr: exprNode context: aContext [
 	an Array, so no runtime-value inspection is needed the way check 1 needs it for normalization."
 
 	(exprNode isKindOf: OCArrayNode) ifFalse: [ ^ nil ].
-	^ ARTIClassRef named: #Array
+	^ HTMClassRef named: #Array
 ]

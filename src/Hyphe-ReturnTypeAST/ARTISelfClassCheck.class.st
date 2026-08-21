@@ -25,5 +25,5 @@ ARTISelfClassCheck class >> matchExpr: exprNode context: aContext [
 	exprNode selector = #class ifFalse: [ ^ nil ].
 	exprNode arguments isEmpty ifFalse: [ ^ nil ].
 	exprNode receiver isSelfOrSuperVariable ifFalse: [ ^ nil ].
-	^ ARTISelfClassType new
+	^ HTMSelfClass new
 ]

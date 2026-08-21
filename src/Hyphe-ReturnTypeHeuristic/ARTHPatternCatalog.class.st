@@ -19,7 +19,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   prefix: #isPrefixBoolean
 				   text: 'is'
-				   type: #Boolean
+				   type: (HTMType classRef: #Boolean)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 1802
@@ -30,7 +30,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   prefix: #hasPrefixBoolean
 				   text: 'has'
-				   type: #Boolean
+				   type: (HTMType classRef: #Boolean)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 126
@@ -40,7 +40,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #equalsBoolean
 				   text: '='
-				   type: #Boolean
+				   type: (HTMType classRef: #Boolean)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 29
@@ -50,7 +50,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #priorityNumber
 				   text: 'priority'
-				   type: #Number
+				   type: (HTMType classRef: #Number)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 70
@@ -60,7 +60,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   regex: #defaultNameDescriptionTitleString
 				   text: '^default[A-Z].*(Name|Description|Title)$'
-				   type: #String
+				   type: (HTMType classRef: #String)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 360
@@ -71,7 +71,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #titleString
 				   text: 'title'
-				   type: #String
+				   type: (HTMType classRef: #String)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 102
@@ -81,7 +81,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #defaultMenuIconNameString
 				   text: 'defaultMenuIconName'
-				   type: #String
+				   type: (HTMType classRef: #String)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 107
@@ -91,7 +91,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #defaultIconNameString
 				   text: 'defaultIconName'
-				   type: #String
+				   type: (HTMType classRef: #String)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 95
@@ -101,7 +101,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #descriptionString
 				   text: 'description'
-				   type: #String
+				   type: (HTMType classRef: #String)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 213
@@ -112,7 +112,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #orderNumber
 				   text: 'order'
-				   type: #Number
+				   type: (HTMType classRef: #Number)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 68
@@ -122,7 +122,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #keyString
 				   text: 'key'
-				   type: #String
+				   type: (HTMType classRef: #String)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 50
@@ -132,7 +132,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #shouldInheritSelectorsBoolean
 				   text: 'shouldInheritSelectors'
-				   type: #Boolean
+				   type: (HTMType classRef: #Boolean)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 40
@@ -142,7 +142,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exact: #manuallyResolvedDependenciesArray
 				   text: 'manuallyResolvedDependencies'
-				   type: #Array
+				   type: (HTMType classRef: #Array)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 53
@@ -153,7 +153,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   prefix: #manuallyPrefixArray
 				   text: 'manually'
-				   type: #Array
+				   type: (HTMType classRef: #Array)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 53
@@ -164,7 +164,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   suffix: #positiveSuffixArray
 				   text: 'Positive'
-				   type: #Array
+				   type: (HTMType classRef: #Array)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 188
@@ -174,7 +174,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   prefix: #wantsPrefixBoolean
 				   text: 'wants'
-				   type: #Boolean
+				   type: (HTMType classRef: #Boolean)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 50
@@ -184,7 +184,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   suffix: #resumableSuffixBoolean
 				   text: 'Resumable'
-				   type: #Boolean
+				   type: (HTMType classRef: #Boolean)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 34
@@ -194,7 +194,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   exactKeyword: #handlesMouseDownBoolean
 				   text: 'handlesMouseDown:'
-				   type: #Boolean
+				   type: (HTMType classRef: #Boolean)
 				   tier: #trusted
 				   calibration: (ARTHCalibrationMetadata
 						    n: 32
@@ -205,7 +205,7 @@ ARTHPatternCatalog class >> trusted [
 		  addPattern: (ARTHPattern
 				   suffix: #nameSuffixString
 				   text: 'Name'
-				   type: #String
+				   type: (HTMType classRef: #String)
 				   tier: #trustedWithCaveat
 				   calibration: (ARTHCalibrationMetadata
 						    n: 1844

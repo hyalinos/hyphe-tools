@@ -17,5 +17,5 @@ ARTIImplicitNoReturnCheck class >> classify: aTerminal context: aContext [
 	ambiguity with check 6 to resolve here)."
 
 	(aTerminal isKindOf: ARTIImplicitEndTerminal) ifFalse: [ ^ nil ].
-	^ ARTISelfType new
+	^ HTMSelf new
 ]

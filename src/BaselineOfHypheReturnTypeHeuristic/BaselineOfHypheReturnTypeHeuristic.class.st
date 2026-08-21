@@ -11,13 +11,15 @@ BaselineOfHypheReturnTypeHeuristic class >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 			spec
-				package: #'Hyphe-ReturnTypeHeuristic';
+				package: #'Hyphe-TypeModel';
+				package: #'Hyphe-ReturnTypeHeuristic'
+				with: [ spec requires: #(#'Hyphe-TypeModel') ];
 				package: #'Hyphe-ReturnTypeHeuristic-Tests'
 				with: [ spec requires: #'Hyphe-ReturnTypeHeuristic' ].
 
 			spec
-				group: 'Core'
+				group: #'Core'
 				with:
-					#( 'Hyphe-ReturnTypeHeuristic' 'Hyphe-ReturnTypeHeuristic-Tests' );
-				group: 'default' with: #( 'Core' ) ]
+					#( #'Hyphe-TypeModel' #'Hyphe-ReturnTypeHeuristic' #'Hyphe-ReturnTypeHeuristic-Tests' );
+				group: #'default' with: #( #'Core' ) ]
 ]

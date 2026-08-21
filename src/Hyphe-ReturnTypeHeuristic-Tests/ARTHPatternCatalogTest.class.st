@@ -15,7 +15,7 @@ ARTHPatternCatalogTest >> testBestMatchPicksHighestSpecificity [
 	shortPrefix := ARTHPattern
 		               prefix: #shortOne
 		               text: 'foo'
-		               type: #Boolean
+		               type: (HTMType classRef: #Boolean)
 		               tier: #trusted
 		               calibration: (ARTHCalibrationMetadata
 				                n: 1
@@ -25,7 +25,7 @@ ARTHPatternCatalogTest >> testBestMatchPicksHighestSpecificity [
 	longExact := ARTHPattern
 		             exact: #longOne
 		             text: 'fooBarBaz'
-		             type: #Number
+		             type: (HTMType classRef: #Number)
 		             tier: #trusted
 		             calibration: (ARTHCalibrationMetadata
 				              n: 1
@@ -39,7 +39,7 @@ ARTHPatternCatalogTest >> testBestMatchPicksHighestSpecificity [
 	result := cat bestMatchFor: #fooBarBaz classSide: false.
 	"Both patterns match #fooBarBaz -- the exact pattern (higher specificityRank) must win, not the\n\tprefix, and not simply 'whichever was added first'."
 	self assert: result matchedPattern identifier equals: #longOne.
-	self assert: result expectedType equals: #Number
+	self assert: result expectedType equals: (HTMType classRef: #Number)
 ]
 
 { #category : 'tests' }
@@ -82,7 +82,7 @@ ARTHPatternCatalogTest >> testBestMatchReturnsNoMatchClassificationWhenNothingAp
 	cat := ARTHPatternCatalog new.
 	result := cat bestMatchFor: #anythingAtAll classSide: false.
 	self deny: result hasMatch.
-	self assert: result expectedType equals: #NoMatch.
+	self assert: result expectedType equals: HTMType unknown.
 	self assert: result matchedPattern isNil
 ]
 

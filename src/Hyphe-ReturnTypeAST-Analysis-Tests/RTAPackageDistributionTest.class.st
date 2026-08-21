@@ -22,25 +22,25 @@ RTAPackageDistributionTest >> sampleResults [
 			 class: 'X'
 			 selector: #a
 			 classSide: false
-			 type: (ARTIClassRef named: #Integer)).
+			 type: (HTMClassRef named: #Integer)).
 	results add: (ARTIMethodResult
 			 package: 'PkgA'
 			 class: 'X'
 			 selector: #b
 			 classSide: false
-			 type: ARTISelfType new).
+			 type: HTMSelf new).
 	results add: (ARTIMethodResult
 			 package: 'PkgA'
 			 class: 'X'
 			 selector: #c
 			 classSide: true
-			 type: (ARTIClassRef named: #Integer)).
+			 type: (HTMClassRef named: #Integer)).
 	results add: (ARTIMethodResult
 			 package: 'PkgB'
 			 class: 'Y'
 			 selector: #d
 			 classSide: false
-			 type: ARTIUnknownType new).
+			 type: HTMUnknown new).
 	^ results
 ]
 

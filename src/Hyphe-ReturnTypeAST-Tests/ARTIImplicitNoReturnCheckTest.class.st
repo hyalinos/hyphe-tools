@@ -34,5 +34,5 @@ ARTIImplicitNoReturnCheckTest >> testPositiveImplicitEndTerminal [
 		assert: (ARTIImplicitNoReturnCheck
 				 classify: (ARTIImplicitEndTerminal forMethod: nil)
 				 context: nil)
-		equals: ARTISelfType new
+		equals: HTMSelf new
 ]

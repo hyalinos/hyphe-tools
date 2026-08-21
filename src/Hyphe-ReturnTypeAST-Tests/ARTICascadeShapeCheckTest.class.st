@@ -19,7 +19,7 @@ ARTICascadeShapeCheckTest >> testDelegatesToClassGlobalReadCheck [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #cascadeOnGlobalRead)
 				 context: (ARTIFixtures contextForSelector: #cascadeOnGlobalRead))
-		equals: (ARTIMetaclass named: #Integer)
+		equals: (HTMMetaclass named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -30,7 +30,7 @@ ARTICascadeShapeCheckTest >> testDelegatesToClassNameNewCheck [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #cascadeOnClassNew)
 				 context: (ARTIFixtures contextForSelector: #cascadeOnClassNew))
-		equals: (ARTIClassRef named: #ARTISafeFixtureClass)
+		equals: (HTMClassRef named: #ARTISafeFixtureClass)
 ]
 
 { #category : 'tests' }
@@ -42,7 +42,7 @@ ARTICascadeShapeCheckTest >> testDelegatesToDynamicArrayCheck [
 				 (ARTIFixtures explicitReturnTerminalFor: #cascadeOnDynamicArray)
 				 context:
 				 (ARTIFixtures contextForSelector: #cascadeOnDynamicArray))
-		equals: (ARTIClassRef named: #Array)
+		equals: (HTMClassRef named: #Array)
 ]
 
 { #category : 'tests' }
@@ -53,7 +53,7 @@ ARTICascadeShapeCheckTest >> testDelegatesToLiteralCheck [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #cascadeOnLiteral)
 				 context: (ARTIFixtures contextForSelector: #cascadeOnLiteral))
-		equals: (ARTIClassRef named: #Integer)
+		equals: (HTMClassRef named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -64,7 +64,7 @@ ARTICascadeShapeCheckTest >> testDelegatesToSelfCheck [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #cascadeOnSelf)
 				 context: (ARTIFixtures contextForSelector: #cascadeOnSelf))
-		equals: ARTISelfType new
+		equals: HTMSelf new
 ]
 
 { #category : 'tests' }
@@ -75,7 +75,7 @@ ARTICascadeShapeCheckTest >> testDelegatesToSelfClassCheck [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #cascadeOnSelfClass)
 				 context: (ARTIFixtures contextForSelector: #cascadeOnSelfClass))
-		equals: ARTISelfClassType new
+		equals: HTMSelfClass new
 ]
 
 { #category : 'tests' }

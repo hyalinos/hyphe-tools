@@ -47,7 +47,7 @@ ARTIPipeline class >> inferType: aCompiledMethod safetyTable: aSafetyTable [
 	"REQ-U1..U4. Answers one of:
 	- #excludedPrimitive  (REQ-G1: method carries a <primitive: N> pragma)
 	- #excludedEmpty      (REQ-G2: method body has no statements)
-	- an ARTIType, the method's inferred return type"
+	- an HTMType, the method's inferred return type"
 
 	| methodNode terminals context classified anyNoMatch |
 	(ARTIMethodGate isExcludedByPrimitive: aCompiledMethod) ifTrue: [
@@ -73,9 +73,9 @@ ARTIPipeline class >> inferType: aCompiledMethod safetyTable: aSafetyTable [
 				(classified includes: type) ifFalse: [ classified add: type ] ] ].
 
 	anyNoMatch ifTrue: [
-			classified isEmpty ifTrue: [ ^ ARTIUnknownType new ].
-			(classified includes: ARTIUnknownType new) ifFalse: [
-				classified add: ARTIUnknownType new ] ].
+			classified isEmpty ifTrue: [ ^ HTMUnknown new ].
+			(classified includes: HTMUnknown new) ifFalse: [
+				classified add: HTMUnknown new ] ].
 
-	^ ARTIUnionType withMembers: classified
+	^ HTMUnion withMembers: classified
 ]

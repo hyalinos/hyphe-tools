@@ -18,7 +18,7 @@ ARTIPipelineTest >> testAllClassifiedTerminalsProduceAPlainUnionOrSingleType [
 		assert: (ARTIPipeline
 				 inferType: ARTIFixtures class >> #literalInteger
 				 safetyTable: ARTINewSafetyTable new)
-		equals: (ARTIClassRef named: #Integer)
+		equals: (HTMClassRef named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -28,7 +28,7 @@ ARTIPipelineTest >> testDynamicArrayClassifiesAsClassRefArrayThroughFullPipeline
 		assert: (ARTIPipeline
 				 inferType: ARTIFixtures class >> #dynamicArrayPositive
 				 safetyTable: ARTINewSafetyTable new)
-		equals: (ARTIClassRef named: #Array)
+		equals: (HTMClassRef named: #Array)
 ]
 
 { #category : 'tests' }
@@ -54,8 +54,8 @@ ARTIPipelineTest >> testPartialNoMatchFoldsIntoUnionWithUnknown [
 	self assert: result isUnion.
 	self assert: result members size equals: 2.
 	self assert:
-		(result members includes: (ARTIClassRef named: #Integer)).
-	self assert: (result members includes: ARTIUnknownType new)
+		(result members includes: (HTMClassRef named: #Integer)).
+	self assert: (result members includes: HTMUnknown new)
 ]
 
 { #category : 'tests' }
@@ -75,7 +75,7 @@ ARTIPipelineTest >> testSingleAssignmentTempClassifiesThroughFullPipeline [
 		assert: (ARTIPipeline
 				 inferType: ARTIFixtures class >> #singleAssignTempPositive
 				 safetyTable: ARTINewSafetyTable new)
-		equals: (ARTIClassRef named: #Integer)
+		equals: (HTMClassRef named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -85,7 +85,7 @@ ARTIPipelineTest >> testSingleUnclassifiableTerminalIsExactlyUnknown [
 	result := ARTIPipeline
 		          inferType: ARTIFixtures class >> #unknownArbitrarySend
 		          safetyTable: ARTINewSafetyTable new.
-	self assert: result equals: ARTIUnknownType new
+	self assert: result equals: HTMUnknown new
 ]
 
 { #category : 'tests' }
@@ -98,7 +98,7 @@ ARTIPipelineTest >> testTotalNoMatchIsExactlyUnknownNotAnEmptyUnion [
 		          ARTIFixtures class
 		          >> #totalUnknownAllBranchesUnclassifiable:
 		          safetyTable: ARTINewSafetyTable new.
-	self assert: result equals: ARTIUnknownType new.
+	self assert: result equals: HTMUnknown new.
 	self deny: result isUnion
 ]
 
@@ -111,7 +111,7 @@ ARTIPipelineTest >> testUnionOfDifferentlyClassifiedTerminalsCollapsesDuplicates
 		assert: (ARTIPipeline
 				 inferType: ARTIFixtures class >> #reachIfTrueIfFalseBothReturn:
 				 safetyTable: ARTINewSafetyTable new)
-		equals: (ARTIClassRef named: #Integer)
+		equals: (HTMClassRef named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -123,5 +123,5 @@ ARTIPipelineTest >> testUnsafeClassNameNewFallsBackToUnknownRatherThanNoMatchAtW
 		assert: (ARTIPipeline
 				 inferType: ARTIFixtures class >> #classNameNewNegativeUnsafe
 				 safetyTable: ARTINewSafetyTable new)
-		equals: ARTIUnknownType new
+		equals: HTMUnknown new
 ]

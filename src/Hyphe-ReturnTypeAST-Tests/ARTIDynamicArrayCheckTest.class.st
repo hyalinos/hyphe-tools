@@ -51,7 +51,7 @@ ARTIDynamicArrayCheckTest >> testPositiveDynamicArray [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #dynamicArrayPositive)
 				 context: (ARTIFixtures contextForSelector: #dynamicArrayPositive))
-		equals: (ARTIClassRef named: #Array)
+		equals: (HTMClassRef named: #Array)
 ]
 
 { #category : 'tests' }
@@ -66,7 +66,7 @@ ARTIDynamicArrayCheckTest >> testPositiveDynamicArrayWithArbitraryElementExpress
 				 context:
 				 (ARTIFixtures contextForSelector:
 					  #dynamicArrayPositiveWithExpressions))
-		equals: (ARTIClassRef named: #Array)
+		equals: (HTMClassRef named: #Array)
 ]
 
 { #category : 'tests' }
@@ -79,5 +79,5 @@ ARTIDynamicArrayCheckTest >> testPositiveEmptyDynamicArray [
 					  #dynamicArrayPositiveEmpty)
 				 context:
 				 (ARTIFixtures contextForSelector: #dynamicArrayPositiveEmpty))
-		equals: (ARTIClassRef named: #Array)
+		equals: (HTMClassRef named: #Array)
 ]

@@ -12,7 +12,9 @@ Class {
 		'stats',
 		'allVars',
 		'linkQueue',
-		'linkQueuedSet'
+		'linkQueuedSet',
+		'config',
+		'numberMask'
 	],
 	#category : 'Hyphe-ReturnTypeConstraint',
 	#package : 'Hyphe-ReturnTypeConstraint'
@@ -81,7 +83,7 @@ CTIInferer >> applyNewSelector: aSelector to: v [
 	newMax = v maxBits ifTrue: [ ^ self ].
 	v maxBits: newMax.
 	v subtypes do: [ :sub | self enqueue: sub ].
-	(newMax ~= 0 and: [ (newMax bitAnd: newMax - 1) = 0 ]) ifTrue: [
+	(config singleImplementorHeuristic and: [ newMax ~= 0 and: [ (newMax bitAnd: newMax - 1) = 0 ] ]) ifTrue: [
 			(v minBits bitAnd: newMax) = newMax ifFalse: [
 					v minBits: (v minBits bitOr: newMax).
 					v supertypes do: [ :sup | self enqueue: sup ] ] ]
@@ -97,7 +99,8 @@ CTIInferer >> buildImplementorIndex [
 			| mask |
 			mask := self subtreeMaskFor: c cache: cache.
 			c selectors do: [ :s | idx at: s put: ((idx at: s ifAbsent: [ 0 ]) bitOr: mask) ] ].
-	implementorIndex := idx
+	implementorIndex := idx.
+	numberMask := self subtreeMaskFor: Number cache: cache
 ]
 
 { #category : 'building' }
@@ -109,6 +112,11 @@ CTIInferer >> buildNodeFor: aNode scope: scope info: info class: aClass [
 			^ self newVar
 				  minBits: (universe maskFor: aNode value class);
 				  name: 'lit';
+				  yourself ].
+	(cname == #OCLiteralArrayNode or: [ cname == #OCArrayNode ]) ifTrue: [
+			^ self newVar
+				  minBits: (universe maskFor: Array);
+				  name: 'arr';
 				  yourself ].
 	cname == #OCAssignmentNode ifTrue: [
 			| rhs target |
@@ -137,7 +145,7 @@ CTIInferer >> buildNodeFor: aNode scope: scope info: info class: aClass [
 				  scope: scope
 				  info: info
 				  class: aClass ].
-	cname == #OCBlockNode ifTrue: [
+	(config blockEvaluationHeuristic and: [ cname == #OCBlockNode ]) ifTrue: [
 			^ self
 				  nodeForBlock: aNode
 				  scope: scope
@@ -169,6 +177,18 @@ CTIInferer >> classNamesFor: bits [
 	^ out asSortedCollection asArray
 ]
 
+{ #category : 'accessing' }
+CTIInferer >> config [
+
+	^ config
+]
+
+{ #category : 'accessing' }
+CTIInferer >> config: aConfig [
+
+	config := aConfig
+]
+
 { #category : 'reporting' }
 CTIInferer >> csvField: aString [
 
@@ -197,7 +217,7 @@ CTIInferer >> drainLinkQueue [
 			| lnk |
 			lnk := linkQueue removeFirst.
 			linkQueuedSet remove: lnk.
-			((self isBlockValueSelector: lnk selector) and: [ lnk receiverVar blockInfo notNil ])
+			(config blockEvaluationHeuristic and: [ (self isBlockValueSelector: lnk selector) and: [ lnk receiverVar blockInfo notNil ] ])
 				ifTrue: [
 						| blk |
 						blk := lnk receiverVar blockInfo.
@@ -365,7 +385,14 @@ CTIInferer >> initialize [
 	allVars := OrderedCollection new.
 	stats := Dictionary new.
 	linkQueue := OrderedCollection new.
-	linkQueuedSet := IdentitySet new
+	linkQueuedSet := IdentitySet new.
+	config := CTIConfig new
+]
+
+{ #category : 'building' }
+CTIInferer >> isArithmeticSelector: aSelector [
+
+	^ #( #+ #- #* #/ #'//' ) includes: aSelector
 ]
 
 { #category : 'building' }
@@ -504,10 +531,15 @@ CTIInferer >> nodeForMessage: aNode scope: scope info: info class: aClass [
 				            info: info
 				            class: aClass ].
 	self applyNewSelector: aNode selector to: recvNode.
-	(self isPrimitiveCreation: aNode recv: recv) ifTrue: [
+	(config basicNewHeuristic and: [ self isPrimitiveCreation: aNode recv: recv ]) ifTrue: [
 			^ self newVar
 				  minBits: (universe maskFor: recv variable value);
 				  name: 'new-' , aNode selector;
+				  yourself ].
+	(config arithmeticHeuristic and: [ self isArithmeticSelector: aNode selector ]) ifTrue: [
+			^ self newVar
+				  minBits: numberMask;
+				  name: 'arith-' , aNode selector;
 				  yourself ].
 	sendVar := self newVar
 		           name: 'send-' , aNode selector;
@@ -553,20 +585,15 @@ CTIInferer >> printCSVTo: aFileReference [
 
 	aFileReference writeStreamDo: [ :stream |
 			stream
-				nextPutAll: 'Package,Class,ClassSide,Selector,Type,MinCount';
+				nextPutAll: 'Package,Class,ClassSide,Selector,Type';
 				nextPut: Character lf.
 			methodInfos keysAndValuesDo: [ :cls :bySelector |
 					bySelector keysAndValuesDo: [ :sel :info |
-							| names pkgName typeStr |
-							names := self classNamesFor: info returnVar minBits.
+							| pkgName typeStr |
+							typeStr := (self typeFor: info returnVar minBits) asString.
 							pkgName := [ cls package name ]
 								           on: Error
 								           do: [ :e | '' ].
-							typeStr := names isEmpty
-								           ifTrue: [ 'Unknown' ]
-								           ifFalse: [
-								           String streamContents: [ :s2 |
-									           names do: [ :n | s2 nextPutAll: n asString ] separatedBy: [ s2 nextPutAll: ';' ] ] ].
 							stream
 								nextPutAll: (self csvField: pkgName asString);
 								nextPut: $,;
@@ -577,8 +604,6 @@ CTIInferer >> printCSVTo: aFileReference [
 								nextPutAll: (self csvField: sel asString);
 								nextPut: $,;
 								nextPutAll: (self csvField: typeStr);
-								nextPut: $,;
-								nextPutAll: names size printString;
 								nextPut: Character lf ] ] ]
 ]
 
@@ -642,6 +667,16 @@ CTIInferer >> subtreeMaskFor: aClass cache: cache [
 			  mm := universe maskFor: aClass.
 			  aClass subclasses do: [ :sub | mm := mm bitOr: (self subtreeMaskFor: sub cache: cache) ].
 			  mm ]
+]
+
+{ #category : 'reporting' }
+CTIInferer >> typeFor: bits [
+
+	| names |
+	names := self classNamesFor: bits.
+	names isEmpty ifTrue: [ ^ HTMType unknown ].
+	names size = 1 ifTrue: [ ^ HTMType classRef: names first ].
+	^ HTMType union: (names collect: [ :n | HTMType classRef: n ])
 ]
 
 { #category : 'accessing' }

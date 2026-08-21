@@ -14,9 +14,9 @@ Class {
 ARTITypeModelTest >> testClassRefEqualityAndPrinting [
 
 	| a b c |
-	a := ARTIClassRef named: #Integer.
-	b := ARTIClassRef named: #Integer.
-	c := ARTIClassRef named: #String.
+	a := HTMClassRef named: #Integer.
+	b := HTMClassRef named: #Integer.
+	c := HTMClassRef named: #String.
 	self assert: a = b.
 	self assert: a hash = b hash.
 	self deny: a = c.
@@ -27,25 +27,25 @@ ARTITypeModelTest >> testClassRefEqualityAndPrinting [
 ARTITypeModelTest >> testMetaclassEqualityAndPrinting [
 
 	| a b |
-	a := ARTIMetaclass named: #Integer.
-	b := ARTIMetaclass named: #Integer.
+	a := HTMMetaclass named: #Integer.
+	b := HTMMetaclass named: #Integer.
 	self assert: a = b.
-	self deny: a = (ARTIClassRef named: #Integer).
+	self deny: a = (HTMClassRef named: #Integer).
 	self assert: a printString equals: 'Metaclass(Integer)'
 ]
 
 { #category : 'tests' }
 ARTITypeModelTest >> testSelfSelfClassBottomUnknownAreSingletonLike [
 
-	self assert: ARTISelfType new = ARTISelfType new.
-	self assert: ARTISelfClassType new = ARTISelfClassType new.
-	self assert: ARTIBottomType new = ARTIBottomType new.
-	self assert: ARTIUnknownType new = ARTIUnknownType new.
-	self deny: ARTISelfType new = ARTISelfClassType new.
-	self assert: ARTISelfType new printString equals: 'Self'.
-	self assert: ARTISelfClassType new printString equals: 'Self class'.
-	self assert: ARTIBottomType new printString equals: 'Bottom'.
-	self assert: ARTIUnknownType new printString equals: 'Unknown'
+	self assert: HTMSelf new = HTMSelf new.
+	self assert: HTMSelfClass new = HTMSelfClass new.
+	self assert: HTMBottom new = HTMBottom new.
+	self assert: HTMUnknown new = HTMUnknown new.
+	self deny: HTMSelf new = HTMSelfClass new.
+	self assert: HTMSelf new printString equals: 'Self'.
+	self assert: HTMSelfClass new printString equals: 'Self class'.
+	self assert: HTMBottom new printString equals: 'Bottom'.
+	self assert: HTMUnknown new printString equals: 'Unknown'
 ]
 
 { #category : 'tests' }
@@ -86,9 +86,9 @@ ARTITypeModelTest >> testTypeNameNormalizerReplacesKnownRuntimeClasses [
 ARTITypeModelTest >> testTypeVarEqualityAndPrinting [
 
 	| a b c |
-	a := ARTITypeVarType position: 1.
-	b := ARTITypeVarType position: 1.
-	c := ARTITypeVarType position: 2.
+	a := HTMTypeVar position: 1.
+	b := HTMTypeVar position: 1.
+	c := HTMTypeVar position: 2.
 	self assert: a = b.
 	self deny: a = c.
 	self assert: a printString equals: 'TypeVar(1)'
@@ -98,8 +98,8 @@ ARTITypeModelTest >> testTypeVarEqualityAndPrinting [
 ARTITypeModelTest >> testUnionCollapsesSingleMember [
 
 	| u |
-	u := ARTIUnionType withMembers: { (ARTIClassRef named: #Integer) }.
-	self assert: (u isKindOf: ARTIClassRef).
+	u := HTMUnion withMembers: { (HTMClassRef named: #Integer) }.
+	self assert: (u isKindOf: HTMClassRef).
 	self deny: u isUnion
 ]
 
@@ -107,10 +107,10 @@ ARTITypeModelTest >> testUnionCollapsesSingleMember [
 ARTITypeModelTest >> testUnionDeduplicatesMembers [
 
 	| u |
-	u := ARTIUnionType withMembers: {
-			     (ARTIClassRef named: #Integer).
-			     ARTIUnknownType new.
-			     (ARTIClassRef named: #Integer) }.
+	u := HTMUnion withMembers: {
+			     (HTMClassRef named: #Integer).
+			     HTMUnknown new.
+			     (HTMClassRef named: #Integer) }.
 	self assert: u isUnion.
 	self assert: u members size equals: 2.
 	self
@@ -122,11 +122,11 @@ ARTITypeModelTest >> testUnionDeduplicatesMembers [
 ARTITypeModelTest >> testUnionEqualityIsOrderIndependent [
 
 	| u1 u2 |
-	u1 := ARTIUnionType withMembers: {
-			      (ARTIClassRef named: #Integer).
-			      ARTIUnknownType new }.
-	u2 := ARTIUnionType withMembers: {
-			      ARTIUnknownType new.
-			      (ARTIClassRef named: #Integer) }.
+	u1 := HTMUnion withMembers: {
+			      (HTMClassRef named: #Integer).
+			      HTMUnknown new }.
+	u2 := HTMUnion withMembers: {
+			      HTMUnknown new.
+			      (HTMClassRef named: #Integer) }.
 	self assert: u1 = u2
 ]

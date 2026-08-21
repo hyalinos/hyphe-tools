@@ -62,7 +62,7 @@ ARTILiteralCheckTest >> testPositiveInteger [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #literalInteger)
 				 context: (ARTIFixtures contextForSelector: #literalInteger))
-		equals: (ARTIClassRef named: #Integer)
+		equals: (HTMClassRef named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -72,7 +72,7 @@ ARTILiteralCheckTest >> testPositiveLiteralArray [
 		assert: (ARTILiteralCheck
 				 classify: (ARTIFixtures explicitReturnTerminalFor: #literalArray)
 				 context: (ARTIFixtures contextForSelector: #literalArray))
-		equals: (ARTIClassRef named: #Array)
+		equals: (HTMClassRef named: #Array)
 ]
 
 { #category : 'tests' }
@@ -83,7 +83,7 @@ ARTILiteralCheckTest >> testPositiveStringNormalizesFromByteString [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #literalString)
 				 context: (ARTIFixtures contextForSelector: #literalString))
-		equals: (ARTIClassRef named: #String)
+		equals: (HTMClassRef named: #String)
 ]
 
 { #category : 'tests' }
@@ -94,7 +94,7 @@ ARTILiteralCheckTest >> testPositiveSymbolNormalizesToString [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #literalSymbol)
 				 context: (ARTIFixtures contextForSelector: #literalSymbol))
-		equals: (ARTIClassRef named: #String)
+		equals: (HTMClassRef named: #String)
 ]
 
 { #category : 'tests' }
@@ -104,5 +104,5 @@ ARTILiteralCheckTest >> testPositiveTrueNormalizesToBoolean [
 		assert: (ARTILiteralCheck
 				 classify: (ARTIFixtures explicitReturnTerminalFor: #literalTrue)
 				 context: (ARTIFixtures contextForSelector: #literalTrue))
-		equals: (ARTIClassRef named: #Boolean)
+		equals: (HTMClassRef named: #Boolean)
 ]

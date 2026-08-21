@@ -42,7 +42,7 @@ ARTHClassifierTest >> testClassifyMethodReportsSelectorsOwnDefiningPackage [
 	self assert: result packageName equals: 'Hyphe-ReturnTypeHeuristic'.
 	self assert: result className equals: #ARTHClassification.
 	self deny: result classSide.
-	self assert: result expectedType equals: #Boolean
+	self assert: result expectedType equals: (HTMType classRef: #Boolean)
 ]
 
 { #category : 'tests' }

@@ -43,7 +43,7 @@ ARTISelfClassCheckTest >> testPositiveSelfClass [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #selfClassPositive)
 				 context: (ARTIFixtures contextForSelector: #selfClassPositive))
-		equals: ARTISelfClassType new
+		equals: HTMSelfClass new
 ]
 
 { #category : 'tests' }
@@ -54,5 +54,5 @@ ARTISelfClassCheckTest >> testPositiveSuperClass [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #superClassPositive)
 				 context: (ARTIFixtures contextForSelector: #superClassPositive))
-		equals: ARTISelfClassType new
+		equals: HTMSelfClass new
 ]

@@ -27,18 +27,18 @@ RTATypeDistribution class >> categories [
 
 { #category : 'classifying' }
 RTATypeDistribution class >> categoryFor: aType [
-	"Maps an ARTIType instance to the Symbol naming its top-level grammar category. A Union is
+	"Maps an HTMType instance to the Symbol naming its top-level grammar category. A Union is
 	counted once as #Union, not once per member -- see class comment."
 
-	aType class = ARTIClassRef ifTrue: [ ^ #ClassRef ].
-	aType class = ARTIMetaclass ifTrue: [ ^ #Metaclass ].
-	aType class = ARTISelfType ifTrue: [ ^ #Self ].
-	aType class = ARTISelfClassType ifTrue: [ ^ #SelfClass ].
-	aType class = ARTIBottomType ifTrue: [ ^ #Bottom ].
-	aType class = ARTITypeVarType ifTrue: [ ^ #TypeVar ].
-	aType class = ARTIUnionType ifTrue: [ ^ #Union ].
-	aType class = ARTIUnknownType ifTrue: [ ^ #Unknown ].
-	^ self error: 'Unrecognized ARTIType: ' , aType class name
+	aType class = HTMClassRef ifTrue: [ ^ #ClassRef ].
+	aType class = HTMMetaclass ifTrue: [ ^ #Metaclass ].
+	aType class = HTMSelf ifTrue: [ ^ #Self ].
+	aType class = HTMSelfClass ifTrue: [ ^ #SelfClass ].
+	aType class = HTMBottom ifTrue: [ ^ #Bottom ].
+	aType class = HTMTypeVar ifTrue: [ ^ #TypeVar ].
+	aType class = HTMUnion ifTrue: [ ^ #Union ].
+	aType class = HTMUnknown ifTrue: [ ^ #Unknown ].
+	^ self error: 'Unrecognized HTMType: ' , aType class name
 ]
 
 { #category : 'instance creation' }

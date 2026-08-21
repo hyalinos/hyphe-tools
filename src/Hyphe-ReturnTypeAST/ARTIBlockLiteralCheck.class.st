@@ -26,5 +26,5 @@ ARTIBlockLiteralCheck class >> matchExpr: exprNode context: aContext [
 
 	(exprNode isKindOf: OCBlockNode) ifFalse: [ ^ nil ].
 	exprNode containsReturn ifTrue: [ ^ nil ].
-	^ ARTIClassRef named: #BlockClosure
+	^ HTMClassRef named: #BlockClosure
 ]
