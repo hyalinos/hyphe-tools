@@ -50,39 +50,6 @@ ARTHMethodResult >> confidenceTier [
 	^ confidenceTier
 ]
 
-{ #category : 'csv' }
-ARTHMethodResult >> csvField: aString [
-
-	((aString includes: $,) or: [ aString includes: $" ]) ifTrue: [
-		^ '"' , (aString copyReplaceAll: '"' with: '""') , '"' ].
-	^ aString
-]
-
-{ #category : 'csv' }
-ARTHMethodResult >> csvRow [
-
-	^ String streamContents: [ :s |
-			  s
-				  nextPutAll: (self csvField: packageName);
-				  nextPut: $,;
-				  nextPutAll: (self csvField: className);
-				  nextPut: $,;
-				  nextPutAll: classSide printString;
-				  nextPut: $,;
-				  nextPutAll: (self csvField: selector asString);
-				  nextPut: $,;
-				  nextPutAll: (self csvField: (matchedPatternIdentifier
-								    ifNil: [ '' ]
-								    ifNotNil: [ matchedPatternIdentifier asString ]));
-				  nextPut: $,;
-				  nextPutAll: (self csvField: expectedType asString);
-				  nextPut: $,;
-				  nextPutAll: (self csvField:
-							   (confidenceTier
-								    ifNil: [ '' ]
-								    ifNotNil: [ confidenceTier asString ])) ]
-]
-
 { #category : 'accessing' }
 ARTHMethodResult >> expectedType [
 

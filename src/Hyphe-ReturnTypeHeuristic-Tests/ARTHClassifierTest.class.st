@@ -57,16 +57,6 @@ ARTHClassifierTest >> testClassifyPackageMatchesSumOfItsClasses [
 ]
 
 { #category : 'tests' }
-ARTHClassifierTest >> testCsvFieldQuotesCommasAndQuotes [
-
-	self assert: (ARTHMethodResult new csvField: 'plain') equals: 'plain'.
-	self assert: (ARTHMethodResult new csvField: 'a,b') equals: '"a,b"'.
-	self
-		assert: (ARTHMethodResult new csvField: 'she said "hi"')
-		equals: '"she said ""hi"""'
-]
-
-{ #category : 'tests' }
 ARTHClassifierTest >> testExactKeywordPatternDoesNotMatchUnarySelectorOfSameStem [
 	"handlesMouseDown: is a keyword selector; a same-stem unary selector must not match it."
 

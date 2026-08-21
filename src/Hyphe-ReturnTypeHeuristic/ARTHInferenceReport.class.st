@@ -42,18 +42,27 @@ ARTHInferenceReport >> matchedResults [
 	^ results select: [ :r | r hasMatch ]
 ]
 
-{ #category : 'csv' }
+{ #category : 'exporting' }
 ARTHInferenceReport >> printCSVTo: aFileReference [
 
+	aFileReference ensureDelete.
 	aFileReference writeStreamDo: [ :stream |
-			stream
-				nextPutAll:
-					'Package,Class,ClassSide,Selector,MatchedPattern,Type,ConfidenceTier';
-				nextPut: Character lf.
-			results do: [ :r |
-					stream
-						nextPutAll: r csvRow;
-						nextPut: Character lf ] ]
+			ZnBufferedWriteStream
+				on: stream
+				do: [ :out |
+						| writer |
+						writer := NeoCSVWriter on: out.
+						writer writeHeader:
+							{ #Package. #Class. #ClassSide. #Selector. #MatchedPattern. #Type. #ConfidenceTier }.
+						results do: [ :r |
+								writer nextPut: {
+										r packageName.
+										r className.
+										r classSide.
+										r selector.
+										(r matchedPatternIdentifier ifNil: [ '' ] ifNotNil: [ :i | i asString ]).
+										r expectedType asString.
+										(r confidenceTier ifNil: [ '' ] ifNotNil: [ :t | t asString ]) } ] ] ]
 ]
 
 { #category : 'printing' }

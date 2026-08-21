@@ -10,9 +10,11 @@ BaselineOfHypheReturnTypeConstraint class >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
+			spec baseline: #'NeoCSV' with: [ spec repository: #'github://pharo-contributions/NeoCSV/src' ].
+
 			spec
 				package: #'Hyphe-TypeModel';
-				package: #'Hyphe-ReturnTypeConstraint' with: [ spec requires: #( #'Hyphe-TypeModel' ) ];
+				package: #'Hyphe-ReturnTypeConstraint' with: [ spec requires: #( #'Hyphe-TypeModel' #'NeoCSV' ) ];
 				package: #'Hyphe-ReturnTypeConstraint-Tests' with: [ spec requires: #( #'Hyphe-ReturnTypeConstraint' ) ];
 				package: #'Hyphe-ReturnTypeConstraint-UI' with: [ spec requires: #( #'Hyphe-ReturnTypeConstraint' ) ].
 
