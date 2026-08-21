@@ -42,7 +42,7 @@ ARTIClassGlobalReadCheckTest >> testPositiveIntegerGlobal [
 				 (ARTIFixtures explicitReturnTerminalFor: #classGlobalReadPositive)
 				 context:
 				 (ARTIFixtures contextForSelector: #classGlobalReadPositive))
-		equals: (ARTIMetaclass named: #Integer)
+		equals: (HTMMetaclass named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -54,5 +54,5 @@ ARTIClassGlobalReadCheckTest >> testPositiveOrderedCollectionGlobal [
 						  #classGlobalReadPositiveOrderedCollection)
 				 context: (ARTIFixtures contextForSelector:
 						  #classGlobalReadPositiveOrderedCollection))
-		equals: (ARTIMetaclass named: #OrderedCollection)
+		equals: (HTMMetaclass named: #OrderedCollection)
 ]

@@ -35,5 +35,5 @@ ARTIClassNameNewCheck class >> matchExpr: exprNode context: aContext [
 	exprNode receiver variable isGlobalClassNameBinding ifFalse: [ ^ nil ].
 	(aContext safetyTable isSafe: exprNode receiver variable value)
 		ifFalse: [ ^ nil ].
-	^ ARTIClassRef named: exprNode receiver variable name
+	^ HTMClassRef named: exprNode receiver variable name
 ]

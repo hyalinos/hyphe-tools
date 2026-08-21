@@ -66,7 +66,7 @@ ARTIClassNameNewCheckTest >> testPositiveObjectNewIsSafe [
 					  #classNameNewPositiveObject)
 				 context:
 				 (ARTIFixtures contextForSelector: #classNameNewPositiveObject))
-		equals: (ARTIClassRef named: #Object)
+		equals: (HTMClassRef named: #Object)
 ]
 
 { #category : 'tests' }
@@ -79,5 +79,5 @@ ARTIClassNameNewCheckTest >> testPositiveSafeFixtureClassNew [
 				 context:
 				 (ARTIFixtures contextForSelector:
 					  #classNameNewPositiveSafeFixture))
-		equals: (ARTIClassRef named: #ARTISafeFixtureClass)
+		equals: (HTMClassRef named: #ARTISafeFixtureClass)
 ]

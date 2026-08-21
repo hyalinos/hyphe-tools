@@ -82,7 +82,7 @@ ARTISingleAssignmentTempCheckTest >> testOrderSensitivity [
 		assert: (ARTISingleAssignmentTempCheck
 				 classify: terminals second
 				 context: context)
-		equals: (ARTIClassRef named: #Integer)
+		equals: (HTMClassRef named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -94,7 +94,7 @@ ARTISingleAssignmentTempCheckTest >> testPositiveClassNameNewRhsDelegatesToCheck
 						  #singleAssignTempPositiveViaClassNameNew)
 				 context: (ARTIFixtures contextForSelector:
 						  #singleAssignTempPositiveViaClassNameNew))
-		equals: (ARTIClassRef named: #ARTISafeFixtureClass)
+		equals: (HTMClassRef named: #ARTISafeFixtureClass)
 ]
 
 { #category : 'tests' }
@@ -106,7 +106,7 @@ ARTISingleAssignmentTempCheckTest >> testPositiveDynamicArrayRhsDelegatesToNewCh
 						  #singleAssignTempPositiveViaDynamicArray)
 				 context: (ARTIFixtures contextForSelector:
 						  #singleAssignTempPositiveViaDynamicArray))
-		equals: (ARTIClassRef named: #Array)
+		equals: (HTMClassRef named: #Array)
 ]
 
 { #category : 'tests' }
@@ -118,7 +118,7 @@ ARTISingleAssignmentTempCheckTest >> testPositiveGlobalReadRhsDelegatesToCheck2 
 						  #singleAssignTempPositiveViaGlobalRead)
 				 context: (ARTIFixtures contextForSelector:
 						  #singleAssignTempPositiveViaGlobalRead))
-		equals: (ARTIMetaclass named: #Integer)
+		equals: (HTMMetaclass named: #Integer)
 ]
 
 { #category : 'tests' }
@@ -131,5 +131,5 @@ ARTISingleAssignmentTempCheckTest >> testPositiveLiteralRhs [
 					  #singleAssignTempPositive)
 				 context:
 				 (ARTIFixtures contextForSelector: #singleAssignTempPositive))
-		equals: (ARTIClassRef named: #Integer)
+		equals: (HTMClassRef named: #Integer)
 ]

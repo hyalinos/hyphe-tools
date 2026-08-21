@@ -20,7 +20,7 @@ ARTIBottomCheckTest >> testEndToEndStandaloneErrorSendProducesBottomTerminal [
 		             (ARTIFixtures class >> #reachBottomThenDeadReturn) ast.
 	self
 		assert: (ARTIBottomCheck classify: terminals first context: nil)
-		equals: ARTIBottomType new
+		equals: HTMBottom new
 ]
 
 { #category : 'tests' }
@@ -48,5 +48,5 @@ ARTIBottomCheckTest >> testPositiveBottomTerminal [
 	self
 		assert:
 		(ARTIBottomCheck classify: (ARTIBottomTerminal on: nil) context: nil)
-		equals: ARTIBottomType new
+		equals: HTMBottom new
 ]

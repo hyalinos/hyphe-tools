@@ -54,7 +54,7 @@ ARTITypeVarCheckTest >> testPositionIsByArgumentPositionNotName [
 						  #typeVarPositiveSecondArg:with:)
 				 context:
 				 (ARTIFixtures contextForSelector: #typeVarPositiveSecondArg:with:))
-		equals: (ARTITypeVarType position: 2)
+		equals: (HTMTypeVar position: 2)
 ]
 
 { #category : 'tests' }
@@ -65,5 +65,5 @@ ARTITypeVarCheckTest >> testPositiveFirstArgument [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #typeVarPositive:)
 				 context: (ARTIFixtures contextForSelector: #typeVarPositive:))
-		equals: (ARTITypeVarType position: 1)
+		equals: (HTMTypeVar position: 1)
 ]

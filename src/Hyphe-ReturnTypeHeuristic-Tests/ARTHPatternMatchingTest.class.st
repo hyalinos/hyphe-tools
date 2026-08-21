@@ -13,7 +13,7 @@ ARTHPatternMatchingTest >> testDefaultIconNameBeatsGenericRegexAndSuffix [
 
 	| pos |
 	pos := ARTHClassifier classify: #defaultIconName classSide: false.
-	self assert: pos expectedType equals: #String.
+	self assert: pos expectedType equals: (HTMType classRef: #String).
 	self
 		assert: pos matchedPattern identifier
 		equals: #defaultIconNameString
@@ -24,7 +24,7 @@ ARTHPatternMatchingTest >> testDefaultMenuIconNameBeatsGenericRegexAndSuffix [
 
 	| pos |
 	pos := ARTHClassifier classify: #defaultMenuIconName classSide: false.
-	self assert: pos expectedType equals: #String.
+	self assert: pos expectedType equals: (HTMType classRef: #String).
 	"Also matches the default*Name regex and the *Name suffix -- the exact pattern must win\n\ton specificity."
 	self
 		assert: pos matchedPattern identifier
@@ -38,7 +38,7 @@ ARTHPatternMatchingTest >> testDefaultNameDescriptionTitleRegex [
 	pos1 := ARTHClassifier
 		        classify: #defaultFooDescription
 		        classSide: false.
-	self assert: pos1 expectedType equals: #String.
+	self assert: pos1 expectedType equals: (HTMType classRef: #String).
 	self
 		assert: pos1 matchedPattern identifier
 		equals: #defaultNameDescriptionTitleString.
@@ -64,7 +64,7 @@ ARTHPatternMatchingTest >> testDescriptionExactString [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #description classSide: false.
-	self assert: pos expectedType equals: #String.
+	self assert: pos expectedType equals: (HTMType classRef: #String).
 	self assert: pos matchedPattern identifier equals: #descriptionString.
 	neg := ARTHClassifier classify: #descriptions classSide: false.
 	self deny: neg hasMatch
@@ -75,7 +75,7 @@ ARTHPatternMatchingTest >> testEqualsExactBoolean [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #= classSide: false.
-	self assert: pos expectedType equals: #Boolean.
+	self assert: pos expectedType equals: (HTMType classRef: #Boolean).
 	self assert: pos matchedPattern identifier equals: #equalsBoolean.
 	neg := ARTHClassifier classify: #'==' classSide: false.
 	self deny: neg hasMatch
@@ -86,7 +86,7 @@ ARTHPatternMatchingTest >> testHandlesMouseDownExactKeyword [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #handlesMouseDown: classSide: false.
-	self assert: pos expectedType equals: #Boolean.
+	self assert: pos expectedType equals: (HTMType classRef: #Boolean).
 	self
 		assert: pos matchedPattern identifier
 		equals: #handlesMouseDownBoolean.
@@ -99,7 +99,7 @@ ARTHPatternMatchingTest >> testHasPrefixBoolean [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #hasElements classSide: false.
-	self assert: pos expectedType equals: #Boolean.
+	self assert: pos expectedType equals: (HTMType classRef: #Boolean).
 	self assert: pos matchedPattern identifier equals: #hasPrefixBoolean.
 	neg := ARTHClassifier classify: #harm classSide: false.
 	self deny: neg hasMatch
@@ -110,7 +110,7 @@ ARTHPatternMatchingTest >> testIsPrefixBoolean [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #isEmpty classSide: false.
-	self assert: pos expectedType equals: #Boolean.
+	self assert: pos expectedType equals: (HTMType classRef: #Boolean).
 	self assert: pos matchedPattern identifier equals: #isPrefixBoolean.
 	neg := ARTHClassifier classify: #island classSide: false.
 	self deny: neg hasMatch
@@ -121,7 +121,7 @@ ARTHPatternMatchingTest >> testKeyExactString [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #key classSide: false.
-	self assert: pos expectedType equals: #String.
+	self assert: pos expectedType equals: (HTMType classRef: #String).
 	self assert: pos matchedPattern identifier equals: #keyString.
 	neg := ARTHClassifier classify: #keys classSide: false.
 	self deny: neg hasMatch
@@ -134,7 +134,7 @@ ARTHPatternMatchingTest >> testManuallyPrefixArray [
 	pos := ARTHClassifier
 		       classify: #manuallyConfiguredThing
 		       classSide: false.
-	self assert: pos expectedType equals: #Array.
+	self assert: pos expectedType equals: (HTMType classRef: #Array).
 	self
 		assert: pos matchedPattern identifier
 		equals: #manuallyPrefixArray.
@@ -151,7 +151,7 @@ ARTHPatternMatchingTest >> testManuallyResolvedDependenciesExactBeatsPrefix [
 	pos := ARTHClassifier
 		       classify: #manuallyResolvedDependencies
 		       classSide: false.
-	self assert: pos expectedType equals: #Array.
+	self assert: pos expectedType equals: (HTMType classRef: #Array).
 	"Also matches the broader manually prefix -- the exact pattern must win on specificity."
 	self
 		assert: pos matchedPattern identifier
@@ -163,7 +163,7 @@ ARTHPatternMatchingTest >> testNameSuffixStringTrustedWithCaveat [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #windowName classSide: false.
-	self assert: pos expectedType equals: #String.
+	self assert: pos expectedType equals: (HTMType classRef: #String).
 	self assert: pos matchedPattern identifier equals: #nameSuffixString.
 	self assert: pos confidenceTier equals: #trustedWithCaveat.
 	neg := ARTHClassifier classify: #named classSide: false.
@@ -175,7 +175,7 @@ ARTHPatternMatchingTest >> testOrderExactNumber [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #order classSide: false.
-	self assert: pos expectedType equals: #Number.
+	self assert: pos expectedType equals: (HTMType classRef: #Number).
 	self assert: pos matchedPattern identifier equals: #orderNumber.
 	neg := ARTHClassifier classify: #reorder classSide: false.
 	self deny: neg hasMatch
@@ -186,7 +186,7 @@ ARTHPatternMatchingTest >> testPositiveSuffixArray [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #assertPositive classSide: false.
-	self assert: pos expectedType equals: #Array.
+	self assert: pos expectedType equals: (HTMType classRef: #Array).
 	self
 		assert: pos matchedPattern identifier
 		equals: #positiveSuffixArray.
@@ -199,7 +199,7 @@ ARTHPatternMatchingTest >> testPriorityExactNumber [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #priority classSide: false.
-	self assert: pos expectedType equals: #Number.
+	self assert: pos expectedType equals: (HTMType classRef: #Number).
 	self assert: pos matchedPattern identifier equals: #priorityNumber.
 	neg := ARTHClassifier classify: #priorityQueue classSide: false.
 	self deny: neg hasMatch
@@ -210,7 +210,7 @@ ARTHPatternMatchingTest >> testResumableSuffixBoolean [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #errorResumable classSide: false.
-	self assert: pos expectedType equals: #Boolean.
+	self assert: pos expectedType equals: (HTMType classRef: #Boolean).
 	self
 		assert: pos matchedPattern identifier
 		equals: #resumableSuffixBoolean.
@@ -225,7 +225,7 @@ ARTHPatternMatchingTest >> testShouldInheritSelectorsExactBoolean [
 	pos := ARTHClassifier
 		       classify: #shouldInheritSelectors
 		       classSide: false.
-	self assert: pos expectedType equals: #Boolean.
+	self assert: pos expectedType equals: (HTMType classRef: #Boolean).
 	self
 		assert: pos matchedPattern identifier
 		equals: #shouldInheritSelectorsBoolean.
@@ -238,7 +238,7 @@ ARTHPatternMatchingTest >> testTitleExactString [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #title classSide: false.
-	self assert: pos expectedType equals: #String.
+	self assert: pos expectedType equals: (HTMType classRef: #String).
 	self assert: pos matchedPattern identifier equals: #titleString.
 	neg := ARTHClassifier classify: #windowTitle classSide: false.
 	self deny: neg hasMatch
@@ -249,7 +249,7 @@ ARTHPatternMatchingTest >> testWantsPrefixBoolean [
 
 	| pos neg |
 	pos := ARTHClassifier classify: #wantsFocus classSide: false.
-	self assert: pos expectedType equals: #Boolean.
+	self assert: pos expectedType equals: (HTMType classRef: #Boolean).
 	self
 		assert: pos matchedPattern identifier
 		equals: #wantsPrefixBoolean.

@@ -28,6 +28,6 @@ ARTILiteralCheck class >> matchExpr: exprNode context: aContext [
 
 	((exprNode isKindOf: OCLiteralValueNode) or: [
 		 exprNode isKindOf: OCLiteralArrayNode ]) ifFalse: [ ^ nil ].
-	^ ARTIClassRef named:
+	^ HTMClassRef named:
 		  (ARTITypeNameNormalizer normalize: exprNode value class name)
 ]

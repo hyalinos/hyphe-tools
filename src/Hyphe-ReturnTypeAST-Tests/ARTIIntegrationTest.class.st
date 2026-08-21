@@ -46,19 +46,19 @@ ARTIIntegrationTest >> testFullPipelineOverAFixtureClassProducesTheExpectedResul
 
 	self
 		assert: (resultsBySelector at: #returnsFive) type
-		equals: (ARTIClassRef named: #Integer).
+		equals: (HTMClassRef named: #Integer).
 	self
 		assert: (resultsBySelector at: #returnsSelf) type
-		equals: ARTISelfType new.
+		equals: HTMSelf new.
 	self
 		assert: (resultsBySelector at: #returnsArg:) type
-		equals: (ARTITypeVarType position: 1).
+		equals: (HTMTypeVar position: 1).
 	self
 		assert: (resultsBySelector at: #makeViaSelfNew) type
-		equals: ARTIUnknownType new.
+		equals: HTMUnknown new.
 	self
 		assert: (resultsBySelector at: #makeViaObjectNew) type
-		equals: (ARTIClassRef named: #Object).
+		equals: (HTMClassRef named: #Object).
 
 	self deny: (resultsBySelector includesKey: #emptyBody)
 ]

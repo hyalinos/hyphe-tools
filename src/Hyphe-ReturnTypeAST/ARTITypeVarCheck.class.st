@@ -45,5 +45,5 @@ ARTITypeVarCheck class >> matchExpr: exprNode context: aContext [
 	(self
 		 isParameterNamed: exprNode variable name
 		 reassignedIn: methodNode) ifTrue: [ ^ nil ].
-	^ ARTITypeVarType position: position
+	^ HTMTypeVar position: position
 ]

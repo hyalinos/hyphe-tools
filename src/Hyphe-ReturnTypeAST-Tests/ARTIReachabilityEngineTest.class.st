@@ -36,7 +36,7 @@ ARTIReachabilityEngineTest >> testDeadStatementAfterBottomSendIsUnreachable [
 { #category : 'tests' }
 ARTIReachabilityEngineTest >> testEngineHasNoKnowledgeOfClassificationOutcomes [
 	"REQ-A2/REQ-R4: the engine's vocabulary is limited to the three terminal kinds; it never
-	answers, or needs to know, an ARTIType."
+	answers, or needs to know, an HTMType."
 
 	self deny: (ARTIReachabilityEngine respondsTo: #classify:context:)
 ]

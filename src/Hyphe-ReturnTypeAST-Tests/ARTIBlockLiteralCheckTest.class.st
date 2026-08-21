@@ -51,7 +51,7 @@ ARTIBlockLiteralCheckTest >> testPositiveBlockWithArgAndNoReturn [
 				 classify:
 				 (ARTIFixtures explicitReturnTerminalFor: #blockLiteralPositive)
 				 context: (ARTIFixtures contextForSelector: #blockLiteralPositive))
-		equals: (ARTIClassRef named: #BlockClosure)
+		equals: (HTMClassRef named: #BlockClosure)
 ]
 
 { #category : 'tests' }
@@ -64,5 +64,5 @@ ARTIBlockLiteralCheckTest >> testPositiveZeroArgBlock [
 					  #blockLiteralPositiveNoArgs)
 				 context:
 				 (ARTIFixtures contextForSelector: #blockLiteralPositiveNoArgs))
-		equals: (ARTIClassRef named: #BlockClosure)
+		equals: (HTMClassRef named: #BlockClosure)
 ]

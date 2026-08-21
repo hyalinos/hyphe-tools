@@ -32,33 +32,33 @@ RTATypeDistributionTest >> testCategoryForEachTopLevelTypeKind [
 
 	self
 		assert:
-		(RTATypeDistribution categoryFor: (ARTIClassRef named: #Integer))
+		(RTATypeDistribution categoryFor: (HTMClassRef named: #Integer))
 		equals: #ClassRef.
 	self
 		assert:
-		(RTATypeDistribution categoryFor: (ARTIMetaclass named: #Integer))
+		(RTATypeDistribution categoryFor: (HTMMetaclass named: #Integer))
 		equals: #Metaclass.
 	self
-		assert: (RTATypeDistribution categoryFor: ARTISelfType new)
+		assert: (RTATypeDistribution categoryFor: HTMSelf new)
 		equals: #Self.
 	self
-		assert: (RTATypeDistribution categoryFor: ARTISelfClassType new)
+		assert: (RTATypeDistribution categoryFor: HTMSelfClass new)
 		equals: #SelfClass.
 	self
-		assert: (RTATypeDistribution categoryFor: ARTIBottomType new)
+		assert: (RTATypeDistribution categoryFor: HTMBottom new)
 		equals: #Bottom.
 	self
 		assert:
-		(RTATypeDistribution categoryFor: (ARTITypeVarType position: 1))
+		(RTATypeDistribution categoryFor: (HTMTypeVar position: 1))
 		equals: #TypeVar.
 	self
-		assert: (RTATypeDistribution categoryFor: ARTIUnknownType new)
+		assert: (RTATypeDistribution categoryFor: HTMUnknown new)
 		equals: #Unknown.
 	self
 		assert:
-			(RTATypeDistribution categoryFor: (ARTIUnionType withMembers: {
-						  (ARTIClassRef named: #Integer).
-						  ARTIUnknownType new }))
+			(RTATypeDistribution categoryFor: (HTMUnion withMembers: {
+						  (HTMClassRef named: #Integer).
+						  HTMUnknown new }))
 		equals: #Union
 ]
 

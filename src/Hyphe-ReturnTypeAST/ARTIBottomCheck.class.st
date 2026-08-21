@@ -19,5 +19,5 @@ ARTIBottomCheck class >> classify: aTerminal context: aContext [
 	terminal instead and is not matched by this check."
 
 	(aTerminal isKindOf: ARTIBottomTerminal) ifFalse: [ ^ nil ].
-	^ ARTIBottomType new
+	^ HTMBottom new
 ]

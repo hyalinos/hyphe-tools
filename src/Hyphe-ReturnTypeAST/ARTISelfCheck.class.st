@@ -22,5 +22,5 @@ ARTISelfCheck class >> matchExpr: exprNode context: aContext [
 	"Matches the bare self or super pseudo-variable, e.g. ^ self."
 
 	exprNode isSelfOrSuperVariable ifFalse: [ ^ nil ].
-	^ ARTISelfType new
+	^ HTMSelf new
 ]

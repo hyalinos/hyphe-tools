@@ -26,5 +26,5 @@ ARTIClassGlobalReadCheck class >> matchExpr: exprNode context: aContext [
 	(exprNode isKindOf: OCVariableNode) ifFalse: [ ^ nil ].
 	(exprNode variable isKindOf: GlobalVariable) ifFalse: [ ^ nil ].
 	exprNode variable isGlobalClassNameBinding ifFalse: [ ^ nil ].
-	^ ARTIMetaclass named: exprNode variable name
+	^ HTMMetaclass named: exprNode variable name
 ]
