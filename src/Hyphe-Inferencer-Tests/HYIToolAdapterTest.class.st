@@ -54,6 +54,16 @@ HYIToolAdapterTest >> testCTIProducesObservedOrUnknownNeverFixedOrGuessed [
 ]
 
 { #category : 'tests' }
+HYIToolAdapterTest >> testClassToHTMWrapsPlainClassAndMetaclass [
+	"classToHTM: wraps a plain Class as HTMClassRef and a Metaclass as HTMMetaclass with
+	 the metaclass's own instance's name -- the same distinction convertHTM: later relies
+	 on to tell 'Foo' from 'Foo class'."
+
+	self assert: (HYIToolAdapter classToHTM: SmallInteger) = (HTMType classRef: #SmallInteger).
+	self assert: (HYIToolAdapter classToHTM: SmallInteger class) = (HTMType metaclass: #SmallInteger)
+]
+
+{ #category : 'tests' }
 HYIToolAdapterTest >> testCombinedBuilderMergesAllThreeSourcesViaTilde [
 	"buildForClass: really does merge all three tools' real answers together via ~, and ARTI's Fixed answer survives even when the other two tools have nothing to say about that same method."
 
@@ -64,6 +74,20 @@ HYIToolAdapterTest >> testCombinedBuilderMergesAllThreeSourcesViaTilde [
 		assert: (dict at: (HYISigmaKey class: 'HYITyperFixture' selector: #dynArray))
 			= (HYITypeVariant fixedNS: (HYIStructNominal nominal: 'Array'))
 		description: 'ARTI''s Fixed-NS(Array) should survive merging even where ARTH/CTI have no opinion'
+]
+
+{ #category : 'tests' }
+HYIToolAdapterTest >> testCombinedBuilderNowIncludesRoelTyperEvidence [
+	"buildForClass: picks up RoelTyper's evidence too -- #addOne: is a method ARTI/ARTH/CTI
+	 have nothing to say about (verified: this key is absent without RoelTyper wired in),
+	 so its presence here, matching RoelTyper's own standalone answer exactly, is the real
+	 proof the wiring took effect end to end, not just that addRoelTyperResultsFor:into:
+	 works in isolation."
+
+	| dict |
+	dict := HYIToolAdapter buildForClass: HYITyperFixture.
+	self assert: (dict at: (HYISigmaKey class: 'HYITyperFixture' selector: #addOne:))
+		= (HYITypeVariant tau: (HYIStructNominal nominal: 'Object') stability: HYIObserved value)
 ]
 
 { #category : 'tests' }
@@ -81,4 +105,33 @@ HYIToolAdapterTest >> testEndToEndWiringRealToolsIntoSigma [
 	self
 		assert: result entries first key isFixed
 		description: 'reconstruction (Fixed-NS(SmallInteger)) and ARTI (Fixed-NS(Integer)) agree via the F-NS narrowing rule'
+]
+
+{ #category : 'tests' }
+HYIToolAdapterTest >> testOfflineProfilerForPackageProducesObservedResults [
+	"Offline Test Profiling's real per-method answers, run through the adapter's
+	 package-scoped entry point, are always tagged Observed (or dissolve to Unknown) --
+	 same discipline as CTI/RoelTyper -- and it actually finds something to report for a
+	 package with real, non-test helper classes exercised by that package's own tests."
+
+	| dict |
+	dict := Dictionary new.
+	HYIToolAdapter addOfflineProfilerResultsForPackage: 'Hyphe-Tests' into: dict.
+	self assert: dict notEmpty.
+	dict valuesDo: [ :r |
+		r isTypeVariant ifTrue: [ self assert: (r entries allSatisfy: [ :e | e key isObserved or: [ e key isUnknown ] ]) ] ]
+]
+
+{ #category : 'tests' }
+HYIToolAdapterTest >> testRoelTyperProducesObservedOrUnknownNeverFixedOrGuessed [
+	"RoelTyper's real per-method answers, run through the adapter, are always tagged
+	 Observed (or dissolve to Unknown) -- never Fixed or Guessed, same discipline as CTI
+	 and Offline Test Profiling (both external, runtime/whole-program evidence)."
+
+	| dict |
+	dict := Dictionary new.
+	HYIToolAdapter addRoelTyperResultsFor: HYITyperFixture into: dict.
+	self assert: dict notEmpty.
+	dict valuesDo: [ :r |
+		r isTypeVariant ifTrue: [ self assert: (r entries allSatisfy: [ :e | e key isObserved or: [ e key isUnknown ] ]) ] ]
 ]
