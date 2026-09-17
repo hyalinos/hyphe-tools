@@ -10,7 +10,7 @@ BaselineOfHypheTools class >> baseline: spec [
 
 	spec for: #common do: [
 			spec baseline: 'NeoCSV' with: [ spec repository: 'github://pharo-contributions/NeoCSV/src' ].
-			spec baseline: 'MethodProxies' with: [ spec repository: 'github://pharo-contributions/MethodProxies/src' ].
+			spec baseline: 'HyMpReturnTypeProfiler' with: [ spec repository: 'github://hyalinos/hyphe-tools:main/src' ].
 
 			spec
 				package: 'Hyphe-TypeModel';
@@ -24,23 +24,20 @@ BaselineOfHypheTools class >> baseline: spec [
 				package: 'Hyphe-ReturnTypeConstraint' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
 				package: 'Hyphe-ReturnTypeConstraint-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeConstraint' ) ];
 				package: 'Hyphe-ReturnTypeConstraint-UI' with: [ spec requires: #( 'Hyphe-ReturnTypeConstraint' ) ];
-				package: 'Hyphe-Analysis' with: [ spec requires: #( 'MethodProxies' 'NeoCSV' ) ];
+				package: 'Hyphe-Analysis' with: [ spec requires: #( 'NeoCSV' ) ];
 				package: 'Hyphe-Analysis-Tests' with: [ spec requires: #( 'Hyphe-Analysis' ) ];
 				package: 'Hyphe-CFG';
-				package: 'Hyphe-CFG-Tests' with: [ spec requires: #( 'Hyphe-CFG' ) ];
-				package: 'HyMpReturnTypeProfiler' with: [ spec requires: #( 'MethodProxies' ) ];
-				package: 'HyMpReturnTypeProfiler-Tests' with: [ spec requires: #( 'HyMpReturnTypeProfiler' ) ].
+				package: 'Hyphe-CFG-Tests' with: [ spec requires: #( 'Hyphe-CFG' ) ].
 
 			spec
 				group: 'inference'
 				with:
 					#( 'Hyphe-TypeModel' 'Hyphe-ReturnTypeAST' 'Hyphe-ReturnTypeAST-Tests' 'Hyphe-ReturnTypeHeuristic'
 					   'Hyphe-ReturnTypeHeuristic-Tests' 'Hyphe-ReturnTypeConstraint' 'Hyphe-ReturnTypeConstraint-Tests'
-					   'Hyphe-ReturnTypeConstraint-UI' );
+					   'Hyphe-ReturnTypeConstraint-UI' 'HyMpReturnTypeProfiler' );
 				group: 'analysis'
 				with: #( 'Hyphe-Analysis' 'Hyphe-Analysis-Tests' 'Hyphe-CFG' 'Hyphe-CFG-Tests' 'Hyphe-ReturnTypeAST-Analysis'
 					   'Hyphe-ReturnTypeAST-Analysis-Tests' );
-				group: 'profiler' with: #( 'HyMpReturnTypeProfiler' 'HyMpReturnTypeProfiler-Tests' );
-				group: 'all' with: #( 'inference' 'analysis' 'profiler' 'Hyphe-ReturnTypeConstraint-UI' );
+				group: 'all' with: #( 'inference' 'analysis' 'Hyphe-ReturnTypeConstraint-UI' );
 				group: 'default' with: #( 'all' ) ]
 ]
