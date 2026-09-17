@@ -10,11 +10,10 @@ BaselineOfHypheAnalysis class >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
-			spec baseline: #'MethodProxies' with: [ spec repository: #'github://pharo-contributions/MethodProxies/src' ].
-			spec baseline: #'NeoCSV' with: [ spec repository: #'github://pharo-contributions/NeoCSV/src' ].
+			spec baseline: #NeoCSV with: [ spec repository: #'github://pharo-contributions/NeoCSV/src' ].
 
 			spec
-				package: #'Hyphe-Analysis' with: [ spec requires: #( #'MethodProxies' #'NeoCSV' ) ];
+				package: #'Hyphe-Analysis' with: [ spec requires: #( #NeoCSV ) ];
 				package: #'Hyphe-Analysis-Tests' with: [ spec requires: #( #'Hyphe-Analysis' ) ].
 
 			spec
