@@ -9,7 +9,7 @@ Class {
 BaselineOfHypheTools class >> baseline: spec [
 
 	spec for: #common do: [
-			spec baseline: 'NeoCSV' with: [ spec repository: 'github://pharo-contributions/NeoCSV/src' ].
+			spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
 			spec baseline: 'HyMpReturnTypeProfiler' with: [ spec repository: 'github://hyalinos/hyphe-tools:main/src' ].
 
 			spec
