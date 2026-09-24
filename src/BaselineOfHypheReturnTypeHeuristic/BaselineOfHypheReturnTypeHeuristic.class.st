@@ -10,7 +10,7 @@ BaselineOfHypheReturnTypeHeuristic class >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
-			spec baseline: #'NeoCSV' with: [ spec repository: #'github://pharo-contributions/NeoCSV/src' ].
+			 spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
 
 			spec
 				package: #'Hyphe-TypeModel';
