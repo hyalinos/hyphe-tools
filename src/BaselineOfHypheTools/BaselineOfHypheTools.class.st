@@ -10,20 +10,19 @@ BaselineOfHypheTools class >> baseline: spec [
 
 	spec for: #common do: [
 			spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
-			spec baseline: 'HyMpReturnTypeProfiler' with: [ spec repository: 'github://hyalinos/hyphe-tools:main/src' ].
 
 			spec
 				package: 'Hyphe-TypeModel';
 				package: 'Hyphe-ReturnTypeAST' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
 				package: 'Hyphe-ReturnTypeAST-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeAST' ) ];
 				package: 'Hyphe-ReturnTypeAST-Analysis' with: [ spec requires: #( 'Hyphe-ReturnTypeAST' 'NeoCSV' ) ];
-				package: 'Hyphe-ReturnTypeAST-Analysis-Tests'
-				with: [ spec requires: #( 'Hyphe-ReturnTypeAST-Analysis' 'Hyphe-ReturnTypeAST-Tests' ) ];
+				package: 'Hyphe-ReturnTypeAST-Analysis-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeAST-Analysis' 'Hyphe-ReturnTypeAST-Tests' ) ];
 				package: 'Hyphe-ReturnTypeHeuristic' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
 				package: 'Hyphe-ReturnTypeHeuristic-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeHeuristic' ) ];
 				package: 'Hyphe-ReturnTypeConstraint' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
 				package: 'Hyphe-ReturnTypeConstraint-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeConstraint' ) ];
 				package: 'Hyphe-ReturnTypeConstraint-UI' with: [ spec requires: #( 'Hyphe-ReturnTypeConstraint' ) ];
+				package: 'HyMpReturnTypeProfiler' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
 				package: 'Hyphe-Analysis' with: [ spec requires: #( 'NeoCSV' ) ];
 				package: 'Hyphe-Analysis-Tests' with: [ spec requires: #( 'Hyphe-Analysis' ) ];
 				package: 'Hyphe-CFG';
