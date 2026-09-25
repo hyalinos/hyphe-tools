@@ -6,8 +6,9 @@ Class {
 }
 
 { #category : 'baselines' }
-BaselineOfHypheTools class >> baseline: spec [
+BaselineOfHypheTools >> baseline: spec [
 
+	<baseline>
 	spec for: #common do: [
 			spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
 
@@ -16,7 +17,8 @@ BaselineOfHypheTools class >> baseline: spec [
 				package: 'Hyphe-ReturnTypeAST' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
 				package: 'Hyphe-ReturnTypeAST-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeAST' ) ];
 				package: 'Hyphe-ReturnTypeAST-Analysis' with: [ spec requires: #( 'Hyphe-ReturnTypeAST' 'NeoCSV' ) ];
-				package: 'Hyphe-ReturnTypeAST-Analysis-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeAST-Analysis' 'Hyphe-ReturnTypeAST-Tests' ) ];
+				package: 'Hyphe-ReturnTypeAST-Analysis-Tests'
+				with: [ spec requires: #( 'Hyphe-ReturnTypeAST-Analysis' 'Hyphe-ReturnTypeAST-Tests' ) ];
 				package: 'Hyphe-ReturnTypeHeuristic' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
 				package: 'Hyphe-ReturnTypeHeuristic-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeHeuristic' ) ];
 				package: 'Hyphe-ReturnTypeConstraint' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
