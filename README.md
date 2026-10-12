@@ -8,13 +8,9 @@ what you need instead of the whole thing.
 
 | Group | What it includes |
 |---|---|
-| `inference` | The three type-inference tools: `Hyphe-TypeModel`, `Hyphe-ReturnTypeAST` (ARTI), `Hyphe-ReturnTypeHeuristic` (ARTH), `Hyphe-ReturnTypeConstraint` (CTI, including its Spec2 UI) — with tests |
+| `inference` | Several type-inference tools: `Hyphe-ReturnTypeAST` (ARTI), `Hyphe-ReturnTypeHeuristic` (ARTH), `Hyphe-ReturnTypeConstraint` (CTI, including its Spec2 UI — with tests), Hyphe-ReturnTypeProfiler |
 | `analysis` | The analysis tools: `Hyphe-Analysis` (code counters + type-prediction calibration), `Hyphe-CFG` (control-flow graph construction and visualization), `Hyphe-ReturnTypeAST-Analysis` (statistics over ARTI's results) — with tests |
 | `all` | `inference` + `analysis` together (this is also the `default` group) |
-
-External dependencies (`NeoCSV`, `MethodProxies`) are declared in the
-baseline itself and get pulled in automatically — no need to load them
-separately.
 
 ### Everything (`all`)
 
@@ -72,6 +68,12 @@ Metacello new
     baseline: 'HypheReturnTypeConstraint';
     repository: 'github://hyalinos/hyphe-tools/src';
     load: #('All').
+
+"Test Profiler"
+Metacello new
+    baseline: 'HyMpReturnTypeProfiler';
+    repository: 'github://hyalinos/hyphe-tools/src';
+    load: #('Core').
 
 "Hyphe-CFG"
 Metacello new
