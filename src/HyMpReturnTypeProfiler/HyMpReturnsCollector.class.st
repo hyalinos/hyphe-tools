@@ -51,6 +51,23 @@ HyMpReturnsCollector class >> excludedPackagePrefixes [
 	     'SystemCommands' 'Deprecated13' 'Deprecated14' 'PharoCompatibility' 'MCP' )
 ]
 
+{ #category : 'hyphe-typemodel' }
+HyMpReturnsCollector class >> inferForImage [
+	"inferForPackages: over every package currently known to the image. Heavy: hundreds of packages, each still bounded by runOnPackages:\'s own per-package/per-test timeouts, but with no package-level exclusion beyond what isEligibleForInstrumentation: already applies per-method -- a whole-image sweep has not been staged/verified package-by-package the way individual packages have. Prefer inferForPackages: with an explicit, vetted list for anything other than a deliberate, supervised full run."
+
+	^ self inferForPackages: (PackageOrganizer default packages collect: [ :p | p name ])
+]
+
+{ #category : 'hyphe-typemodel' }
+HyMpReturnsCollector class >> inferForPackages: aCollectionOfPackageNames [
+	"The whole pipeline in one call, for this tool\'s registration as an inference source alongside ARTI/ARTH/CTI: instrument + run tests (runOnPackages:, with its own outer/per-test safety budgets), build the intermediate statistics report, then convert straight to the single unified format every tool produces. The raw per-method statistics (counts, percentages, dominant type) stay available by building the report yourself instead (runOnPackages: / HyMpReturnTypeReport fromObservations:) -- this entry point only ever hands back the final, already-converted result."
+
+	| collector report |
+	collector := self runOnPackages: aCollectionOfPackageNames.
+	report := HyMpReturnTypeReport fromObservations: collector observations.
+	^ report hypheType
+]
+
 { #category : 'configuration' }
 HyMpReturnsCollector class >> maxObservations [
 	"Hard cap on how many observations a single run collects, so a very hot method (called

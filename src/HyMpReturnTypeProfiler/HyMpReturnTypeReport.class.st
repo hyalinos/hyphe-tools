@@ -27,9 +27,9 @@ HyMpReturnTypeReport >> addAllObservations: aCollectionOfObservations [
 	aCollectionOfObservations do: [ :each | self recordObservation: each ]
 ]
 
-{ #category : 'exporting' }
+{ #category : 'hyphe-typemodel' }
 HyMpReturnTypeReport >> asCsvString [
-	"One row per (definingClass, selector, returnClass) triple, following the methodology's Section 14 'Quick Reference' expectation of a flat CSV export: definingClass,selector,returnClass,count,percentage,totalCount"
+	"One row per (definingClass, selector, returnClass) triple -- the raw, intermediate statistics (not yet converted to the shared Hyphe-TypeModel vocabulary; see hypheType for that): definingClass,selector,returnClass,count,percentage,totalCount"
 
 	| stream |
 	stream := WriteStream on: String new.
@@ -52,6 +52,20 @@ HyMpReturnTypeReport >> asCsvString [
 						print: profile totalCount;
 						nextPut: Character lf ] ].
 	^ stream contents
+]
+
+{ #category : 'hyphe-typemodel' }
+HyMpReturnTypeReport >> hypheType [
+	"Every profiled method\'s result in the shared Hyphe-TypeModel vocabulary, keyed the same way profilesByKey itself is (definingClass -> selector) -- this is the Offline Test Profiling tool\'s full result set in the single unified format every other inference tool (ARTI/ARTH/CTI) already produces, ready for the same ~ merge pipeline. The raw, intermediate statistics (counts, percentages, dominant type) stay available per-method via profileFor:selector: / profiles -- this is a separate, on-demand conversion, not a replacement for them."
+
+	^ profilesByKey collect: [ :profile | profile hypheType ]
+]
+
+{ #category : 'hyphe-typemodel' }
+HyMpReturnTypeReport >> hypheTypeFor: dClass selector: aSelector [
+	"Convenience: (dClass, aSelector)\'s observed-return-type result in the shared Hyphe-TypeModel vocabulary. Creates an (empty, HTMUnknown-valued) profile on first request, same as profileFor:selector: itself -- this never raises for a method that simply wasn\'t profiled."
+
+	^ (self profileFor: dClass selector: aSelector) hypheType
 ]
 
 { #category : 'initialization' }
