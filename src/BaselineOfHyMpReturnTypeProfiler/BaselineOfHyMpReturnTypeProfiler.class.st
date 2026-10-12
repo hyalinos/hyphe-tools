@@ -13,10 +13,11 @@ BaselineOfHyMpReturnTypeProfiler >> baseline: spec [
 			spec baseline: #MethodProxies with: [ spec repository: #'github://pharo-contributions/MethodProxies/src' ].
 
 			spec
-				package: #HyMpReturnTypeProfiler with: [ spec requires: #( #MethodProxies ) ];
+				package: #'Hyphe-TypeModel';
+				package: #HyMpReturnTypeProfiler with: [ spec requires: #(#'Hyphe-TypeModel' #MethodProxies ) ];
 				package: #'HyMpReturnTypeProfiler-Tests' with: [ spec requires: #( #HyMpReturnTypeProfiler ) ].
 
 			spec
-				group: 'Core' with: #( 'HyMpReturnTypeProfiler' 'HyMpReturnTypeProfiler-Tests' );
+				group: 'Core' with: #(#'Hyphe-TypeModel' 'HyMpReturnTypeProfiler' 'HyMpReturnTypeProfiler-Tests' );
 				group: 'default' with: #( 'Core' ) ]
 ]
