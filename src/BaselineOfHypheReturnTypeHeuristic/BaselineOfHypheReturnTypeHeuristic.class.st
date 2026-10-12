@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'baselines' }
-BaselineOfHypheReturnTypeHeuristic class >> baseline: spec [
+BaselineOfHypheReturnTypeHeuristic >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
