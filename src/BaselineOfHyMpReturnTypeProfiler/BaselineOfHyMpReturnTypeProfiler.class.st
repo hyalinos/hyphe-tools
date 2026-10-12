@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'baselines' }
-BaselineOfHyMpReturnTypeProfiler class >> baseline: spec [
+BaselineOfHyMpReturnTypeProfiler >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
