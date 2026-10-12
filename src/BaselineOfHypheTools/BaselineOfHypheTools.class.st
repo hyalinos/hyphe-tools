@@ -11,6 +11,7 @@ BaselineOfHypheTools >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 			spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
+			spec baseline: #MethodProxies with: [ spec repository:#'github://pharo-contributions/MethodProxies/src' ].
 
 			spec
 				package: 'Hyphe-TypeModel';
@@ -24,7 +25,7 @@ BaselineOfHypheTools >> baseline: spec [
 				package: 'Hyphe-ReturnTypeConstraint' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
 				package: 'Hyphe-ReturnTypeConstraint-Tests' with: [ spec requires: #( 'Hyphe-ReturnTypeConstraint' ) ];
 				package: 'Hyphe-ReturnTypeConstraint-UI' with: [ spec requires: #( 'Hyphe-ReturnTypeConstraint' ) ];
-				package: 'HyMpReturnTypeProfiler' with: [ spec requires: #( 'Hyphe-TypeModel' 'NeoCSV' ) ];
+				package: 'HyMpReturnTypeProfiler' with: [ spec requires: #( 'Hyphe-TypeModel' #MethodProxies 'NeoCSV' ) ];
 				package: 'Hyphe-Analysis' with: [ spec requires: #( 'NeoCSV' ) ];
 				package: 'Hyphe-Analysis-Tests' with: [ spec requires: #( 'Hyphe-Analysis' ) ];
 				package: 'Hyphe-CFG';
