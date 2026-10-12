@@ -22,7 +22,16 @@ HyMpMethodProfile class >> definingClass: dClass selector: aSelector [
 		  yourself
 ]
 
-{ #category : 'accessing' }
+{ #category : 'hyphe-typemodel' }
+HyMpMethodProfile class >> hypheTypeForObservedClass: aClass [
+	"Wraps one raw Class/Metaclass as observed at runtime into the shared Hyphe-TypeModel vocabulary (see Hyphe-TypeModel). A method that returned a class itself (e.g. ^ self class) shows up here as a real Metaclass -- that must become HTMMetaclass, not a bogus HTMClassRef named #\'Foo class\'."
+
+	(aClass isKindOf: Metaclass)
+		ifTrue: [ ^ HTMType metaclass: aClass instanceSide name ]
+		ifFalse: [ ^ HTMType classRef: aClass name ]
+]
+
+{ #category : 'hyphe-typemodel' }
 HyMpMethodProfile >> countFor: aClass [
 
 	^ typeCounts at: aClass ifAbsent: [ 0 ]
@@ -43,7 +52,7 @@ HyMpMethodProfile >> definingClass: dClass selector: aSelector [
 	totalCount := 0
 ]
 
-{ #category : 'querying' }
+{ #category : 'hyphe-typemodel' }
 HyMpMethodProfile >> dominantType [
 	"The most frequently observed return class -- nil if there are no observations at all."
 
@@ -54,6 +63,14 @@ HyMpMethodProfile >> dominantType [
 				   ifFalse: [ best ] ]) key
 ]
 
+{ #category : 'hyphe-typemodel' }
+HyMpMethodProfile >> hypheType [
+	"This method's result in the shared Hyphe-TypeModel vocabulary (see Hyphe-TypeModel), built on demand from the raw, intermediate statistics in typeCounts: a single HTMClassRef/HTMMetaclass when monomorphic, an HTMUnion of all observed classes when polymorphic (HTMType class>>union: already de-duplicates and collapses a single-member union on its own), or HTMUnknown when this method was never actually called during profiling. typeCounts itself is never touched by this -- it stays the raw per-run statistics (counts, percentages, dominant type) that the rest of this class works with."
+
+	typeCounts isEmpty ifTrue: [ ^ HTMType unknown ].
+	^ HTMType union: (typeCounts keys collect: [ :aClass | self class hypheTypeForObservedClass: aClass ])
+]
+
 { #category : 'querying' }
 HyMpMethodProfile >> isMonomorphic [
 	"True if every single observed call returned the exact same class."
@@ -61,7 +78,7 @@ HyMpMethodProfile >> isMonomorphic [
 	^ typeCounts size = 1
 ]
 
-{ #category : 'accessing' }
+{ #category : 'hyphe-typemodel' }
 HyMpMethodProfile >> percentageFor: aClass [
 	"What fraction of observed calls returned aClass, as 0.0-100.0."
 
@@ -69,7 +86,7 @@ HyMpMethodProfile >> percentageFor: aClass [
 	^ (self countFor: aClass) / totalCount asFloat * 100
 ]
 
-{ #category : 'printing' }
+{ #category : 'hyphe-typemodel' }
 HyMpMethodProfile >> printOn: aStream [
 
 	aStream
