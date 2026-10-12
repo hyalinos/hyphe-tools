@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'baselines' }
-BaselineOfHypheReturnTypeConstraint class >> baseline: spec [
+BaselineOfHypheReturnTypeConstraint >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
