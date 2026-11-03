@@ -61,12 +61,12 @@ HyExperiment >> policy: anObject [
 	policy := anObject
 ]
 
-{ #category : 'running' }
+{ #category : 'Protocol (running) - 2 selector(s)' }
 HyExperiment >> rowFor: anEntry [
-	"Answer the row of a method: predictions of the tools (r replaced by the class of the method), of the strategies, and outcomes"
+	"Answer the row of a method: predictions of the tools (r replaced by the class of the method, prepared by the policy), of the strategies, and outcomes"
 
 	| toolPredictions predictions outcomes |
-	toolPredictions := tools collect: [ :tool | (tool predictionFor: anEntry ref) resolvedFor: anEntry ref ].
+	toolPredictions := tools collect: [ :tool | policy prepared: ((tool predictionFor: anEntry ref) resolvedFor: anEntry ref) ].
 	predictions := Dictionary new.
 	outcomes := Dictionary new.
 	tools with: toolPredictions do: [ :tool :prediction | predictions at: tool name put: prediction ].

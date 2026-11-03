@@ -22,7 +22,7 @@ HyExperimentResult class >> experiment: anExperiment rows: someRows [
 		  yourself
 ]
 
-{ #category : 'RQ1 accuracy' }
+{ #category : 'Protocol (testing) - 1 selector(s)' }
 HyExperimentResult >> accuracyChiSquareOf: aSourceName [
 	"Answer the chi-square test of the dependence between the group and being correct, among the answers of a tool or strategy (a table correct / not correct by group): does the number of return points (statements...) change its accuracy?"
 
@@ -30,7 +30,7 @@ HyExperimentResult >> accuracyChiSquareOf: aSourceName [
 	tallies := self groups collect: [ :group | self tallyOf: aSourceName in: group ].
 	^ HyChiSquareTest on: {
 			  (tallies collect: [ :tally | tally correct ]).
-			  (tallies collect: [ :tally | tally partial + tally incorrect ]) }
+			  (tallies collect: [ :tally | tally partial + tally related + tally incorrect ]) }
 ]
 
 { #category : 'RQ1 accuracy' }

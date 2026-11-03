@@ -41,11 +41,107 @@ HyComparisonPolicyTest >> testArgumentTruth [
 	self assert: (self outcome: 'Integer' truth: 'a1') equals: #incorrect
 ]
 
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testDefaultPreparedPredictionIsTheSame [
+
+	| prediction |
+	prediction := HyToolPrediction tool: 'T' type: 'ByteString | Object'.
+	self assert: (policy prepared: prediction) equals: prediction
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testDefaultsKeepTheOlderRules [
+
+	self assert: policy nameNormalization equals: #none.
+	self deny: policy objectMeansUnknown.
+	self assert: policy relatedMatching equals: #off.
+	self assert: (self outcome: 'ByteString' truth: 'String') equals: #incorrect.
+	self assert: (self outcome: 'Object' truth: 'Integer') equals: #incorrect.
+	self assert: (self outcome: 'Integer' truth: 'SmallInteger') equals: #incorrect.
+	self assert: (self outcome: 'Integer' truth: 'UndefinedObject | Integer') equals: #correct
+]
+
 { #category : 'tests' }
 HyComparisonPolicyTest >> testDifferentType [
 	"Different type: incorrect"
 
 	self assert: (self outcome: 'String' truth: 'Integer') equals: #incorrect
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testExperimentOneNormalizesNames [
+
+	policy := HyComparisonPolicy experimentOne.
+	self assert: (self outcome: 'ByteString' truth: 'String') equals: #correct.
+	self assert: (self outcome: 'WideString' truth: 'String') equals: #correct.
+	self assert: (self outcome: 'ByteSymbol' truth: 'Symbol') equals: #correct.
+	self assert: (self outcome: 'False | True' truth: 'Boolean') equals: #correct.
+	self assert: (self outcome: 'True' truth: 'Boolean') equals: #correct.
+	self assert: (self outcome: 'ByteString' truth: 'Symbol') equals: #related
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testExperimentOneObjectAnswerIsNoAnswer [
+
+	policy := HyComparisonPolicy experimentOne.
+	self assert: (self outcome: 'Object' truth: 'Integer') equals: #abstained.
+	self assert: (self outcome: 'Integer | Object' truth: 'Integer') equals: #abstained.
+	self assert: (self outcome: nil truth: 'Integer') equals: #abstained
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testExperimentOneObjectTruthIsExcluded [
+
+	policy := HyComparisonPolicy experimentOne.
+	self assert: (self outcome: 'Integer' truth: 'Object') equals: #excluded.
+	self assert: (self outcome: nil truth: 'Object') equals: #excluded.
+	self assert: (self outcome: 'Object' truth: 'Object') equals: #excluded
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testExperimentOneOneTypeOfAUnionIsPartial [
+
+	policy := HyComparisonPolicy experimentOne.
+	self assert: (self outcome: 'Integer' truth: 'UndefinedObject | Integer') equals: #partial.
+	self assert: (self outcome: 'Integer | UndefinedObject' truth: 'UndefinedObject | Integer') equals: #correct.
+	self assert: (self outcome: 'Integer | String | Float' truth: 'Integer | String') equals: #partial.
+	self assert: (self outcome: 'Array' truth: 'UndefinedObject | Integer') equals: #incorrect
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testExperimentOneRelatedByInheritance [
+
+	policy := HyComparisonPolicy experimentOne.
+	self assert: (self outcome: 'Integer' truth: 'SmallInteger') equals: #related.
+	self assert: (self outcome: 'SmallInteger' truth: 'Integer') equals: #related.
+	self assert: (self outcome: 'Number' truth: 'Integer | String') equals: #related.
+	self assert: (self outcome: 'String' truth: 'Symbol') equals: #related.
+	self assert: (self outcome: 'Integer' truth: 'String') equals: #incorrect.
+	self assert: (self outcome: 'Array' truth: 'Collection') equals: #related.
+	self assert: (self outcome: 'Array' truth: 'Set') equals: #incorrect.
+	self assert: (self outcome: 'SmallInteger' truth: 'SmallInteger') equals: #correct
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testExperimentOneRelatedNeverUsesObject [
+
+	policy := HyComparisonPolicy experimentOne.
+	policy objectMeansUnknown: false.
+	self assert: (self outcome: 'Object' truth: 'Integer') equals: #incorrect.
+	self assert: (self outcome: 'Integer' truth: 'Object') equals: #incorrect
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testExperimentOneSettings [
+
+	policy := HyComparisonPolicy experimentOne.
+	self assert: policy unionTruth equals: #partial.
+	self assert: policy nameNormalization equals: #standard.
+	self assert: policy objectMeansUnknown.
+	self assert: policy relatedMatching equals: #inheritance.
+	self assert: policy abstention equals: #abstain.
+	self assert: policy unknownTruth equals: #excluded.
+	self assert: policy argumentTruth equals: #excluded
 ]
 
 { #category : 'tests' }
@@ -81,6 +177,18 @@ HyComparisonPolicyTest >> testPredictionWithAnArgumentTypeIsNotAnAnswer [
 	"A prediction that is only the type of an argument says no class: it is an abstention"
 
 	self assert: (self outcome: 'a1' truth: 'Integer') equals: #abstained
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testPreparedPrediction [
+
+	| prediction |
+	policy := HyComparisonPolicy experimentOne.
+	prediction := policy prepared: (HyToolPrediction tool: 'T' type: 'ByteString | True').
+	self assert: prediction types keys equals: #( 'Boolean' 'String' ).
+	self assert: (policy prepared: (HyToolPrediction tool: 'T' type: 'ByteString | Object')) isNothing.
+	self assert: (policy prepared: (HyToolPrediction tool: 'T' type: nil)) isNothing.
+	self assert: (policy prepared: (HyToolPrediction tool: 'T' type: 'r | ByteString')) types keys equals: #( 'String' 'r' )
 ]
 
 { #category : 'tests' }
@@ -128,6 +236,15 @@ HyComparisonPolicyTest >> testReceiverTruthWithClassHierarchy [
 	self assert: (policy outcomeOf: (HyToolPrediction tool: 'T' type: 'SortedCollection') for: entry) equals: #correct.
 	self assert: (policy outcomeOf: (HyToolPrediction tool: 'T' type: 'Dictionary') for: entry) equals: #incorrect.
 	self assert: (policy outcomeOf: (HyToolPrediction tool: 'T' type: 'NoSuchClassAnywhere') for: entry) equals: #incorrect
+]
+
+{ #category : 'Protocol (tests) - 30 selector(s)' }
+HyComparisonPolicyTest >> testRelatedNeedsTheSetting [
+
+	self assert: (self outcome: 'Integer' truth: 'SmallInteger') equals: #incorrect.
+	policy relatedMatching: #inheritance.
+	self assert: (self outcome: 'Integer' truth: 'SmallInteger') equals: #related.
+	self should: [ policy relatedMatching: #maybe ] raise: Error
 ]
 
 { #category : 'tests' }

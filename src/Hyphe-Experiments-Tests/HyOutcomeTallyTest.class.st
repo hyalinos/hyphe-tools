@@ -66,3 +66,17 @@ HyOutcomeTallyTest >> testRates [
 	self assert: tally accuracyWithPartial equals: 3 / 4.
 	self assert: tally coverage equals: 4 / 5
 ]
+
+{ #category : 'Protocol (tests) - 5 selector(s)' }
+HyOutcomeTallyTest >> testRelatedIsAnAnswer [
+
+	| tally |
+	tally := HyOutcomeTally new.
+	#( #correct #partial #related #related #incorrect #abstained #excluded ) do: [ :each | tally add: each ].
+	self assert: tally related equals: 2.
+	self assert: tally answered equals: 5.
+	self assert: tally evaluated equals: 6.
+	self assert: tally accuracy equals: 1 / 5.
+	self assert: tally accuracyWithRelated equals: 4 / 5.
+	self assert: tally coverage equals: 5 / 6
+]

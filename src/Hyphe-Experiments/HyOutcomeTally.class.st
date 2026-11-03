@@ -33,6 +33,13 @@ HyOutcomeTally >> accuracyWithPartial [
 	^ self answered = 0 ifFalse: [ self correct + self partial / self answered ]
 ]
 
+{ #category : 'Protocol (accessing) - 11 selector(s)' }
+HyOutcomeTally >> accuracyWithRelated [
+	"Answer (correct + partial + related) / answered, nil if the tool answered nothing"
+
+	^ self answered = 0 ifFalse: [ self correct + self partial + self related / self answered ]
+]
+
 { #category : 'adding' }
 HyOutcomeTally >> add: anOutcome [
 	"Count one outcome"
@@ -40,11 +47,11 @@ HyOutcomeTally >> add: anOutcome [
 	counts at: anOutcome put: (counts at: anOutcome) + 1
 ]
 
-{ #category : 'accessing' }
+{ #category : 'Protocol (accessing) - 11 selector(s)' }
 HyOutcomeTally >> answered [
 	"Answer how many times the tool gave an answer"
 
-	^ self correct + self partial + self incorrect
+	^ self correct + self partial + self related + self incorrect
 ]
 
 { #category : 'accessing' }
@@ -82,13 +89,13 @@ HyOutcomeTally >> incorrect [
 	^ counts at: #incorrect
 ]
 
-{ #category : 'initialization' }
+{ #category : 'Protocol (accessing) - 11 selector(s)' }
 HyOutcomeTally >> initialize [
 	"Start with all the counts at 0"
 
 	super initialize.
 	counts := Dictionary new.
-	#( #correct #partial #incorrect #abstained #excluded ) do: [ :outcome | counts at: outcome put: 0 ]
+	#( #correct #partial #related #incorrect #abstained #excluded ) do: [ :outcome | counts at: outcome put: 0 ]
 ]
 
 { #category : 'accessing' }
@@ -98,13 +105,13 @@ HyOutcomeTally >> partial [
 	^ counts at: #partial
 ]
 
-{ #category : 'printing' }
+{ #category : 'Protocol (accessing) - 11 selector(s)' }
 HyOutcomeTally >> printOn: aStream [
 	"Print the counts"
 
 	super printOn: aStream.
 	aStream nextPut: $(.
-	#( #correct #partial #incorrect #abstained #excluded )
+	#( #correct #partial #related #incorrect #abstained #excluded )
 		do: [ :outcome |
 				aStream
 					nextPutAll: outcome;
@@ -112,4 +119,11 @@ HyOutcomeTally >> printOn: aStream [
 					print: (counts at: outcome) ]
 		separatedBy: [ aStream space ].
 	aStream nextPut: $)
+]
+
+{ #category : 'Protocol (accessing) - 11 selector(s)' }
+HyOutcomeTally >> related [
+	"Answer how many outcomes are related: wrong, but right for a class related by inheritance"
+
+	^ counts at: #related
 ]

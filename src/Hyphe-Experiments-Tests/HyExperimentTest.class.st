@@ -160,6 +160,29 @@ HyExperimentTest >> testExperimentNamesAndStrategies [
 	self assert: experiment strategies third tierOrder equals: #( 'Good' 'Bad' 'Half' 'Silent' )
 ]
 
+{ #category : 'Protocol (tests) - 19 selector(s)' }
+HyExperimentTest >> testExperimentOneRulesAreApplied [
+	"A tool that says Object does not answer (nor vote), ByteString is String, and a truth Object is left out"
+
+	| experiment |
+	experiment := HyExperiment
+		              name: 'x'
+		              scheme: HyGroupScheme returnPoints
+		              dataset: self dataset
+		              tools: {
+				              (HyBlockTool name: 'Anything' block: [ :ref | 'Object' ]).
+				              (HyBlockTool name: 'Bytes' block: [ :ref | 'ByteString' ]) }.
+	experiment policy: HyComparisonPolicy experimentOne.
+	result := experiment run.
+	result rows do: [ :row |
+			self assert: (row predictionOf: 'Anything') isNothing.
+			self assert: (row predictionOf: 'VotingConfidence') types keys equals: #( 'String' ).
+			self assert: (row outcomeOf: 'Anything') equals: (row entry truth classNames asArray = #( 'Object' )
+					 ifTrue: [ #excluded ]
+					 ifFalse: [ #abstained ]).
+			row entry truth classNames asArray = #( 'String' ) ifTrue: [ self assert: (row outcomeOf: 'Bytes') equals: #correct ] ]
+]
+
 { #category : 'tests' }
 HyExperimentTest >> testMethodsNotInTheImageAreLeftOut [
 	"A method that is not in the image has no group: it is not a row"
