@@ -1,3 +1,6 @@
+"
+Methods with assignments analyzed by the tests of AssignmentCounter.
+"
 Class {
 	#name : 'AssignmentCountersTestData',
 	#superclass : 'Object',

@@ -1,9 +1,49 @@
 Class {
 	#name : 'CSVComparatorTest',
 	#superclass : 'TestCase',
+	#instVars : [
+		'createdFiles'
+	],
 	#category : 'Hyphe-Analysis-Tests',
 	#package : 'Hyphe-Analysis-Tests'
 }
+
+{ #category : 'running' }
+CSVComparatorTest >> ensureFile: aName lines: someLines [
+	"Write a file in the working directory unless it exists; remember it when created"
+
+	| file |
+	file := FileLocator workingDirectory / aName.
+	file exists ifTrue: [ ^ self ].
+	file writeStreamDo: [ :stream |
+			someLines do: [ :line |
+					stream
+						nextPutAll: line;
+						lf ] ].
+	createdFiles add: file
+]
+
+{ #category : 'running' }
+CSVComparatorTest >> setUp [
+	"The three tests that read test.csv and test2.csv from the working directory find these files: they are written here when they do not exist, and removed afterwards (see tearDown)"
+
+	super setUp.
+	createdFiles := OrderedCollection new.
+	self
+		ensureFile: 'test.csv'
+		lines:
+			{ 'package,class,methodName,collectedType,commonType'. 'P1,A,add:,Integer,'. 'P1,A,remove:,String,'. 'P1,B,print:,Object,'.
+			'P1,B,size,Integer,' }.
+	self ensureFile: 'test2.csv' lines: { 'methodName,class,inferredType'. 'add:,A,Integer'. 'remove:,A,Boolean'. 'size,B,Integer' }
+]
+
+{ #category : 'running' }
+CSVComparatorTest >> tearDown [
+	"Remove the files that setUp created, leave the ones that already existed"
+
+	createdFiles do: [ :file | file ensureDelete ].
+	super tearDown
+]
 
 { #category : 'tests' }
 CSVComparatorTest >> testCompareMultipleStrategiesMemory [

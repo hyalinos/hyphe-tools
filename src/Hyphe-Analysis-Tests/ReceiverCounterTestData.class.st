@@ -1,3 +1,6 @@
+"
+Methods whose receivers are counted by the tests of ReceiverCounter.
+"
 Class {
 	#name : 'ReceiverCounterTestData',
 	#superclass : 'Object',

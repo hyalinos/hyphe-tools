@@ -1,3 +1,6 @@
+"
+Tests of AssignmentCounter.
+"
 Class {
 	#name : 'AssignmentCountersTest',
 	#superclass : 'TestCase',

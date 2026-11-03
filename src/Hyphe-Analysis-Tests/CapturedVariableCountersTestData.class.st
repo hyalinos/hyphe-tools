@@ -1,3 +1,6 @@
+"
+Methods with blocks that capture, or do not capture, variables of the method, analyzed by the tests of CapturedVariableCounter.
+"
 Class {
 	#name : 'CapturedVariableCountersTestData',
 	#superclass : 'Object',

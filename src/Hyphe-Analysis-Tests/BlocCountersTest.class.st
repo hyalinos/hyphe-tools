@@ -45,13 +45,16 @@ BlocCountersTest >> testComplexcBloc [
 
 { #category : 'tests' }
 BlocCountersTest >> testMethodTwoBloc [
-	| blocCounter method count maxDeph|
+	| blocCounter method count deph maxDeph|
 	method := BlocCountersTestData >> #twoBloc .
 	blocCounter := BlocsCounter new.
 	count := blocCounter numberOfBlocIn: method.
+	deph := blocCounter dephBlocInMethod: method .
 	maxDeph := blocCounter maxDephBlocInMethod: method.
 	self assert: count equals: 2.
+	self assert: deph size equals: 2.
 	self assert: maxDeph equals: 1.
+	
 ]
 
 { #category : 'tests' }

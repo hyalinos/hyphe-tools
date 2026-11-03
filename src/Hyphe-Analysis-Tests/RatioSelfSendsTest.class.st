@@ -1,3 +1,6 @@
+"
+Tests of RatioSelfSends.
+"
 Class {
 	#name : 'RatioSelfSendsTest',
 	#superclass : 'TestCase',

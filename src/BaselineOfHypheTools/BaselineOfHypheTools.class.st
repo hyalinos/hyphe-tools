@@ -11,7 +11,7 @@ BaselineOfHypheTools >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 			spec baseline: 'NeoCSV' with: [ spec repository: 'github://svenvc/NeoCSV/repository' ].
-			spec baseline: #MethodProxies with: [ spec repository:#'github://pharo-contributions/MethodProxies/src' ].
+			spec baseline: #MethodProxies with: [ spec repository: #'github://pharo-contributions/MethodProxies/src' ].
 
 			spec
 				package: 'Hyphe-TypeModel';
@@ -29,7 +29,10 @@ BaselineOfHypheTools >> baseline: spec [
 				package: 'Hyphe-Analysis' with: [ spec requires: #( 'NeoCSV' ) ];
 				package: 'Hyphe-Analysis-Tests' with: [ spec requires: #( 'Hyphe-Analysis' ) ];
 				package: 'Hyphe-CFG';
-				package: 'Hyphe-CFG-Tests' with: [ spec requires: #( 'Hyphe-CFG' ) ].
+				package: 'Hyphe-CFG-UI' with: [ spec requires: #( 'Hyphe-CFG' ) ];
+				package: 'Hyphe-CFG-Tests' with: [ spec requires: #( 'Hyphe-CFG' 'Hyphe-CFG-UI' ) ];
+				package: 'Hyphe-Experiments' with: [ spec requires: #( 'Hyphe-Analysis' 'Hyphe-ReturnTypeAST' 'NeoCSV' ) ];
+				package: 'Hyphe-Experiments-Tests' with: [ spec requires: #( 'Hyphe-Experiments' 'Hyphe-Analysis-Tests' ) ].
 
 			spec
 				group: 'inference'
@@ -38,8 +41,9 @@ BaselineOfHypheTools >> baseline: spec [
 					   'Hyphe-ReturnTypeHeuristic-Tests' 'Hyphe-ReturnTypeConstraint' 'Hyphe-ReturnTypeConstraint-Tests'
 					   'Hyphe-ReturnTypeConstraint-UI' 'HyMpReturnTypeProfiler' );
 				group: 'analysis'
-				with: #( 'Hyphe-Analysis' 'Hyphe-Analysis-Tests' 'Hyphe-CFG' 'Hyphe-CFG-Tests' 'Hyphe-ReturnTypeAST-Analysis'
-					   'Hyphe-ReturnTypeAST-Analysis-Tests' );
+				with:
+					#( 'Hyphe-Analysis' 'Hyphe-Analysis-Tests' 'Hyphe-CFG' 'Hyphe-CFG-UI' 'Hyphe-CFG-Tests' 'Hyphe-Experiments'
+					   'Hyphe-Experiments-Tests' 'Hyphe-ReturnTypeAST-Analysis' 'Hyphe-ReturnTypeAST-Analysis-Tests' );
 				group: 'all' with: #( 'inference' 'analysis' 'Hyphe-ReturnTypeConstraint-UI' );
 				group: 'default' with: #( 'all' ) ]
 ]

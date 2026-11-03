@@ -1,3 +1,6 @@
+"
+Methods analyzed by the tests of SelectorAnalysisResults.
+"
 Class {
 	#name : 'SelectorAnalysisResultsTestData',
 	#superclass : 'Object',
