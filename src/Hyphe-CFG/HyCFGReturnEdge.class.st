@@ -1,3 +1,6 @@
+"
+Edge from a return statement (^) to the exit node.
+"
 Class {
 	#name : 'HyCFGReturnEdge',
 	#superclass : 'HyCFGEdge',

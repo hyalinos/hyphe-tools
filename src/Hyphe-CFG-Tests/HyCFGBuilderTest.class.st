@@ -1,5 +1,5 @@
 "
-A HyCFGBuilderTest is a test class for testing the behavior of HyCFGBuilder
+Tests of HyCFGBuilder on statements and conditionals. Loops, exception handling and unusual code are tested in HyCFGBuilderLoopTest, HyCFGBuilderExceptionTest and HyCFGBuilderRobustnessTest.
 "
 Class {
 	#name : 'HyCFGBuilderTest',
@@ -9,8 +9,9 @@ Class {
 	#tag : 'Builder'
 }
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testAssignmentStatement [
+	"An assignment is a statement node: entry -> statement -> exit"
 
 	| method cfg statementNodes |
 	method := OCParser parseMethod: 'singleStatement
@@ -18,7 +19,7 @@ HyCFGBuilderTest >> testAssignmentStatement [
 	cfg := HyCFGBuilder buildFrom: method.
 
 	statementNodes := cfg nodes select: [ :n | n isKindOf: HyCFGStatementNode ].
-	
+
 	self assert: cfg nodes size equals: 3.
 	self assert: cfg edges size equals: 2.
 	self assert: statementNodes size equals: 1.
@@ -26,8 +27,9 @@ HyCFGBuilderTest >> testAssignmentStatement [
 	self assert: statementNodes first nestingDepth equals: 0
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testCascade [
+	"Each message of a cascade is a statement node"
 
 	| method cfg statementNodes |
 	method := OCParser parseMethod: 'cascade
@@ -43,8 +45,9 @@ HyCFGBuilderTest >> testCascade [
 	self assert: (cfg edges select: [ :e | e isKindOf: HyCFGSequentialEdge ]) size equals: 4
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testCommentOnly [
+	"A method with only a comment has no statement"
 
 	| method cfg statementNodes |
 	method := OCParser parseMethod: 'messageStatement
@@ -53,11 +56,12 @@ HyCFGBuilderTest >> testCommentOnly [
 
 	statementNodes := cfg nodes select: [ :n | n isKindOf: HyCFGStatementNode ].
 
-	self assert: statementNodes size equals: 0.
+	self assert: statementNodes size equals: 0
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testEmptyMethod [
+	"An empty method is entry -> exit"
 
 	| method cfg |
 	method := OCParser parseMethod: 'emptyMethod'.
@@ -69,8 +73,9 @@ HyCFGBuilderTest >> testEmptyMethod [
 	self assert: cfg nodes last class equals: HyCFGExitNode
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfEmpty [
+	"ifEmpty: runs its block on the true edge, the false edge goes to the exit"
 
 	| method cfg cfNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifEmptyTest
@@ -92,8 +97,9 @@ HyCFGBuilderTest >> testIfEmpty [
 	self assert: (trueEdge target isKindOf: HyCFGBlockScopeNode)
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfEmptyIfNotEmpty [
+	"ifEmpty:ifNotEmpty: has two branches"
 
 	| method cfg cfgNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifEmptyIfNotempty
@@ -117,10 +123,11 @@ HyCFGBuilderTest >> testIfEmptyIfNotEmpty [
 	self assert: falseEdge target astNode isReturn
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfFalse [
+	"ifFalse: runs its block on the false edge, the true edge goes to the exit"
 
-	| method cfg cfNodes conditionalEdges falseEdge trueEdge|
+	| method cfg cfNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifFalseTest
 		x > 0 ifFalse: [ y := 1 ]'.
 	cfg := HyCFGBuilder buildFrom: method.
@@ -140,8 +147,9 @@ HyCFGBuilderTest >> testIfFalse [
 	self assert: (falseEdge target isKindOf: HyCFGBlockScopeNode)
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfIfFalseIfTrue [
+	"ifFalse:ifTrue: has two branches, the first block is the false one"
 
 	| method cfg cfgNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifTrueIfFalseTest
@@ -183,8 +191,9 @@ HyCFGBuilderTest >> testIfNilFalse [
 	self assert: conditionalEdges size equals: 2
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfNilIfNotNil [
+	"ifNil:ifNotNil: has two branches"
 
 	| method cfg cfgNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifNilIfNotNil
@@ -208,8 +217,9 @@ HyCFGBuilderTest >> testIfNilIfNotNil [
 	self assert: falseEdge target astNode isReturn
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfNotEmpty [
+	"ifNotEmpty: runs its block on the false edge, the true edge goes to the exit"
 
 	| method cfg cfNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifEmptyTest
@@ -231,8 +241,9 @@ HyCFGBuilderTest >> testIfNotEmpty [
 	self assert: (falseEdge target isKindOf: HyCFGBlockScopeNode)
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfNotEmptyIfEmpty [
+	"ifNotEmpty:ifEmpty: has two branches"
 
 	| method cfg cfgNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifNotEmptyIfEmpty
@@ -292,8 +303,9 @@ HyCFGBuilderTest >> testIfNotNilFalse [
 	self assert: conditionalEdges size equals: 2
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfNotNilIfNil [
+	"ifNotNil:ifNil: has two branches"
 
 	| method cfg cfgNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifNotNilIfNil
@@ -358,8 +370,9 @@ HyCFGBuilderTest >> testIfTrueEmptyBlock [
 	self assert: conditionalEdges size equals: 2.
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testIfTrueIfFalse [
+	"ifTrue:ifFalse: has a true branch and a false branch, both blocks of code"
 
 	| method cfg cfgNodes conditionalEdges falseEdge trueEdge |
 	method := OCParser parseMethod: 'ifTrueIfFalseTest
@@ -401,23 +414,25 @@ HyCFGBuilderTest >> testIfTrueWithReturn [
 	self assert: conditionalEdges size equals: 2
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testMessageStatement [
-	
+	"A message send is a statement node"
+
 	| method cfg statementNodes |
 	method := OCParser parseMethod: 'messageStatement
 		1 isInteger'.
 	cfg := HyCFGBuilder buildFrom: method.
-	
+
 	statementNodes := cfg nodes select: [ :n | n isKindOf: HyCFGStatementNode ].
-	
+
 	self assert: statementNodes size equals: 1.
 	self assert: statementNodes first astNode isMessage.
 	self assert: statementNodes first nestingDepth equals: 0
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testPragmaOnly [
+	"A pragma is not a statement: entry -> exit"
 
 	| method cfg statementNodes |
 	method := OCParser parseMethod: 'messageStatement
@@ -431,8 +446,9 @@ HyCFGBuilderTest >> testPragmaOnly [
 	self assert: statementNodes size equals: 0
 ]
 
-{ #category : 'tests' }
+{ #category : 'test' }
 HyCFGBuilderTest >> testReturnStatement [
+	"A return is a statement node"
 
 	| method cfg statementNodes |
 	method := OCParser parseMethod: 'returnStatement
@@ -440,7 +456,7 @@ HyCFGBuilderTest >> testReturnStatement [
 	cfg := HyCFGBuilder buildFrom: method.
 
 	statementNodes := cfg nodes select: [ :n | n isKindOf: HyCFGStatementNode ].
-	
+
 	self assert: cfg nodes size equals: 3.
 	self assert: statementNodes size equals: 1.
 	self assert: statementNodes first astNode isReturn.

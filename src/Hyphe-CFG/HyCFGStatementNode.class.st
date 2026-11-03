@@ -1,3 +1,6 @@
+"
+A statement of the method body itself (nesting depth 0): an assignment, a message send, a return.
+"
 Class {
 	#name : 'HyCFGStatementNode',
 	#superclass : 'HyCFGCodeNode',

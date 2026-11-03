@@ -1,3 +1,6 @@
+"
+Where the execution of the method ends (return or end of the method). There is exactly one in a CFG and it is terminal: nothing follows it.
+"
 Class {
 	#name : 'HyCFGExitNode',
 	#superclass : 'HyCFGStructureNode',
@@ -6,8 +9,9 @@ Class {
 	#tag : 'Structure'
 }
 
-{ #category : 'testing' }
-HyCFGExitNode >> isTerminal [ 
+{ #category : 'testin' }
+HyCFGExitNode >> isTerminal [
+	"Nothing follows the exit node"
 
 	^ true
 ]
