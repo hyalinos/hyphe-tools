@@ -1,3 +1,6 @@
+"
+The control goes on with the next statement.
+"
 Class {
 	#name : 'HyCFGSequentialEdge',
 	#superclass : 'HyCFGEdge',
