@@ -1,3 +1,6 @@
+"
+Tests of CapturedVariableCounter.
+"
 Class {
 	#name : 'CapturedVariableCountersTest',
 	#superclass : 'TestCase',

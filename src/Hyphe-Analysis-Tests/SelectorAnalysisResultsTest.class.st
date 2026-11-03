@@ -7,16 +7,14 @@ Class {
 
 { #category : 'tests' }
 SelectorAnalysisResultsTest >> testAnalyzMethod [
-	| analyz result |
-	analyz := SelectorAnalysisResults new.
-	result := analyz analyzMethod: (SelectorAnalysisResultsTestData >> #method).
-	self assert: (result at: #name) equals: 'method'.
-	self assert: (result at: #size) equals: 2.
-	"self assert: ( result at: #implementors) isDictionary."
+	"The analysis of a method answers a dictionary method -> one SelectorAnalysisResult per distinct selector sent (the method sends new and at:put:)"
 
+	| method results |
+	method := SelectorAnalysisResultsTestData >> #method.
+	results := (SelectorAnalysisResults new analyzMethod: method) at: method.
 
-	
-	
+	self assert: (results collect: [ :result | result name ]) asArray equals: #( #new #at:put: ).
+	self assert: (results allSatisfy: [ :result | result size > 0 ])
 ]
 
 { #category : 'tests' }

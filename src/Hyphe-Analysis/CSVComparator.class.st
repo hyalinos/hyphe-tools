@@ -1,3 +1,6 @@
+"
+Compares, in CSV files, the return types collected by hand with the ones inferred by tools or by the merging strategies (consensus, biased consensus, tiered, weighted voting, biased weighted voting) and tells which methods have the same result. This is the first version of the data preparation of the return points experiment; HyExperiment (package Hyphe-Experiments) does the same without intermediate files and also computes the accuracy, the agreement and the best strategy per group.
+"
 Class {
 	#name : 'CSVComparator',
 	#superclass : 'Object',
@@ -323,24 +326,19 @@ CSVComparator >> exportResultsToCSVStandard: results toFile: fileName [
     stream close.
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'reading' }
 CSVComparator >> readCSV: aFile [
-    | rows |
-    rows := OrderedCollection new.
-	"For a real File"
-	(FileLocator workingDirectory / aFile) readStreamDo: [ :stream |
-        (NeoCSVReader on: stream)
-            separator: $,;
-            do: [ :row | rows add: row ].
-    ].
-	
-	"Using an in-memory FileSystem"
-   "aFile readStreamDo: [ :stream | 
-		(NeoCSVReader on: stream)
-			separator: $,;
-			do: [ :row | rows add: row  ].
-	]. " 
-    ^ rows
+	"Read the rows of a CSV file. A string is a path relative to the working directory, a FileReference (also of an in-memory file system) is used as it is."
+
+	| rows |
+	rows := OrderedCollection new.
+	(aFile isString
+		 ifTrue: [ FileLocator workingDirectory / aFile ]
+		 ifFalse: [ aFile ]) readStreamDo: [ :stream |
+			(NeoCSVReader on: stream)
+				separator: $,;
+				do: [ :row | rows add: row ] ].
+	^ rows
 ]
 
 { #category : 'as yet unclassified' }

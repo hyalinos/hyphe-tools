@@ -24,6 +24,13 @@ NilDensityTestData >> methodWithEqualityNil [
     ^ z
 ]
 
+{ #category : 'data' }
+NilDensityTestData >> methodWithEqualsNil [
+	| x |
+	x = nil ifTrue: [ ^ 0 ].
+	^ x
+]
+
 { #category : 'as yet unclassified' }
 NilDensityTestData >> methodWithIfNil [
     | x |
@@ -31,6 +38,32 @@ NilDensityTestData >> methodWithIfNil [
     x ifNil: [ x := 10 ].
     
     ^ x
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithIfNilIfNotNil [
+	| x |
+	^ x ifNil: [ 0 ] ifNotNil: [ :v | v ]
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithIfNotNil [
+	| x |
+	x ifNotNil: [ :v | ^ v ].
+	^ 0
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithIfNotNilIfNil [
+	| x |
+	^ x ifNotNil: [ :v | v ] ifNil: [ 0 ]
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithIsNotNil [
+	| x |
+	x isNotNil ifTrue: [ ^ 1 ].
+	^ 0
 ]
 
 { #category : 'as yet unclassified' }
@@ -59,6 +92,41 @@ NilDensityTestData >> methodWithNestedNilChecks [
     ].
     
     ^ x
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithNilOnTheLeft [
+	| x |
+	nil == x ifTrue: [ ^ 0 ].
+	^ x
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithNilValuesOnly [
+	| x |
+	x := nil.
+	^ nil
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithNotEqualNil [
+	| x |
+	x ~= nil ifTrue: [ ^ 1 ].
+	^ 0
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithNotIdenticalNil [
+	| x |
+	x ~~ nil ifTrue: [ ^ 1 ].
+	^ 0
+]
+
+{ #category : 'data' }
+NilDensityTestData >> methodWithNotNil [
+	| x |
+	x notNil ifTrue: [ ^ 1 ].
+	^ 0
 ]
 
 { #category : 'as yet unclassified' }

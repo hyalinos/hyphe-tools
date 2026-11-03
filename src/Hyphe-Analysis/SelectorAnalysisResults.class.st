@@ -1,3 +1,6 @@
+"
+Entry point of the first version of the analysis of the implementors of the selectors of a method, kept for compatibility. It now delegates to SelectorAnalyzer, which answers one SelectorAnalysisResult per selector sent (name, number of implementors, and for each implementor whether it overrides the base implementation).
+"
 Class {
 	#name : 'SelectorAnalysisResults',
 	#superclass : 'OCProgramNodeVisitor',
@@ -24,28 +27,22 @@ SelectorAnalysisResults class >> exampleSelectorAnalyisMethod [
 	count inspect.
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'analysis' }
 SelectorAnalysisResults >> analyzMethod: aCompiledMethod [
-	method := aCompiledMethod.
-	method ast acceptVisitor: self.
-	
-	^ result 
-	
+	"Answer a dictionary: the method -> a SelectorAnalysisResult for each distinct selector it sends (see SelectorAnalyzer). The previous version answered the same dictionary for every selector, so all the results were those of the last selector."
 
+	^ SelectorAnalyzer new analyzeMethod: aCompiledMethod
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'analysis' }
 SelectorAnalysisResults >> implementorsOf: aSelector [
-	|allSelectors|
-	allSelectors := SystemNavigation default allImplementorsOf: aSelector.
-	allSelectors do: [:each |
-        | class |
-        class := each methodClass.
-        implementors
-            at: class
-            put: (SelectorAnalysisResults new override: class with: aSelector)
-    ].
-   ^ implementors 
+	"Answer a dictionary: the classes that implement the selector -> true if their implementation overrides the one of a superclass"
+
+	| dictionary |
+	dictionary := Dictionary new.
+	(SelectorAnalyzer new resultFor: aSelector) implementors do: [ :association |
+		dictionary at: association key put: association value ].
+	^ dictionary
 ]
 
 { #category : 'initialization' }
@@ -58,35 +55,9 @@ SelectorAnalysisResults >> initialize [
 	
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'analysis' }
 SelectorAnalysisResults >> override: aClass with: aSelector [
-    |override current allSuperClasses |
-    override := false.
-    allSuperClasses := OrderedCollection new.
-    current := aClass superclass.
+	"Answer true if a superclass of aClass also implements aSelector"
 
-    [ current notNil ] whileTrue: [
-        allSuperClasses add: current.
-        current := current superclass.
-    ].
-		allSuperClasses do: [ :each| 
-			override := (each includesSelector:aSelector) .
-			override ifTrue: [^ override] ].
-    ^ override
-	
-	
-  
-]
-
-{ #category : 'visiting' }
-SelectorAnalysisResults >> visitMessageNode: aMessageNode [
-	| selector |
-	selector := aMessageNode selector.	
-	"selectors at: selector put: (SelectorAnalysisResults new implementorsOf: selector)."
-	selectors at: 'name' put: selector.
-	selectors at: 'size' put: (SelectorAnalysisResults new implementorsOf: selector)size.
-	selectors at: 'implemementors' put: (SelectorAnalysisResults new implementorsOf: selector).
-	result add: selectors.
-	super visitMessageNode: aMessageNode .
-	
+	^ SelectorAnalysisResult does: aClass override: aSelector
 ]

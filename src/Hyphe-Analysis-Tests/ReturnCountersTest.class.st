@@ -1,3 +1,6 @@
+"
+Tests of ReturnCounter.
+"
 Class {
 	#name : 'ReturnCountersTest',
 	#superclass : 'TestCase',

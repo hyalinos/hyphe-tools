@@ -1,3 +1,6 @@
+"
+One line of the comparison made by CSVComparator: the method (package, class, selector), the type collected by hand, the type inferred by a tool or strategy, and the result (true if they match, false if not, nil if the tool inferred nothing). The newer pipeline of Hyphe-Experiments (HyExperiment) keeps these results in HyExperimentRow.
+"
 Class {
 	#name : 'ResultRow',
 	#superclass : 'Object',

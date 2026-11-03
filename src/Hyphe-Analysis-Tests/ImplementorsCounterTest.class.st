@@ -1,3 +1,6 @@
+"
+Tests of ImplementorsCounter.
+"
 Class {
 	#name : 'ImplementorsCounterTest',
 	#superclass : 'TestCase',

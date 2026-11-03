@@ -1,3 +1,6 @@
+"
+Methods whose lines of code are counted by the tests of LOCCounter.
+"
 Class {
 	#name : 'LOCCounterTestData',
 	#superclass : 'Object',
